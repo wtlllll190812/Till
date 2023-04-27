@@ -40,11 +40,11 @@ void read_file(string filepath)
 	while (getline(infile, line))
 	{
 		lexer lex(line);
-		for (auto new_token = lex.next_token();
+		for (auto new_token = lex.get_next_token();
 			new_token.type != token::token_type::END;
-			new_token = lex.next_token())
+			new_token = lex.get_next_token())
 		{
-			std::cout << "{" << new_token << "}" << new_token.value << std::endl;
+			std::cout << new_token  << std::endl;
 			if (new_token.type == token::token_type::ILLEGAL)
 			{
 				cout<<"ILLEGAL" << endl;

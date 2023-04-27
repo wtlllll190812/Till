@@ -42,15 +42,17 @@ struct token
         END,		   // end of file
 	};
 
-	static std::map<std::string, token_type> keywords;
-	static token_type lookup(const std::string& token);
+public:
     token(token_type type, std::string value);
     token();
 
-	token_type type;
-	std::string value;
-
     bool operator==(const token& rhs) const;
     friend std::ostream& operator<<(std::ostream& out, const token& token);
+
+public:
+    static std::map<std::string, token_type> keywords;
+    static token_type type2str(const std::string& token);
+	token_type type;
+	std::string value;
 };
 std::ostream& operator<<(std::ostream& out, const token& token);

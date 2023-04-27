@@ -7,7 +7,7 @@ lexer::lexer(std::string& text)
 	read_char();
 }
 
-token lexer::next_token()
+token lexer::get_next_token()
 {
 	skip_whitespace();
 	token res;
@@ -18,8 +18,15 @@ token lexer::next_token()
 		res = token(token::token_type::STRING, read_string());
 		break;
 	case '=':
-		if(peek_char()=='=')
-		res = token(token::token_type::ASSIGN, "=");
+		if (peek_char() == '=')
+		{
+			read_char();
+			res = token(token::token_type::EQ, "==");
+		}
+		else
+		{
+			res = token(token::token_type::ASSIGN, "=");
+		}
 		break;
 	case '+':
 		res = token(token::token_type::PLUS, "+");
@@ -27,32 +34,57 @@ token lexer::next_token()
 	case '-':
 		res = token(token::token_type::MINUS, "-");
 		break;
-	case '!':
-		res = token(token::token_type::BANG, "!");
-		break;
 	case '*':
 		res = token(token::token_type::ASTERISK, "*");
 		break;
 	case '/':
-		res = token(token::token_type::SLASH, "/");
+		if (peek_char() == '/')
+		{
+			res = token(token::token_type::END, "//");
+		}
+		else
+		{
+			res = token(token::token_type::SLASH, "/");
+		}
+		break;
+	case '!':
+		if (peek_char() == '=')
+		{
+			read_char();
+			res = token(token::token_type::NEQ, "!=");
+		}
+		else
+		{
+			res = token(token::token_type::BANG, "!");
+		}
 		break;
 	case '<':
-		res = token(token::token_type::LT, "<");
+		if (peek_char() == '=')
+		{
+			read_char();
+			res = token(token::token_type::LTE, "<=");
+		}
+		else
+		{
+			res = token(token::token_type::LT, "<");
+		}
 		break;
 	case '>':
-		res = token(token::token_type::GT, ">");
-		break;
-	case ';':
-		res = token(token::token_type::SEMICOLON, ";");
+		if (peek_char() == '=')
+		{
+			read_char();
+			res = token(token::token_type::GTE, ">=");
+		}
+		else
+		{
+			res = token(token::token_type::GT, ">");
+		}
 		break;
 	case '(':
 		res = token(token::token_type::LPAREN, "(");
 		break;
 	case ')':
 		res = token(token::token_type::RPAREN, ")");
-		break;
-	case ',':
-		res = token(token::token_type::COMMA, ",");
 		break;
 	case '{':
 		res = token(token::token_type::LBRACE, "{");
@@ -66,8 +98,14 @@ token lexer::next_token()
 	case ']':
 		res = token(token::token_type::RBRACKET, "]");
 		break;
+	case ',':
+		res = token(token::token_type::COMMA, ",");
+		break;
 	case ':':
 		res = token(token::token_type::COLON, ":");
+		break;
+	case ';':
+		res = token(token::token_type::SEMICOLON, ";");
 		break;
 	case 0:
 		res = token(token::token_type::END, "");
@@ -76,26 +114,21 @@ token lexer::next_token()
 		if (is_letter(m_current_char))
 		{
 			std::string ident = read_identifier();
-			token::token_type type = token::lookup(ident);
-			res = token(type, ident);
+			return token(token::type2str(ident), ident);
 		}
 		else if (is_digit(m_current_char))
 		{
-			res = token(token::token_type::INT, read_number());
+			return token(token::token_type::INT, read_number());
 		}
 		else
 		{
-			res = token(token::token_type::ILLEGAL, "");
+			return token(token::token_type::ILLEGAL, "");
 		}
 		break;
 	}
 
 	read_char();
 	return res;
-}
-
-lexer::~lexer()
-{
 }
 
 void lexer::read_char()
@@ -149,14 +182,11 @@ std::string lexer::read_number()
 std::string lexer::read_string()
 {
 	int pos= m_pos + 1;
-	while (true)
+	do
 	{
 		read_char();
-		if (m_current_char == '"')
-		{
-			break;
-		}
-	}
+	} while (m_current_char != '"');
+	
 	return m_text.substr(pos, m_pos - pos);
 }
 

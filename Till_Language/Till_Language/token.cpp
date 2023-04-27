@@ -49,7 +49,7 @@ std::map<std::string, token::token_type> token::keywords =
 };
 
 
-token::token_type token::lookup(const std::string& token)
+token::token_type token::type2str(const std::string& token)
 {
     auto it = token::keywords.find(token);
     
@@ -69,6 +69,8 @@ token::token(token_type type, std::string value)
 
 token::token()
 {
+    this->type = token_type::ILLEGAL;
+	this->value = "";
 }
 
 bool token::operator==(const token& rhs) const

@@ -40,7 +40,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="语法.md" />
-    <None Include="test.till" />
+    <None Include="test.till">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="语法.md">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
