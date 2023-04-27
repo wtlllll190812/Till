@@ -39,7 +39,7 @@ static std::map<token::token_type, std::string> s_token_type =
 
 std::map<std::string, token::token_type> token::keywords = 
 {
-    {"fn", token::FUNCTION},
+    {"func", token::FUNCTION},
     {"let", token::LET},
     {"true", token::TRUE},
     {"false", token::FALSE},
@@ -59,4 +59,30 @@ token::token_type token::lookup(const std::string& token)
     }
 
     return token_type::IDENT;
+}
+
+token::token(token_type type, std::string value)
+{
+    this->type = type;
+	this->value = value;
+}
+
+token::token()
+{
+}
+
+bool token::operator==(const token& rhs) const
+{
+    return type == rhs.type && value == rhs.value;
+}
+
+std::ostream& operator<<(std::ostream& out, const token& token)
+{
+    auto it = s_token_type.find(token.type);
+    std::string type_name = "ERROR";
+    if (it != s_token_type.end()) {
+        type_name = it->second;
+    }
+    out << '{' << type_name << ',' << token.value << '}';
+    return out;
 }

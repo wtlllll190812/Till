@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClCompile Include="lexer.cpp" />
     <ClCompile Include="till.cpp" />
+    <ClCompile Include="token.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexer.h" />
+    <ClInclude Include="token.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.till" />

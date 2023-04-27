@@ -10,17 +10,20 @@ public:
 	~lexer();
 
 private:
-	void read_next();
+	void read_char();
+	char peek_char();
 	void skip_whitespace();
 	//void skip_comment();
-	void read_identifier();
-	void read_number();
-	void read_string();
+	std::string read_number();
+	std::string read_string();
+	std::string read_identifier();
+	bool is_letter(char c);
+	bool is_digit(char c);
 
 private:
 	std::string m_text;
 
-	char m_current_char;
-	int m_pos;
-	int m_next_pos;
+	char m_current_char = '\0';
+	int m_pos = 0;
+	int m_next_pos = 0;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include<string>
 #include<map>
+#include <iostream>
 
 struct token
 {
@@ -43,7 +44,13 @@ struct token
 
 	static std::map<std::string, token_type> keywords;
 	static token_type lookup(const std::string& token);
+    token(token_type type, std::string value);
+    token();
 
 	token_type type;
 	std::string value;
+
+    bool operator==(const token& rhs) const;
+    friend std::ostream& operator<<(std::ostream& out, const token& token);
 };
+std::ostream& operator<<(std::ostream& out, const token& token);

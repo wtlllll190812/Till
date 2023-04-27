@@ -27,9 +27,15 @@
     <ClCompile Include="till.cpp">
       <Filter>头文件\Runtime</Filter>
     </ClCompile>
+    <ClCompile Include="token.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexer.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="token.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
