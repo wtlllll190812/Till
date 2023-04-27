@@ -1,12 +1,6 @@
 #include "lexer.h"
 using namespace std;
 
-lexer::lexer(std::string& text)
-{
-	m_text = text;
-	read_char();
-}
-
 token lexer::get_next_token()
 {
 	skip_whitespace();
@@ -114,7 +108,7 @@ token lexer::get_next_token()
 		if (is_letter(m_current_char))
 		{
 			std::string ident = read_identifier();
-			return token(token::type2str(ident), ident);
+			return token(token::str2type(ident), ident);
 		}
 		else if (is_digit(m_current_char))
 		{
@@ -129,6 +123,15 @@ token lexer::get_next_token()
 
 	read_char();
 	return res;
+}
+
+void lexer::set_line(std::string& text)
+{
+	m_line_number++;
+	m_text = text;
+	m_pos = 0;
+	m_next_pos = 0;
+	read_char();
 }
 
 void lexer::read_char()

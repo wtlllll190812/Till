@@ -51,7 +51,7 @@ public:
 
 public:
     static std::map<std::string, token_type> keywords;
-    static token_type type2str(const std::string& token);
+    static token_type str2type(const std::string& token);
 	token_type type;
 	std::string value;
 };

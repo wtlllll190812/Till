@@ -139,12 +139,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ast_node.h" />
+    <ClCompile Include="expression.cpp" />
     <ClCompile Include="lexer.cpp" />
+    <ClCompile Include="parser.cpp" />
+    <ClCompile Include="program.cpp" />
+    <ClCompile Include="statement.cpp" />
     <ClCompile Include="till.cpp" />
     <ClCompile Include="token.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="expression.h" />
     <ClInclude Include="lexer.h" />
+    <ClInclude Include="parser.h" />
+    <ClInclude Include="program.h" />
+    <ClInclude Include="statement.h" />
     <ClInclude Include="token.h" />
   </ItemGroup>
   <ItemGroup>

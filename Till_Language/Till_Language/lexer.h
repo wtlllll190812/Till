@@ -5,12 +5,17 @@
 class lexer
 {
 public:
-	lexer(std::string& text);
+	lexer() {};
 
 	/// <summary>
 	/// 读取下一个token
 	/// </summary>
 	token get_next_token();
+
+	/// <summary>
+	/// 设置当前行
+	/// </summary>
+	void set_line(std::string& text);
 
 private:
 	/// <summary>
@@ -60,7 +65,8 @@ private:
 private:
 	std::string m_text;
 
-	char m_current_char = '\0';		//当前字符
-	int m_pos = 0;					//当前位置
-	int m_next_pos = 0;				//下一个字符位置
+	char m_current_char = '\0';			//当前字符
+	unsigned int m_pos = 0;				//当前位置
+	unsigned int m_next_pos = 0;		//下一个字符位置
+	unsigned int m_line_number = 0;		//行号
 };

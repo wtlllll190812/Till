@@ -49,7 +49,7 @@ std::map<std::string, token::token_type> token::keywords =
 };
 
 
-token::token_type token::type2str(const std::string& token)
+token::token_type token::str2type(const std::string& token)
 {
     auto it = token::keywords.find(token);
     
