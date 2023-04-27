@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<string>
 #include "lexer.h"
 using namespace std;
 
@@ -35,9 +36,15 @@ void read_file(string filepath)
 		return;
 	}
 
-	char buf[1024];
-	while (infile.getline(buf, sizeof(buf)))
+	string line;
+	while (getline(infile, line))
 	{
-		cout << buf << endl;
+		lexer lex(line);
+		for (auto token = lex.next_token();
+			token.type != token::token_type::END;
+			token = lex.next_token()) 
+		{
+			std::cout << "{" <<token.type<< "}" << std::endl;
+		}
 	}
 }

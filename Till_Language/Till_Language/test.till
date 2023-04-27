@@ -1,9 +1,15 @@
-int i=10;
-if(i>10)
+func max(a,b)
 {
-	i=i+1;
+	if(a>b)
+		return a;
+	else
+		return b;
 }
-else
-{
-	i=i-1;
-}
+
+let a=1;
+let b=2;
+max(a,b);
+
+let a=2;
+let b=1;
+max(a,b);
