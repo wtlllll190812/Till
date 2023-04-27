@@ -20,7 +20,34 @@ const std::unordered_map<token::token_type, parser::Precedence> PRECEDENCES =
 
 parser::parser()
 {
-	lexer lex;
+    // 注册前缀解析函数
+    _prefix_parse_funcs[token::IDENT] = std::bind(&parser::parse_identifier, this);
+    _prefix_parse_funcs[token::INT] = std::bind(&parser::parse_integer_literal, this);
+    _prefix_parse_funcs[token::STRING] = std::bind(&parser::parse_string_literal, this);
+    _prefix_parse_funcs[token::TRUE] = std::bind(&parser::parse_boolean_literal, this);
+    _prefix_parse_funcs[token::FALSE] = std::bind(&parser::parse_boolean_literal, this);
+    _prefix_parse_funcs[token::FUNCTION] = std::bind(&parser::parse_function_literal, this);
+    _prefix_parse_funcs[token::LPAREN] = std::bind(&parser::parse_group_expression, this);
+    _prefix_parse_funcs[token::BANG] = std::bind(&parser::parse_prefix_expression, this);
+    _prefix_parse_funcs[token::MINUS] = std::bind(&parser::parse_prefix_expression, this);
+    _prefix_parse_funcs[token::IF] = std::bind(&parser::parse_if_expression, this);
+    _prefix_parse_funcs[token::LBRACKET] = std::bind(&parser::parse_array_literal, this);
+    _prefix_parse_funcs[token::LBRACE] = std::bind(&parser::parse_hash_literal, this);
+
+    // 注册中缀解析函数
+    _infix_parse_funcs[token::PLUS] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::MINUS] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::ASTERISK] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::SLASH] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::EQ] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::NEQ] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::LT] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::GT] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::LTE] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::GTE] = std::bind(&parser::parse_infix_expression, this, _1);
+    // 在 call 表达式中，形如 add(1, 2 * 3)，我们把 ( 看作是中缀操作符，且它有最高的优先级
+    _infix_parse_funcs[token::LPAREN] = std::bind(&parser::parse_call_expression, this, _1);
+    _infix_parse_funcs[token::LBRACKET] = std::bind(&parser::parse_index_expression, this, _1);
 }
 
 std::unique_ptr<program> parser::parse(std::string& line)
@@ -108,17 +135,95 @@ std::unique_ptr<statement> parser::parse_let_statment()
     return stmt;
 }
 
+/// <summary>
+/// 识别return关键字
+/// </summary>
 std::unique_ptr<statement> parser::parse_return_statment()
 {
-    return std::unique_ptr<statement>();
+    auto stmt = std::make_unique<return_statement>(m_current_token);
+    
+    //跳过return
+    next_token();
+    //表达式部分
+    auto exp = parse_expression(Precedence::LOWEST);
+    stmt->set_expression(exp.release());
+
+    if (m_next_token.type == token::SEMICOLON)
+    {
+		next_token();
+	}
+
+    return stmt;
 }
 
+/// <summary>
+/// 识别表达式
+/// </summary>
 std::unique_ptr<statement> parser::parse_expression_statment()
 {
-    return std::unique_ptr<statement>();
+    auto stmt = std::make_unique<expression_statment>(m_current_token);
+    
+    auto expression = parse_expression(Precedence::LOWEST);
+    stmt->set_expression(expression.release());
+
+    if (m_next_token.type == token::SEMICOLON)
+    {
+		next_token();
+	}
+    return stmt;
 }
 
+/// <summary>
+/// Pratt Parsing算法处理表达式
+/// </summary>
 std::unique_ptr<expression> parser::parse_expression(Precedence precedence)
 {
-    return std::unique_ptr<expression>();
+    auto prefix = _prefix_parse_funcs.find(m_current_token.type);
+    /*if (prefix == _prefix_parse_funcs.end())
+    {
+        _errors.push_back("no prefix parse function found for `" + m_current_token.value + "`");
+        return nullptr;
+    }*/
+
+    auto left = prefix->second();
+
+    // precedence 描述的是向右结合的能力。如果 precedence 是当前最高的，到目前所
+    // 收集到的 left_exp 就不会被传递给 infix_parse_func
+    // peek_precedence 描述的是向左结合的能力。这意味着 peek_precedence 越高
+    // 当前收集的 left_exp 越容易被 peek_token 收入囊中，即继续传递给 infix_parse_func
+    while (m_next_token.type!= token::SEMICOLON && precedence < peek_precedence())
+    {
+        auto infix = _infix_parse_funcs.find(m_next_token.type);
+        if (infix == _infix_parse_funcs.end())
+        {
+            return left;
+        }
+
+        next_token();
+        // infix_parse_func 内部会递进 token
+        auto exp = infix->second(left.release());
+        left.swap(exp);
+    }
+
+    return left;
+}
+
+parser::Precedence parser::current_precedence() const
+{
+    auto it = PRECEDENCES.find(m_current_token.type);
+    if (it != PRECEDENCES.end())
+    {
+        return it->second;
+    }
+    return Precedence::LOWEST;
+}
+
+parser::Precedence parser::peek_precedence() const
+{
+    auto it = PRECEDENCES.find(m_next_token.type);
+    if (it != PRECEDENCES.end())
+    {
+        return it->second;
+    }
+    return Precedence::LOWEST;
 }

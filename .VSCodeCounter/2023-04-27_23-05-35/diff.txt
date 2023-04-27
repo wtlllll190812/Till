@@ -1,0 +1,36 @@
+Date : 2023-04-27 23:05:35
+Directory : d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language
+Total : 11 files,  249 codes, 22 comments, 52 blanks, all 323 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         10 |        243 |         22 |         52 |        317 |
+| XML      |          1 |          6 |          0 |          0 |          6 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                         | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                            |         11 |        249 |         22 |         52 |        323 |
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                     | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\Till_Language.vcxproj | XML      |          6 |          0 |          0 |          6 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\ast_node.h            | C++      |         21 |          0 |          3 |         24 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\expression.cpp        | C++      |         17 |          0 |          5 |         22 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\expression.h          | C++      |         24 |          0 |          5 |         29 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\parser.cpp            | C++      |         90 |          9 |         20 |        119 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\parser.h              | C++      |         19 |          0 |          3 |         22 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\program.cpp           | C++      |         23 |          1 |          5 |         29 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\program.h             | C++      |        -15 |          7 |         -2 |        -10 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\statement.cpp         | C++      |         28 |          0 |          5 |         33 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\statement.h           | C++      |         24 |          3 |          5 |         32 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\till.cpp              | C++      |         12 |          2 |          3 |         17 |
+| Total                                                                                        |          |        249 |         22 |         52 |        323 |
++----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

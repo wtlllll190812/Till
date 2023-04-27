@@ -1,0 +1,13 @@
+"filename", "language", "XML", "C++", "comment", "blank", "total"
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\Till_Language.vcxproj", "XML", 6, 0, 0, 0, 6
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\ast_node.h", "C++", 0, 21, 0, 3, 24
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\expression.cpp", "C++", 0, 17, 0, 5, 22
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\expression.h", "C++", 0, 24, 0, 5, 29
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\parser.cpp", "C++", 0, 90, 9, 20, 119
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\parser.h", "C++", 0, 19, 0, 3, 22
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\program.cpp", "C++", 0, 23, 1, 5, 29
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\program.h", "C++", 0, -15, 7, -2, -10
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\statement.cpp", "C++", 0, 28, 0, 5, 33
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\statement.h", "C++", 0, 24, 3, 5, 32
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\till.cpp", "C++", 0, 12, 2, 3, 17
+"Total", "-", 6, 243, 22, 52, 323

@@ -31,3 +31,35 @@ void let_statement::set_expression(expression* expression)
 {
     m_expression.reset(expression);
 }
+
+std::string return_statement::to_string() const
+{
+    std::string ret = token_value();
+    if (m_expression != nullptr)
+    {
+        ret += m_expression->to_string();
+    }
+    ret += ';';
+    return ret;
+}
+
+void return_statement::set_expression(expression* expression)
+{
+    m_expression.reset(expression);
+}
+
+std::string expression_statment::to_string() const
+{
+    std::string ret="expression"; // ÁÙÊ±
+    if (m_expression != nullptr)
+    {
+        ret = m_expression->to_string();
+    }
+
+    return ret;
+}
+
+void expression_statment::set_expression(expression* expression)
+{
+    m_expression.reset(expression);
+}
