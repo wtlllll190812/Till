@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="test.till" />
+    <None Include="till.l" />
     <None Include="语法.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
