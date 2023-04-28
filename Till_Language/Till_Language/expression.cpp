@@ -1,4 +1,5 @@
 #include "expression.h"
+#include "statement.h"
 
 std::string expression::token_value() const
 {
@@ -18,4 +19,29 @@ std::string identifier::to_string() const
 const std::string& identifier::value() const
 {
     return _value;
+}
+
+std::string integerLiteral::to_string() const
+{
+    return m_token.value;
+}
+
+const int integerLiteral::value() const
+{
+    return m_value;
+}
+
+std::string function_literal::to_string() const
+{
+    return std::string();
+}
+
+void function_literal::set_parameters(std::vector<std::shared_ptr<identifier>>& parameters)
+{
+    m_parameters = parameters;
+}
+
+void function_literal::set_body(block_statement* body)
+{
+    m_body.reset(body);
 }

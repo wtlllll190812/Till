@@ -49,7 +49,7 @@ private:
 };
 
 /// <summary>
-/// 表达式statement
+/// 表达式语句
 /// </summary>
 class expression_statment : public statement
 {
@@ -60,4 +60,17 @@ public:
 	void set_expression(expression* expression);
 private:
 	std::unique_ptr<expression> m_expression;
+};
+
+/// <summary>
+/// 语句块
+/// </summary>
+class block_statement : public statement
+{
+public:
+	std::string to_string() const override;
+	void append(statement* statment);
+
+private:
+    std::vector<std::unique_ptr<statement>> m_statements;
 };

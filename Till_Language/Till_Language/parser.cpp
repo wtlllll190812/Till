@@ -4,18 +4,18 @@
 // 优先级表
 const std::unordered_map<token::token_type, parser::Precedence> PRECEDENCES = 
 {
-            {token::EQ, parser::Precedence::EQUALS},
-            {token::NEQ, parser::Precedence::EQUALS},
-            {token::LT, parser::Precedence::LESSGREATER},
-            {token::GT, parser::Precedence::LESSGREATER},
-            {token::LTE, parser::Precedence::LESSGREATER},
-            {token::GTE, parser::Precedence::LESSGREATER},
-            {token::PLUS, parser::Precedence::SUM},
-            {token::MINUS, parser::Precedence::SUM},
-            {token::SLASH, parser::Precedence::PRODUCT},
-            {token::ASTERISK, parser::Precedence::PRODUCT},
-            {token::LPAREN, parser::Precedence::CALL},
-            {token::LBRACKET, parser::Precedence::INDEX},
+    {token::EQ, parser::Precedence::EQUALS},
+    {token::NEQ, parser::Precedence::EQUALS},
+    {token::LT, parser::Precedence::LESSGREATER},
+    {token::GT, parser::Precedence::LESSGREATER},
+    {token::LTE, parser::Precedence::LESSGREATER},
+    {token::GTE, parser::Precedence::LESSGREATER},
+    {token::PLUS, parser::Precedence::SUM},
+    {token::MINUS, parser::Precedence::SUM},
+    {token::SLASH, parser::Precedence::PRODUCT},
+    {token::ASTERISK, parser::Precedence::PRODUCT},
+    {token::LPAREN, parser::Precedence::CALL},
+    {token::LBRACKET, parser::Precedence::INDEX},
 };
 
 parser::parser()
@@ -35,19 +35,19 @@ parser::parser()
     _prefix_parse_funcs[token::LBRACE] = std::bind(&parser::parse_hash_literal, this);
 
     // 注册中缀解析函数
-    _infix_parse_funcs[token::PLUS] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::MINUS] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::ASTERISK] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::SLASH] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::EQ] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::NEQ] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::LT] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::GT] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::LTE] = std::bind(&parser::parse_infix_expression, this, _1);
-    _infix_parse_funcs[token::GTE] = std::bind(&parser::parse_infix_expression, this, _1);
+    _infix_parse_funcs[token::PLUS] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::MINUS] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::ASTERISK] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::SLASH] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::EQ] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::NEQ] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::LT] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::GT] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::LTE] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::GTE] = std::bind(&parser::parse_infix_expression, this, std::placeholders::_1);
     // 在 call 表达式中，形如 add(1, 2 * 3)，我们把 ( 看作是中缀操作符，且它有最高的优先级
-    _infix_parse_funcs[token::LPAREN] = std::bind(&parser::parse_call_expression, this, _1);
-    _infix_parse_funcs[token::LBRACKET] = std::bind(&parser::parse_index_expression, this, _1);
+    _infix_parse_funcs[token::LPAREN] = std::bind(&parser::parse_call_expression, this, std::placeholders::_1);
+    _infix_parse_funcs[token::LBRACKET] = std::bind(&parser::parse_index_expression, this, std::placeholders::_1);
 }
 
 std::unique_ptr<program> parser::parse(std::string& line)
@@ -122,6 +122,7 @@ std::unique_ptr<statement> parser::parse_let_statment()
 
     // 跳过 = 号
     next_token();
+    next_token();
 
     // 表达式解析部分
     auto exp = parse_expression(Precedence::LOWEST);
@@ -174,23 +175,16 @@ std::unique_ptr<statement> parser::parse_expression_statment()
 }
 
 /// <summary>
-/// Pratt Parsing算法处理表达式
+/// Pratt Parsing算法
 /// </summary>
 std::unique_ptr<expression> parser::parse_expression(Precedence precedence)
 {
     auto prefix = _prefix_parse_funcs.find(m_current_token.type);
-    /*if (prefix == _prefix_parse_funcs.end())
-    {
-        _errors.push_back("no prefix parse function found for `" + m_current_token.value + "`");
-        return nullptr;
-    }*/
+   
 
     auto left = prefix->second();
 
-    // precedence 描述的是向右结合的能力。如果 precedence 是当前最高的，到目前所
-    // 收集到的 left_exp 就不会被传递给 infix_parse_func
-    // peek_precedence 描述的是向左结合的能力。这意味着 peek_precedence 越高
-    // 当前收集的 left_exp 越容易被 peek_token 收入囊中，即继续传递给 infix_parse_func
+    // 右侧运算符优先级更高时
     while (m_next_token.type!= token::SEMICOLON && precedence < peek_precedence())
     {
         auto infix = _infix_parse_funcs.find(m_next_token.type);
@@ -206,6 +200,22 @@ std::unique_ptr<expression> parser::parse_expression(Precedence precedence)
     }
 
     return left;
+}
+
+std::vector<std::shared_ptr<identifier>> parser::parse_function_parameters()
+{
+    return std::vector<std::shared_ptr<identifier>>();
+}
+
+std::unique_ptr<block_statement> parser::parse_block_statement()
+{
+    auto block = std::make_unique<block_statement>(m_current_token);
+    next_token();
+
+    while (m_current_token.type != token::RBRACE && m_current_token.type != token::END)
+    {
+
+    }
 }
 
 parser::Precedence parser::current_precedence() const
@@ -226,4 +236,93 @@ parser::Precedence parser::peek_precedence() const
         return it->second;
     }
     return Precedence::LOWEST;
+}
+
+std::unique_ptr<expression> parser::parse_identifier()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_integer_literal()
+{
+    return std::unique_ptr<expression>(new integerLiteral(m_current_token));
+}
+
+std::unique_ptr<expression> parser::parse_string_literal()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_boolean_literal()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_function_literal()
+{
+    auto func = std::make_unique<function_literal>(m_current_token);
+
+    if (!m_next_token.type == token::LPAREN)
+    {
+        return nullptr;
+    }
+    next_token();
+
+    auto params = parse_function_parameters();
+    func->set_parameters(params);
+
+    if (!m_next_token.type == token::LBRACE)
+    {
+        return nullptr;
+    }
+    next_token();
+
+    auto body = parse_block_statement();
+    if (body == nullptr)
+    {
+        return nullptr;
+    }
+    func->set_body(body.release());
+    
+    return func;
+}
+
+std::unique_ptr<expression> parser::parse_array_literal()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_hash_literal()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_group_expression()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_prefix_expression()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_if_expression()
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_infix_expression(expression* left)
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_call_expression(expression* left)
+{
+    return std::unique_ptr<expression>();
+}
+
+std::unique_ptr<expression> parser::parse_index_expression(expression* left)
+{
+    return std::unique_ptr<expression>();
 }

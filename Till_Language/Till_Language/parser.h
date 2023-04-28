@@ -36,6 +36,8 @@ private:
     std::unique_ptr<statement> parse_return_statment();
     std::unique_ptr<statement> parse_expression_statment();
     std::unique_ptr<expression> parse_expression(Precedence precedence);
+    std::vector<std::shared_ptr<identifier>> parse_function_parameters();
+    std::unique_ptr<block_statement> parse_block_statement();
 
     parser::Precedence current_precedence() const;
     parser::Precedence peek_precedence() const;

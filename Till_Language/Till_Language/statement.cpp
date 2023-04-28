@@ -63,3 +63,18 @@ void expression_statment::set_expression(expression* expression)
 {
     m_expression.reset(expression);
 }
+
+std::string block_statement::to_string() const
+{
+    std::string ret;
+    for (auto& stmt : m_statements)
+    {
+        ret += stmt->to_string();
+    }
+    return ret;
+}
+
+void block_statement::append(statement* statment)
+{
+    m_statements.emplace_back(statment);
+}
