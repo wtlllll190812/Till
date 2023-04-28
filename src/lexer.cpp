@@ -20,7 +20,25 @@
      * We will address this in a future release of flex, or omit the C++ scanner
      * altogether.
      */
-    #define yyFlexLexer yyFlexLexer
+    #define yyFlexLexer EzAquarii_FlexLexer
+
+#ifdef yyalloc
+#define EzAquarii_alloc_ALREADY_DEFINED
+#else
+#define yyalloc EzAquarii_alloc
+#endif
+
+#ifdef yyrealloc
+#define EzAquarii_realloc_ALREADY_DEFINED
+#else
+#define yyrealloc EzAquarii_realloc
+#endif
+
+#ifdef yyfree
+#define EzAquarii_free_ALREADY_DEFINED
+#else
+#define yyfree EzAquarii_free
+#endif
 
 /* First, we deal with  platform-specific or compiler-specific issues. */
 
@@ -295,12 +313,22 @@ void yyfree ( void *  );
 #define YY_AT_BOL() (YY_CURRENT_BUFFER_LVALUE->yy_at_bol)
 
 /* Begin user sect3 */
+#define YY_SKIP_YYWRAP
 typedef flex_uint8_t YY_CHAR;
 
 #define yytext_ptr yytext
 #define YY_INTERACTIVE
 
 #include <FlexLexer.h>
+
+int yyFlexLexer::yywrap() { return 1; }
+int yyFlexLexer::yylex()
+	{
+	LexerError( "yyFlexLexer::yylex invoked but %option yyclass used" );
+	return 0;
+	}
+
+#define YY_DECL int Scanner::yylex()
 
 /* Done after the current pattern has been matched and before the
  * corresponding action - sets up yytext.
@@ -440,11 +468,8 @@ static const flex_int16_t yy_chk[117] =
 #include "parser.hpp"
 #define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
 #define TOKEN(t) (yylval.token = t)
-extern "C" int yywrap() { 
-    return 1;
-}
-#line 446 "../src/lexer.cpp"
-#line 447 "../src/lexer.cpp"
+#line 471 "../src/lexer.cpp"
+#line 472 "../src/lexer.cpp"
 
 #define INITIAL 0
 
@@ -576,9 +601,9 @@ YY_DECL
 		}
 
 	{
-#line 12 "till.l"
+#line 13 "till.l"
 
-#line 581 "../src/lexer.cpp"
+#line 606 "../src/lexer.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -638,133 +663,133 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 13 "till.l"
+#line 14 "till.l"
 ;/* ignore whitespace */
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 14 "till.l"
+#line 15 "till.l"
 ;/* ignore comments */
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 15 "till.l"
+#line 16 "till.l"
 TOKEN(LPAREN); return LPAREN;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 16 "till.l"
+#line 17 "till.l"
 TOKEN(RPAREN); return RPAREN;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 17 "till.l"
+#line 18 "till.l"
 TOKEN(LBRACE); return LBRACE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 18 "till.l"
+#line 19 "till.l"
 TOKEN(RBRACE); return RBRACE;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 19 "till.l"
+#line 20 "till.l"
 TOKEN(SEMICOLON); return SEMICOLON;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 20 "till.l"
+#line 21 "till.l"
 TOKEN(COMMA); return COMMA;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 21 "till.l"
+#line 22 "till.l"
 TOKEN(ASSIGN); return ASSIGN;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "till.l"
+#line 23 "till.l"
 TOKEN(EQ); return EQ;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 23 "till.l"
+#line 24 "till.l"
 TOKEN(NE); return NE;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 24 "till.l"
+#line 25 "till.l"
 TOKEN(LT); return LT;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 25 "till.l"
+#line 26 "till.l"
 TOKEN(GT); return GT;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 26 "till.l"
+#line 27 "till.l"
 TOKEN(LE); return LE;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 27 "till.l"
+#line 28 "till.l"
 TOKEN(GE); return GE;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 28 "till.l"
+#line 29 "till.l"
 TOKEN(ADD); return ADD;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 29 "till.l"
+#line 30 "till.l"
 TOKEN(SUB); return SUB;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 30 "till.l"
+#line 31 "till.l"
 TOKEN(MUL); return MUL;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 31 "till.l"
+#line 32 "till.l"
 TOKEN(DIV); return DIV;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 32 "till.l"
+#line 33 "till.l"
 TOKEN(IF); return IF;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 33 "till.l"
+#line 34 "till.l"
 TOKEN(ELSE); return ELSE;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 34 "till.l"
+#line 35 "till.l"
 TOKEN(WHILE); return WHILE;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 35 "till.l"
+#line 36 "till.l"
 TOKEN(RETURN); return RETURN;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 36 "till.l"
+#line 37 "till.l"
 SAVE_TOKEN; return IDENTIFIER;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 37 "till.l"
+#line 38 "till.l"
 SAVE_TOKEN; return INTEGER;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 38 "till.l"
+#line 39 "till.l"
 SAVE_TOKEN; return DOUBLE;
 	YY_BREAK
 case 27:
@@ -772,15 +797,15 @@ case 27:
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 39 "till.l"
+#line 40 "till.l"
 SAVE_TOKEN; return STRING;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 40 "till.l"
+#line 41 "till.l"
 ECHO;
 	YY_BREAK
-#line 783 "../src/lexer.cpp"
+#line 808 "../src/lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1743,5 +1768,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 40 "till.l"
+#line 41 "till.l"
 

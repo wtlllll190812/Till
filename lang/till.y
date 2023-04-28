@@ -1,8 +1,18 @@
 %{
     #include "ast.hpp"
-    Block *program; /* the top level root node of our final AST */
+    #include <cstdio>
+    #include <cstdlib>
+    namespace EzAquarii {
+        class Scanner;
+    }
 
-    extern int yylex();
+    Block *program; /* the top level root node of our final AST */
+    
+    static int yylex() {
+        return scanner.get_next_token();
+    }
+
+    // extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
 %}
 
@@ -18,13 +28,13 @@
 }
 
 
-%token  IDENTIFIER INTEGER DOUBLE STRING                    //±êÊ¶·ûºÍ±äÁ¿
-%token  EQ NE LT LE GT GE                                   //±È½ÏÔËËã·û
-%token  LPAREN RPAREN LBRACE RBRACE COMMA DOT SEMICOLON     //À¨ºÅºÍ¶ººÅ
-%token  ADD SUB MUL DIV                                     //ËãÊõÔËËã·û
-%token  ASSIGN                                              //¸³ÖµÔËËã·û
-%token  IF ELSE WHILE FOR                                   //¿ØÖÆÓï¾ä
-%token  LET RETURN FUNC                                     //¹Ø¼ü×Ö
+%token  IDENTIFIER INTEGER DOUBLE STRING                    //æ ‡è¯†ç¬¦å’Œå˜é‡
+%token  EQ NE LT LE GT GE                                   //æ¯”è¾ƒè¿ç®—ç¬¦
+%token  LPAREN RPAREN LBRACE RBRACE COMMA DOT SEMICOLON     //æ‹¬å·å’Œé€—å·
+%token  ADD SUB MUL DIV                                     //ç®—æœ¯è¿ç®—ç¬¦
+%token  ASSIGN                                              //èµ‹å€¼è¿ç®—ç¬¦
+%token  IF ELSE WHILE FOR                                   //æŽ§åˆ¶è¯­å¥
+%token  LET RETURN FUNC                                     //å…³é”®å­—
 
 // %type  numeric expr
 // %type  func_decl_args

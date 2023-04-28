@@ -1,5 +1,5 @@
 win_bison -d -o ../src/parser.cpp till.y
-clang -c ../src/parser.cpp -o ../src/parser.o  -I C:\Windows\GnuWin32\FlexAndBison
 win_flex -+ -o../src/lexer.cpp till.l
-clang -c ../src/lexer.cpp -o ../src/lexer.o  -I C:\Windows\GnuWin32\FlexAndBison
-clang -o till ../src/parser.o ../src/lexer.o
+clang++ -c -o parser.o ../src/parser.cpp -I C:\Windows\GnuWin32\FlexAndBison
+clang++ -c -o lexer.o ../src/lexer.cpp -I C:\Windows\GnuWin32\FlexAndBison
+clang++ -o till lexer.o parser.o ../src/till.cpp -I C:\Windows\GnuWin32\FlexAndBison
