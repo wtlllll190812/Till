@@ -4,10 +4,10 @@ OBJS= 	lexer.o 	\
 		till.o 		\
 
 till.exe:${OBJS}
-	g++ -o $@ $^ -I $(include)
+	g++ ${CFLAG} -o $@ $^ -I $(include)
 
 %.o: src/%.cpp
-	g++ -c -o $@ $< -I $(include)
+	g++ ${CFLAG} -c -o $@ $< -I $(include)
 
 src/%.cpp:
 	parser
