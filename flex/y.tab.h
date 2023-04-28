@@ -43,36 +43,31 @@
      INTEGER = 259,
      DOUBLE = 260,
      STRING = 261,
-     OBJECT = 262,
-     EQ = 263,
-     NE = 264,
-     LT = 265,
-     LE = 266,
-     GT = 267,
-     GE = 268,
-     LPAREN = 269,
-     RPAREN = 270,
-     LBRACE = 271,
-     RBRACE = 272,
-     COMMA = 273,
-     DOT = 274,
-     SEMICOLON = 275,
-     PLUS = 276,
-     MINUS = 277,
-     MUL = 278,
-     DIV = 279,
-     ASSIGN = 280,
-     IF = 281,
-     ELSE = 282,
-     WHILE = 283,
-     FOR = 284,
-     LET = 285,
-     RETURN = 286,
-     FUNC = 287,
-     TMINUS = 288,
-     TPLUS = 289,
-     TDIV = 290,
-     TMUL = 291
+     EQ = 262,
+     NE = 263,
+     LT = 264,
+     LE = 265,
+     GT = 266,
+     GE = 267,
+     LPAREN = 268,
+     RPAREN = 269,
+     LBRACE = 270,
+     RBRACE = 271,
+     COMMA = 272,
+     DOT = 273,
+     SEMICOLON = 274,
+     ADD = 275,
+     SUB = 276,
+     MUL = 277,
+     DIV = 278,
+     ASSIGN = 279,
+     IF = 280,
+     ELSE = 281,
+     WHILE = 282,
+     FOR = 283,
+     LET = 284,
+     RETURN = 285,
+     FUNC = 286
    };
 #endif
 /* Tokens.  */
@@ -80,36 +75,31 @@
 #define INTEGER 259
 #define DOUBLE 260
 #define STRING 261
-#define OBJECT 262
-#define EQ 263
-#define NE 264
-#define LT 265
-#define LE 266
-#define GT 267
-#define GE 268
-#define LPAREN 269
-#define RPAREN 270
-#define LBRACE 271
-#define RBRACE 272
-#define COMMA 273
-#define DOT 274
-#define SEMICOLON 275
-#define PLUS 276
-#define MINUS 277
-#define MUL 278
-#define DIV 279
-#define ASSIGN 280
-#define IF 281
-#define ELSE 282
-#define WHILE 283
-#define FOR 284
-#define LET 285
-#define RETURN 286
-#define FUNC 287
-#define TMINUS 288
-#define TPLUS 289
-#define TDIV 290
-#define TMUL 291
+#define EQ 262
+#define NE 263
+#define LT 264
+#define LE 265
+#define GT 266
+#define GE 267
+#define LPAREN 268
+#define RPAREN 269
+#define LBRACE 270
+#define RBRACE 271
+#define COMMA 272
+#define DOT 273
+#define SEMICOLON 274
+#define ADD 275
+#define SUB 276
+#define MUL 277
+#define DIV 278
+#define ASSIGN 279
+#define IF 280
+#define ELSE 281
+#define WHILE 282
+#define FOR 283
+#define LET 284
+#define RETURN 285
+#define FUNC 286
 
 
 
@@ -121,18 +111,18 @@ typedef union YYSTYPE
 /* Line 1676 of yacc.c  */
 #line 10 "till.y"
 
-    Program *program;
-    Statement *statement;
-    Block *block;
-    Expression *expr;
-    Object* object;    
+    Program*        program;
+    Block*          block;
+    Statement*      statement;
+    Expression*     expr;
+    Object*         object;   
+     
     std::string string;
-    vector<Statement*> statements;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 136 "y.tab.h"
+#line 126 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

@@ -1,5 +1,5 @@
 %{
-    #include "node.h"
+    #include "ast.h"
     Program *program; /* the top level root node of our final AST */
 
     extern int yylex();
@@ -11,21 +11,17 @@
     Program*        program;
     Block*          block;
     Statement*      statement;
-
     Expression*     expr;
-    AssignExpr*     assign;
-    BoolExpr*       bool;
-    IDENTIFIER*     identifier;  
     Object*         object;   
      
     std::string string;
 }
 
 
-%token  IDENTIFIER INTEGER DOUBLE STRING OBJECT             //标识符和变量
+%token  IDENTIFIER INTEGER DOUBLE STRING                    //标识符和变量
 %token  EQ NE LT LE GT GE                                   //比较运算符
 %token  LPAREN RPAREN LBRACE RBRACE COMMA DOT SEMICOLON     //括号和逗号
-%token  PLUS MINUS MUL DIV                                  //算术运算符
+%token  ADD SUB MUL DIV                                     //算术运算符
 %token  ASSIGN                                              //赋值运算符
 %token  IF ELSE WHILE FOR                                   //控制语句
 %token  LET RETURN FUNC                                     //关键字
@@ -37,45 +33,56 @@
 // %type  stmt var_decl func_decl
 // %type  comparison
 
-/* Operator precedence for mathematical operators */
-%left TPLUS TMINUS
-%left TMUL TDIV
+%left ADD SUB ELSE
+%left MUL DIV
 
 %type <program>         program
-%type <block>           stmts
+%type <block>           block
 %type <statement>       stmt
 %type <identifier>      IDENTIFIER
-%type <object>          OBJECT, INTEGER, DOUBLE, STRING
-%type <expression>      assign_expr, if_expr, while_expr, bool_expr, expr
+%type <expression>      assign_expr if_expr while_expr expr term
+%type <object>          INTEGER DOUBLE STRING value
+
+%type <string>          EQ NE LT LE GT GE ADD SUB MUL DIV
 
 %start program
 
 %%
-program:        stmts           { $$->statements=$1; }
+program:        block           { $$->block=$1; }
                 ;
 
-stmts:          stmt            { $$.push_back($1); }
-                | stmts stmt    { $$.push_back($2); }
+block:          stmt            { $$->append($1); }
+                | block stmt    { $1->append($2); }
                 ;
 
 stmt:           assign_expr     { $$=new Statement($1); }
+                | if_expr       { $$=new Statement($1); }
+                | while_expr    { $$=new Statement($1); }
                 ;
 
-assign_expr:    LET IDENTIFIER ASSIGN OBJECT SEMICOLON      { $2 = new Object($4); }
+assign_expr:    LET IDENTIFIER ASSIGN value SEMICOLON       { $$ = new AssignExpression($4); }
                 ;   
 
-if_expr:        IF LPAREN expr RPAREN stmts                 { $$ = new If($3, $5); }
-                | IF LPAREN expr RPAREN stmts ELSE stmts    { $$ = new If($3, $5, $7); }
+if_expr:        IF LPAREN expr RPAREN block                 { $$ = new IfExpression($3, $5); }
+                | IF LPAREN expr RPAREN block ELSE block    { $$ = new IfExpression($3, $5, $7); }
                 ;
 
-while_expr:     WHILE LPAREN expr RPAREN stmts              { $$ = new While($3, $5); }
+while_expr:     WHILE LPAREN expr RPAREN block              { $$ = new WhileExpression($3, $5); }
                 ;
 
-bool_expr:      OBJECT EQ OBJECT                            { $$ = new Bool($1, $2, $3); }
-                | OBJECT NE OBJECT                          { $$ = new Bool($1, $2, $3); }
-                | OBJECT LT OBJECT                          { $$ = new Bool($1, $2, $3); }
-                | OBJECT LE OBJECT                          { $$ = new Bool($1, $2, $3); }
-                | OBJECT GT OBJECT                          { $$ = new Bool($1, $2, $3); }
-                | OBJECT GE OBJECT                          { $$ = new Bool($1, $2, $3); }
+expr            : term 
+                | expr ADD term   {$$=new BinaryExpression($1, $2, $3);}
+				| expr SUB term   {$$=new BinaryExpression($1, $2, $3);}
+                ;
+
+term            : value SEMICOLON               {$$=new ConstExpression($1);}
+				| term MUL value SEMICOLON 		{$$=new BinaryExpression($1, $2, $3);}
+				| term DIV value SEMICOLON		{$$=new BinaryExpression($1, $2, $3);}
+				;
+
+value:          INTEGER             {$$=new Object($1);}
+                | DOUBLE            {$$=new Object($1);}
+                | STRING            {$$=new Object($1);}
+                | IDENTIFIER        {$$=new Object($1);}
                 ;
 %%

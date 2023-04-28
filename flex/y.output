@@ -1,194 +1,567 @@
 Terminals unused in grammar
 
-   INTEGER
-   DOUBLE
-   STRING
    EQ
    NE
    LT
    LE
    GT
    GE
-   LPAREN
-   RPAREN
    LBRACE
    RBRACE
    COMMA
    DOT
-   PLUS
-   MINUS
-   MUL
-   DIV
-   IF
-   ELSE
-   WHILE
    FOR
    RETURN
    FUNC
-   TMINUS
-   TPLUS
-   TDIV
-   TMUL
+
+
+State 32 conflicts: 4 shift/reduce
+State 37 conflicts: 3 shift/reduce
+State 42 conflicts: 3 shift/reduce
 
 
 Grammar
 
     0 $accept: program $end
 
-    1 program: stmts
+    1 program: block
 
-    2 stmts: stmt
-    3      | stmts stmt
+    2 block: stmt
+    3      | block stmt
 
     4 stmt: assign_expr
+    5     | if_expr
+    6     | while_expr
 
-    5 assign_expr: LET IDENTIFIER ASSIGN OBJECT SEMICOLON
+    7 assign_expr: LET IDENTIFIER ASSIGN value SEMICOLON
+
+    8 if_expr: IF LPAREN expr RPAREN block
+    9        | IF LPAREN expr RPAREN block ELSE block
+
+   10 while_expr: WHILE LPAREN expr RPAREN block
+
+   11 expr: term
+   12     | expr ADD term
+   13     | expr SUB term
+
+   14 term: value SEMICOLON
+   15     | term MUL value SEMICOLON
+   16     | term DIV value SEMICOLON
+
+   17 value: INTEGER
+   18      | DOUBLE
+   19      | STRING
+   20      | IDENTIFIER
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-IDENTIFIER (258) 5
-INTEGER (259)
-DOUBLE (260)
-STRING (261)
-OBJECT (262) 5
-EQ (263)
-NE (264)
-LT (265)
-LE (266)
-GT (267)
-GE (268)
-LPAREN (269)
-RPAREN (270)
-LBRACE (271)
-RBRACE (272)
-COMMA (273)
-DOT (274)
-SEMICOLON (275) 5
-PLUS (276)
-MINUS (277)
-MUL (278)
-DIV (279)
-ASSIGN (280) 5
-IF (281)
-ELSE (282)
-WHILE (283)
-FOR (284)
-LET (285) 5
-RETURN (286)
-FUNC (287)
-TMINUS (288)
-TPLUS (289)
-TDIV (290)
-TMUL (291)
+IDENTIFIER (258) 7 20
+INTEGER (259) 17
+DOUBLE (260) 18
+STRING (261) 19
+EQ (262)
+NE (263)
+LT (264)
+LE (265)
+GT (266)
+GE (267)
+LPAREN (268) 8 9 10
+RPAREN (269) 8 9 10
+LBRACE (270)
+RBRACE (271)
+COMMA (272)
+DOT (273)
+SEMICOLON (274) 7 14 15 16
+ADD (275) 12
+SUB (276) 13
+MUL (277) 15
+DIV (278) 16
+ASSIGN (279) 7
+IF (280) 8 9
+ELSE (281) 9
+WHILE (282) 10
+FOR (283)
+LET (284) 7
+RETURN (285)
+FUNC (286)
 
 
 Nonterminals, with rules where they appear
 
-$accept (37)
+$accept (32)
     on left: 0
-program (38)
+program (33)
     on left: 1, on right: 0
-stmts (39)
-    on left: 2 3, on right: 1 3
-stmt (40)
-    on left: 4, on right: 2 3
-assign_expr (41)
-    on left: 5, on right: 4
+block (34)
+    on left: 2 3, on right: 1 3 8 9 10
+stmt (35)
+    on left: 4 5 6, on right: 2 3
+assign_expr (36)
+    on left: 7, on right: 4
+if_expr (37)
+    on left: 8 9, on right: 5
+while_expr (38)
+    on left: 10, on right: 6
+expr (39)
+    on left: 11 12 13, on right: 8 9 10 12 13
+term (40)
+    on left: 14 15 16, on right: 11 12 13 15 16
+value (41)
+    on left: 17 18 19 20, on right: 7 14 15 16
 
 
 state 0
 
     0 $accept: . program $end
 
-    LET  shift, and go to state 1
+    IF     shift, and go to state 1
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
 
-    program      go to state 2
-    stmts        go to state 3
-    stmt         go to state 4
-    assign_expr  go to state 5
+    program      go to state 4
+    block        go to state 5
+    stmt         go to state 6
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
 
 
 state 1
 
-    5 assign_expr: LET . IDENTIFIER ASSIGN OBJECT SEMICOLON
+    8 if_expr: IF . LPAREN expr RPAREN block
+    9        | IF . LPAREN expr RPAREN block ELSE block
 
-    IDENTIFIER  shift, and go to state 6
+    LPAREN  shift, and go to state 10
 
 
 state 2
 
-    0 $accept: program . $end
+   10 while_expr: WHILE . LPAREN expr RPAREN block
 
-    $end  shift, and go to state 7
+    LPAREN  shift, and go to state 11
 
 
 state 3
 
-    1 program: stmts .
-    3 stmts: stmts . stmt
+    7 assign_expr: LET . IDENTIFIER ASSIGN value SEMICOLON
 
-    LET  shift, and go to state 1
-
-    $default  reduce using rule 1 (program)
-
-    stmt         go to state 8
-    assign_expr  go to state 5
+    IDENTIFIER  shift, and go to state 12
 
 
 state 4
 
-    2 stmts: stmt .
+    0 $accept: program . $end
 
-    $default  reduce using rule 2 (stmts)
+    $end  shift, and go to state 13
 
 
 state 5
+
+    1 program: block .
+    3 block: block . stmt
+
+    IF     shift, and go to state 1
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
+
+    $default  reduce using rule 1 (program)
+
+    stmt         go to state 14
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
+
+
+state 6
+
+    2 block: stmt .
+
+    $default  reduce using rule 2 (block)
+
+
+state 7
 
     4 stmt: assign_expr .
 
     $default  reduce using rule 4 (stmt)
 
 
-state 6
+state 8
 
-    5 assign_expr: LET IDENTIFIER . ASSIGN OBJECT SEMICOLON
+    5 stmt: if_expr .
 
-    ASSIGN  shift, and go to state 9
+    $default  reduce using rule 5 (stmt)
 
 
-state 7
+state 9
+
+    6 stmt: while_expr .
+
+    $default  reduce using rule 6 (stmt)
+
+
+state 10
+
+    8 if_expr: IF LPAREN . expr RPAREN block
+    9        | IF LPAREN . expr RPAREN block ELSE block
+
+    IDENTIFIER  shift, and go to state 15
+    INTEGER     shift, and go to state 16
+    DOUBLE      shift, and go to state 17
+    STRING      shift, and go to state 18
+
+    expr   go to state 19
+    term   go to state 20
+    value  go to state 21
+
+
+state 11
+
+   10 while_expr: WHILE LPAREN . expr RPAREN block
+
+    IDENTIFIER  shift, and go to state 15
+    INTEGER     shift, and go to state 16
+    DOUBLE      shift, and go to state 17
+    STRING      shift, and go to state 18
+
+    expr   go to state 22
+    term   go to state 20
+    value  go to state 21
+
+
+state 12
+
+    7 assign_expr: LET IDENTIFIER . ASSIGN value SEMICOLON
+
+    ASSIGN  shift, and go to state 23
+
+
+state 13
 
     0 $accept: program $end .
 
     $default  accept
 
 
-state 8
+state 14
 
-    3 stmts: stmts stmt .
+    3 block: block stmt .
 
-    $default  reduce using rule 3 (stmts)
-
-
-state 9
-
-    5 assign_expr: LET IDENTIFIER ASSIGN . OBJECT SEMICOLON
-
-    OBJECT  shift, and go to state 10
+    $default  reduce using rule 3 (block)
 
 
-state 10
+state 15
 
-    5 assign_expr: LET IDENTIFIER ASSIGN OBJECT . SEMICOLON
+   20 value: IDENTIFIER .
 
-    SEMICOLON  shift, and go to state 11
+    $default  reduce using rule 20 (value)
 
 
-state 11
+state 16
 
-    5 assign_expr: LET IDENTIFIER ASSIGN OBJECT SEMICOLON .
+   17 value: INTEGER .
 
-    $default  reduce using rule 5 (assign_expr)
+    $default  reduce using rule 17 (value)
+
+
+state 17
+
+   18 value: DOUBLE .
+
+    $default  reduce using rule 18 (value)
+
+
+state 18
+
+   19 value: STRING .
+
+    $default  reduce using rule 19 (value)
+
+
+state 19
+
+    8 if_expr: IF LPAREN expr . RPAREN block
+    9        | IF LPAREN expr . RPAREN block ELSE block
+   12 expr: expr . ADD term
+   13     | expr . SUB term
+
+    RPAREN  shift, and go to state 24
+    ADD     shift, and go to state 25
+    SUB     shift, and go to state 26
+
+
+state 20
+
+   11 expr: term .
+   15 term: term . MUL value SEMICOLON
+   16     | term . DIV value SEMICOLON
+
+    MUL  shift, and go to state 27
+    DIV  shift, and go to state 28
+
+    $default  reduce using rule 11 (expr)
+
+
+state 21
+
+   14 term: value . SEMICOLON
+
+    SEMICOLON  shift, and go to state 29
+
+
+state 22
+
+   10 while_expr: WHILE LPAREN expr . RPAREN block
+   12 expr: expr . ADD term
+   13     | expr . SUB term
+
+    RPAREN  shift, and go to state 30
+    ADD     shift, and go to state 25
+    SUB     shift, and go to state 26
+
+
+state 23
+
+    7 assign_expr: LET IDENTIFIER ASSIGN . value SEMICOLON
+
+    IDENTIFIER  shift, and go to state 15
+    INTEGER     shift, and go to state 16
+    DOUBLE      shift, and go to state 17
+    STRING      shift, and go to state 18
+
+    value  go to state 31
+
+
+state 24
+
+    8 if_expr: IF LPAREN expr RPAREN . block
+    9        | IF LPAREN expr RPAREN . block ELSE block
+
+    IF     shift, and go to state 1
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
+
+    block        go to state 32
+    stmt         go to state 6
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
+
+
+state 25
+
+   12 expr: expr ADD . term
+
+    IDENTIFIER  shift, and go to state 15
+    INTEGER     shift, and go to state 16
+    DOUBLE      shift, and go to state 17
+    STRING      shift, and go to state 18
+
+    term   go to state 33
+    value  go to state 21
+
+
+state 26
+
+   13 expr: expr SUB . term
+
+    IDENTIFIER  shift, and go to state 15
+    INTEGER     shift, and go to state 16
+    DOUBLE      shift, and go to state 17
+    STRING      shift, and go to state 18
+
+    term   go to state 34
+    value  go to state 21
+
+
+state 27
+
+   15 term: term MUL . value SEMICOLON
+
+    IDENTIFIER  shift, and go to state 15
+    INTEGER     shift, and go to state 16
+    DOUBLE      shift, and go to state 17
+    STRING      shift, and go to state 18
+
+    value  go to state 35
+
+
+state 28
+
+   16 term: term DIV . value SEMICOLON
+
+    IDENTIFIER  shift, and go to state 15
+    INTEGER     shift, and go to state 16
+    DOUBLE      shift, and go to state 17
+    STRING      shift, and go to state 18
+
+    value  go to state 36
+
+
+state 29
+
+   14 term: value SEMICOLON .
+
+    $default  reduce using rule 14 (term)
+
+
+state 30
+
+   10 while_expr: WHILE LPAREN expr RPAREN . block
+
+    IF     shift, and go to state 1
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
+
+    block        go to state 37
+    stmt         go to state 6
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
+
+
+state 31
+
+    7 assign_expr: LET IDENTIFIER ASSIGN value . SEMICOLON
+
+    SEMICOLON  shift, and go to state 38
+
+
+state 32
+
+    3 block: block . stmt
+    8 if_expr: IF LPAREN expr RPAREN block .
+    9        | IF LPAREN expr RPAREN block . ELSE block
+
+    IF     shift, and go to state 1
+    ELSE   shift, and go to state 39
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
+
+    IF        [reduce using rule 8 (if_expr)]
+    ELSE      [reduce using rule 8 (if_expr)]
+    WHILE     [reduce using rule 8 (if_expr)]
+    LET       [reduce using rule 8 (if_expr)]
+    $default  reduce using rule 8 (if_expr)
+
+    stmt         go to state 14
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
+
+
+state 33
+
+   12 expr: expr ADD term .
+   15 term: term . MUL value SEMICOLON
+   16     | term . DIV value SEMICOLON
+
+    MUL  shift, and go to state 27
+    DIV  shift, and go to state 28
+
+    $default  reduce using rule 12 (expr)
+
+
+state 34
+
+   13 expr: expr SUB term .
+   15 term: term . MUL value SEMICOLON
+   16     | term . DIV value SEMICOLON
+
+    MUL  shift, and go to state 27
+    DIV  shift, and go to state 28
+
+    $default  reduce using rule 13 (expr)
+
+
+state 35
+
+   15 term: term MUL value . SEMICOLON
+
+    SEMICOLON  shift, and go to state 40
+
+
+state 36
+
+   16 term: term DIV value . SEMICOLON
+
+    SEMICOLON  shift, and go to state 41
+
+
+state 37
+
+    3 block: block . stmt
+   10 while_expr: WHILE LPAREN expr RPAREN block .
+
+    IF     shift, and go to state 1
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
+
+    IF        [reduce using rule 10 (while_expr)]
+    WHILE     [reduce using rule 10 (while_expr)]
+    LET       [reduce using rule 10 (while_expr)]
+    $default  reduce using rule 10 (while_expr)
+
+    stmt         go to state 14
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
+
+
+state 38
+
+    7 assign_expr: LET IDENTIFIER ASSIGN value SEMICOLON .
+
+    $default  reduce using rule 7 (assign_expr)
+
+
+state 39
+
+    9 if_expr: IF LPAREN expr RPAREN block ELSE . block
+
+    IF     shift, and go to state 1
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
+
+    block        go to state 42
+    stmt         go to state 6
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
+
+
+state 40
+
+   15 term: term MUL value SEMICOLON .
+
+    $default  reduce using rule 15 (term)
+
+
+state 41
+
+   16 term: term DIV value SEMICOLON .
+
+    $default  reduce using rule 16 (term)
+
+
+state 42
+
+    3 block: block . stmt
+    9 if_expr: IF LPAREN expr RPAREN block ELSE block .
+
+    IF     shift, and go to state 1
+    WHILE  shift, and go to state 2
+    LET    shift, and go to state 3
+
+    IF        [reduce using rule 9 (if_expr)]
+    WHILE     [reduce using rule 9 (if_expr)]
+    LET       [reduce using rule 9 (if_expr)]
+    $default  reduce using rule 9 (if_expr)
+
+    stmt         go to state 14
+    assign_expr  go to state 7
+    if_expr      go to state 8
+    while_expr   go to state 9
