@@ -1,2 +1,3 @@
+bison --yacc -dv till.y
 flex till.l
-gcc lex.yy.c
+gcc -o till y.tab.c lex.yy.c

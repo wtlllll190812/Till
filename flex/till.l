@@ -1,27 +1,58 @@
 %{
-  int key=0;
-  int mark=0;
+	#include "y.tab.h"
+	void yyerror(char *);
 %}
 
-ALPHA [a-zA-Z]
-MARK  {ALPHA}+[a-zA-Z0-9_]*
-KEY   if|else|int|double|return
+INUM	[1-9]+[0-9]*|0
+FNUM	[0-9]+\.[0-9]+
+VAR 	[a-zA-Z_$]+[a-zA-Z_$0-9]*
+CHAR	'.'
 
 %%
 
-{KEY}					  printf("KEY ");key++;
-{MARK}					printf("MARK "); mark++;
-\n						  printf("\n");
-.
-
+"int"		return DEF_INT;
+"double"	return DEF_DOUBLE;
+"char"		return DEF_CHAR;
+{INUM}		return INT;
+{FNUM}		return DOUBLE;
+{VAR}		return VAR;
+{CHAR}		return CHAR;
+"="			return EQ;
+";"			return END;
+"\n"		return CR;
 %%
-int main(int argc, char **argv)
-{
-  yylex();
-  printf("MARK=%d  KEY=%d",mark,key);
-  yywrap();
-}
-int yywrap()
-{
-	return 1;
-}
+
+
+ILLEGAL = 0,
+        ASSIGN,
+        PLUS,
+        MINUS,
+        ASTERISK,
+        SLASH,
+        BANG,
+        LT,
+        LTE,
+        GT,
+        GTE,
+        EQ,
+        NEQ,
+        LPAREN,
+        RPAREN,
+        LBRACE,
+        RBRACE,
+        LBRACKET,
+        RBRACKET,
+        COMMA,
+        COLON,
+        SEMICOLON,
+        LET,
+        IDENT,
+        FUNCTION,
+        INT,
+        TRUE,
+        FALSE,
+        IF,
+        ELSE,
+        RETURN,
+        STRING,
+        END,
