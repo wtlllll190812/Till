@@ -23,4 +23,4 @@ lexer:
 
 clean:
 	echo "Cleaning..."
-	$(RM) -rf src/parser.cpp src/parser.hpp lexer.cpp till.exe $(OBJS) 
+	$(RM) -rf src/parser.cpp src/parser.hpp src/lexer.cpp till.exe $(OBJS) 

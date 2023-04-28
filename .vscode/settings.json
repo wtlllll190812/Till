@@ -44,5 +44,12 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "stdio.h": "c"
-    }
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "d:\\TLProject\\Vscode\\VsCode_C\\Till_Language",
+            "binaryPath": "d:\\TLProject\\Vscode\\VsCode_C\\Till_Language\\till.exe",
+            "binaryArgs": []
+        }
+    ]
 }
