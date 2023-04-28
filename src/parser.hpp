@@ -91,7 +91,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "till.y"
+#line 12 "till.y"
 
     Block*          block;
     Statement*      statement;

@@ -14,7 +14,7 @@ void read_file(string filepath, ifstream &infile);
 int main(int argc, char *argv[])
 {
 	yyparse();
-	std::cout << program << std::endl;
+	std::cout << "sdsdsdsd" << std::endl;
 	return 0;
 
 	// if (argc < 2)

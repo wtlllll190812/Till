@@ -2,17 +2,9 @@
     #include "ast.hpp"
     #include <cstdio>
     #include <cstdlib>
-    namespace EzAquarii {
-        class Scanner;
-    }
-
     Block *program; /* the top level root node of our final AST */
-    
-    static int yylex() {
-        return scanner.get_next_token();
-    }
 
-    // extern int yylex();
+    extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
 %}
 

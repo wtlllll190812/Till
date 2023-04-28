@@ -72,20 +72,12 @@
     #include "ast.hpp"
     #include <cstdio>
     #include <cstdlib>
-    namespace EzAquarii {
-        class Scanner;
-    }
-
     Block *program; /* the top level root node of our final AST */
-    
-    static int yylex() {
-        return scanner.get_next_token();
-    }
 
-    // extern int yylex();
+    extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
 
-#line 89 "../src/parser.cpp"
+#line 81 "../src/parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -525,9 +517,9 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    64,    64,    67,    68,    71,    72,    73,    76,    79,
-      80,    83,    86,    87,    88,    91,    92,    93,    96,    97,
-      98,    99
+       0,    56,    56,    59,    60,    63,    64,    65,    68,    71,
+      72,    75,    78,    79,    80,    83,    84,    85,    88,    89,
+      90,    91
 };
 #endif
 
@@ -1128,121 +1120,121 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: block  */
-#line 64 "till.y"
+#line 56 "till.y"
                                 { program=(yyvsp[0].block); }
-#line 1134 "../src/parser.cpp"
+#line 1126 "../src/parser.cpp"
     break;
 
   case 3: /* block: stmt  */
-#line 67 "till.y"
+#line 59 "till.y"
                                 { (yyval.block)=new Block();(yyval.block)->Append((yyvsp[0].statement)); }
-#line 1140 "../src/parser.cpp"
+#line 1132 "../src/parser.cpp"
     break;
 
   case 4: /* block: block stmt  */
-#line 68 "till.y"
+#line 60 "till.y"
                                 { (yyvsp[-1].block)->Append((yyvsp[0].statement)); }
-#line 1146 "../src/parser.cpp"
+#line 1138 "../src/parser.cpp"
     break;
 
   case 5: /* stmt: assign_expr  */
-#line 71 "till.y"
+#line 63 "till.y"
                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
-#line 1152 "../src/parser.cpp"
+#line 1144 "../src/parser.cpp"
     break;
 
   case 6: /* stmt: if_expr  */
-#line 72 "till.y"
+#line 64 "till.y"
                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
-#line 1158 "../src/parser.cpp"
+#line 1150 "../src/parser.cpp"
     break;
 
   case 7: /* stmt: while_expr  */
-#line 73 "till.y"
+#line 65 "till.y"
                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
-#line 1164 "../src/parser.cpp"
+#line 1156 "../src/parser.cpp"
     break;
 
   case 8: /* assign_expr: LET IDENTIFIER ASSIGN value SEMICOLON  */
-#line 76 "till.y"
+#line 68 "till.y"
                                                             { (yyval.expression) = new AssignExpression(*(yyvsp[-3].identifier), *(yyvsp[-1].object)); }
-#line 1170 "../src/parser.cpp"
+#line 1162 "../src/parser.cpp"
     break;
 
   case 9: /* if_expr: IF LPAREN expr RPAREN block  */
-#line 79 "till.y"
+#line 71 "till.y"
                                                             { (yyval.expression) = new IfExpression(*(yyvsp[-2].expression), *(yyvsp[0].block)); }
-#line 1176 "../src/parser.cpp"
+#line 1168 "../src/parser.cpp"
     break;
 
   case 10: /* if_expr: IF LPAREN expr RPAREN block ELSE block  */
-#line 80 "till.y"
+#line 72 "till.y"
                                                                        { (yyval.expression) = new IfExpression(*(yyvsp[-4].expression), *(yyvsp[-2].block), *(yyvsp[0].block)); }
-#line 1182 "../src/parser.cpp"
+#line 1174 "../src/parser.cpp"
     break;
 
   case 11: /* while_expr: WHILE LPAREN expr RPAREN block  */
-#line 83 "till.y"
+#line 75 "till.y"
                                                             { (yyval.expression) = new WhileExpression(*(yyvsp[-2].expression), *(yyvsp[0].block)); }
-#line 1188 "../src/parser.cpp"
+#line 1180 "../src/parser.cpp"
     break;
 
   case 13: /* expr: expr ADD term  */
-#line 87 "till.y"
+#line 79 "till.y"
                                   {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
-#line 1194 "../src/parser.cpp"
+#line 1186 "../src/parser.cpp"
     break;
 
   case 14: /* expr: expr SUB term  */
-#line 88 "till.y"
+#line 80 "till.y"
                                                   {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
-#line 1200 "../src/parser.cpp"
+#line 1192 "../src/parser.cpp"
     break;
 
   case 15: /* term: value SEMICOLON  */
-#line 91 "till.y"
+#line 83 "till.y"
                                                 {(yyval.expression)=new ConstExpression(*(yyvsp[-1].object));}
-#line 1206 "../src/parser.cpp"
+#line 1198 "../src/parser.cpp"
     break;
 
   case 16: /* term: term MUL value SEMICOLON  */
-#line 92 "till.y"
+#line 84 "till.y"
                                                                         {(yyval.expression)=new BinaryExpression(*(yyvsp[-3].expression), (yyvsp[-2].token), *(yyvsp[-1].object));}
-#line 1212 "../src/parser.cpp"
+#line 1204 "../src/parser.cpp"
     break;
 
   case 17: /* term: term DIV value SEMICOLON  */
-#line 93 "till.y"
+#line 85 "till.y"
                                                                         {(yyval.expression)=new BinaryExpression(*(yyvsp[-3].expression), (yyvsp[-2].token), *(yyvsp[-1].object));}
-#line 1218 "../src/parser.cpp"
+#line 1210 "../src/parser.cpp"
     break;
 
   case 18: /* value: INTEGER  */
-#line 96 "till.y"
+#line 88 "till.y"
                                     {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
-#line 1224 "../src/parser.cpp"
+#line 1216 "../src/parser.cpp"
     break;
 
   case 19: /* value: DOUBLE  */
-#line 97 "till.y"
+#line 89 "till.y"
                                     {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
-#line 1230 "../src/parser.cpp"
+#line 1222 "../src/parser.cpp"
     break;
 
   case 20: /* value: STRING  */
-#line 98 "till.y"
+#line 90 "till.y"
                                     {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
-#line 1236 "../src/parser.cpp"
+#line 1228 "../src/parser.cpp"
     break;
 
   case 21: /* value: IDENTIFIER  */
-#line 99 "till.y"
+#line 91 "till.y"
                                     {(yyval.object)=(yyvsp[0].identifier)->get_value();}
-#line 1242 "../src/parser.cpp"
+#line 1234 "../src/parser.cpp"
     break;
 
 
-#line 1246 "../src/parser.cpp"
+#line 1238 "../src/parser.cpp"
 
       default: break;
     }
@@ -1436,4 +1428,4 @@ yyreturn:
   return yyresult;
 }
 
-#line 101 "till.y"
+#line 93 "till.y"
