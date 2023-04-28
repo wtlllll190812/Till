@@ -1,6 +1,6 @@
 %{
     #include "ast.h"
-    Program *program; /* the top level root node of our final AST */
+    Block *program; /* the top level root node of our final AST */
 
     extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
@@ -33,11 +33,9 @@
 // %type  stmt var_decl func_decl
 // %type  comparison
 
-%left ADD SUB ELSE
-%left MUL DIV
 
-%type <program>         program
-%type <block>           block
+
+%type <block>           block program
 %type <statement>       stmt
 %type <identifier>      IDENTIFIER
 %type <expression>      assign_expr if_expr while_expr expr term
@@ -45,13 +43,17 @@
 
 %type <string>          EQ NE LT LE GT GE ADD SUB MUL DIV
 
+%left ADD SUB 
+%left MUL DIV
+%left ELSE
+
 %start program
 
 %%
-program:        block           { $$->block=$1; }
+program:        block           { program=$1; }
                 ;
 
-block:          stmt            { $$->append($1); }
+block:          stmt            { $$=new Block();$$->append($1); }
                 | block stmt    { $1->append($2); }
                 ;
 
@@ -64,7 +66,7 @@ assign_expr:    LET IDENTIFIER ASSIGN value SEMICOLON       { $$ = new AssignExp
                 ;   
 
 if_expr:        IF LPAREN expr RPAREN block                 { $$ = new IfExpression($3, $5); }
-                | IF LPAREN expr RPAREN block ELSE block    { $$ = new IfExpression($3, $5, $7); }
+                | IF LPAREN expr RPAREN block ELSE block    %prec ELSE { $$ = new IfExpression($3, $5, $7); }
                 ;
 
 while_expr:     WHILE LPAREN expr RPAREN block              { $$ = new WhileExpression($3, $5); }

@@ -71,14 +71,14 @@
 #line 1 "till.y"
 
     #include "ast.h"
-    Program *program; /* the top level root node of our final AST */
+    Block *program; /* the top level root node of our final AST */
 
     extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
 
 
 /* Line 189 of yacc.c  */
-#line 82 "y.tab.c"
+#line 82 "../out/parser.cpp"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -136,37 +136,6 @@
      FUNC = 286
    };
 #endif
-/* Tokens.  */
-#define IDENTIFIER 258
-#define INTEGER 259
-#define DOUBLE 260
-#define STRING 261
-#define EQ 262
-#define NE 263
-#define LT 264
-#define LE 265
-#define GT 266
-#define GE 267
-#define LPAREN 268
-#define RPAREN 269
-#define LBRACE 270
-#define RBRACE 271
-#define COMMA 272
-#define DOT 273
-#define SEMICOLON 274
-#define ADD 275
-#define SUB 276
-#define MUL 277
-#define DIV 278
-#define ASSIGN 279
-#define IF 280
-#define ELSE 281
-#define WHILE 282
-#define FOR 283
-#define LET 284
-#define RETURN 285
-#define FUNC 286
-
 
 
 
@@ -188,7 +157,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 192 "y.tab.c"
+#line 161 "../out/parser.cpp"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -200,7 +169,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 204 "y.tab.c"
+#line 173 "../out/parser.cpp"
 
 #ifdef short
 # undef short
@@ -493,9 +462,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    51,    51,    54,    55,    58,    59,    60,    63,    66,
-      67,    70,    73,    74,    75,    78,    79,    80,    83,    84,
-      85,    86
+       0,    53,    53,    56,    57,    60,    61,    62,    65,    68,
+      69,    72,    75,    76,    77,    80,    81,    82,    85,    86,
+      87,    88
 };
 #endif
 
@@ -1422,140 +1391,140 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 51 "till.y"
-    { (yyval.program)->block=(yyvsp[(1) - (1)].block); }
+#line 53 "till.y"
+    { program=(yyvsp[(1) - (1)].block); ;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 54 "till.y"
-    { (yyval.block)->append((yyvsp[(1) - (1)].statement)); }
+#line 56 "till.y"
+    { (yyval.block)=new Block();(yyval.block)->append((yyvsp[(1) - (1)].statement)); ;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 55 "till.y"
-    { (yyvsp[(1) - (2)].block)->append((yyvsp[(2) - (2)].statement)); }
+#line 57 "till.y"
+    { (yyvsp[(1) - (2)].block)->append((yyvsp[(2) - (2)].statement)); ;}
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 58 "till.y"
-    { (yyval.statement)=new Statement((yyvsp[(1) - (1)].expression)); }
+#line 60 "till.y"
+    { (yyval.statement)=new Statement((yyvsp[(1) - (1)].expression)); ;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 59 "till.y"
-    { (yyval.statement)=new Statement((yyvsp[(1) - (1)].expression)); }
+#line 61 "till.y"
+    { (yyval.statement)=new Statement((yyvsp[(1) - (1)].expression)); ;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 60 "till.y"
-    { (yyval.statement)=new Statement((yyvsp[(1) - (1)].expression)); }
+#line 62 "till.y"
+    { (yyval.statement)=new Statement((yyvsp[(1) - (1)].expression)); ;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 63 "till.y"
-    { (yyval.expression) = new AssignExpression((yyvsp[(4) - (5)].object)); }
+#line 65 "till.y"
+    { (yyval.expression) = new AssignExpression((yyvsp[(4) - (5)].object)); ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 66 "till.y"
-    { (yyval.expression) = new IfExpression((yyvsp[(3) - (5)].expression), (yyvsp[(5) - (5)].block)); }
+#line 68 "till.y"
+    { (yyval.expression) = new IfExpression((yyvsp[(3) - (5)].expression), (yyvsp[(5) - (5)].block)); ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 67 "till.y"
-    { (yyval.expression) = new IfExpression((yyvsp[(3) - (7)].expression), (yyvsp[(5) - (7)].block), (yyvsp[(7) - (7)].block)); }
+#line 69 "till.y"
+    { (yyval.expression) = new IfExpression((yyvsp[(3) - (7)].expression), (yyvsp[(5) - (7)].block), (yyvsp[(7) - (7)].block)); ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 70 "till.y"
-    { (yyval.expression) = new WhileExpression((yyvsp[(3) - (5)].expression), (yyvsp[(5) - (5)].block)); }
+#line 72 "till.y"
+    { (yyval.expression) = new WhileExpression((yyvsp[(3) - (5)].expression), (yyvsp[(5) - (5)].block)); ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 74 "till.y"
-    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (3)].expression), (yyvsp[(2) - (3)].string), (yyvsp[(3) - (3)].expression));}
+#line 76 "till.y"
+    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (3)].expression), (yyvsp[(2) - (3)].string), (yyvsp[(3) - (3)].expression));;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 75 "till.y"
-    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (3)].expression), (yyvsp[(2) - (3)].string), (yyvsp[(3) - (3)].expression));}
+#line 77 "till.y"
+    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (3)].expression), (yyvsp[(2) - (3)].string), (yyvsp[(3) - (3)].expression));;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 78 "till.y"
-    {(yyval.expression)=new ConstExpression((yyvsp[(1) - (2)].object));}
+#line 80 "till.y"
+    {(yyval.expression)=new ConstExpression((yyvsp[(1) - (2)].object));;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 79 "till.y"
-    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (4)].expression), (yyvsp[(2) - (4)].string), (yyvsp[(3) - (4)].object));}
+#line 81 "till.y"
+    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (4)].expression), (yyvsp[(2) - (4)].string), (yyvsp[(3) - (4)].object));;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 80 "till.y"
-    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (4)].expression), (yyvsp[(2) - (4)].string), (yyvsp[(3) - (4)].object));}
+#line 82 "till.y"
+    {(yyval.expression)=new BinaryExpression((yyvsp[(1) - (4)].expression), (yyvsp[(2) - (4)].string), (yyvsp[(3) - (4)].object));;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 83 "till.y"
-    {(yyval.object)=new Object((yyvsp[(1) - (1)].object));}
+#line 85 "till.y"
+    {(yyval.object)=new Object((yyvsp[(1) - (1)].object));;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 84 "till.y"
-    {(yyval.object)=new Object((yyvsp[(1) - (1)].object));}
+#line 86 "till.y"
+    {(yyval.object)=new Object((yyvsp[(1) - (1)].object));;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 85 "till.y"
-    {(yyval.object)=new Object((yyvsp[(1) - (1)].object));}
+#line 87 "till.y"
+    {(yyval.object)=new Object((yyvsp[(1) - (1)].object));;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 86 "till.y"
-    {(yyval.object)=new Object((yyvsp[(1) - (1)].identifier));}
+#line 88 "till.y"
+    {(yyval.object)=new Object((yyvsp[(1) - (1)].identifier));;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1559 "y.tab.c"
+#line 1528 "../out/parser.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1767,5 +1736,5 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 88 "till.y"
+#line 90 "till.y"
 

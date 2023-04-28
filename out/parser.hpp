@@ -70,37 +70,6 @@
      FUNC = 286
    };
 #endif
-/* Tokens.  */
-#define IDENTIFIER 258
-#define INTEGER 259
-#define DOUBLE 260
-#define STRING 261
-#define EQ 262
-#define NE 263
-#define LT 264
-#define LE 265
-#define GT 266
-#define GE 267
-#define LPAREN 268
-#define RPAREN 269
-#define LBRACE 270
-#define RBRACE 271
-#define COMMA 272
-#define DOT 273
-#define SEMICOLON 274
-#define ADD 275
-#define SUB 276
-#define MUL 277
-#define DIV 278
-#define ASSIGN 279
-#define IF 280
-#define ELSE 281
-#define WHILE 282
-#define FOR 283
-#define LET 284
-#define RETURN 285
-#define FUNC 286
-
 
 
 
@@ -122,7 +91,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 126 "y.tab.h"
+#line 95 "../out/parser.hpp"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
