@@ -1,0 +1,10 @@
+"filename", "language", "C++", "comment", "blank", "total"
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\expression.cpp", "C++", 38, 0, 7, 45
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\expression.h", "C++", 26, 9, 8, 43
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\lexer.cpp", "C++", 3, 0, 0, 3
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\parser.cpp", "C++", 180, 19, 37, 236
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\parser.h", "C++", 23, 3, 3, 29
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\statement.cpp", "C++", 40, 0, 8, 48
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\statement.h", "C++", 27, 12, 6, 45
+"d:\TLProject\Vscode\VsCode_C\Till_Language\Till_Language\Till_Language\till.cpp", "C++", 3, 0, 2, 5
+"Total", "-", 340, 43, 71, 454
