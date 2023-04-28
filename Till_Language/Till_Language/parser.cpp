@@ -50,9 +50,9 @@ parser::parser()
     _infix_parse_funcs[token::LBRACKET] = std::bind(&parser::parse_index_expression, this, std::placeholders::_1);
 }
 
-std::unique_ptr<program> parser::parse(std::string& line)
+std::unique_ptr<program> parser::parse(std::string& text)
 {
-	m_line = line;
+	m_text = text;
 	init();
 	auto program = std::make_unique<class program>();
 	while (m_current_token.type != token::END)
@@ -70,7 +70,7 @@ std::unique_ptr<program> parser::parse(std::string& line)
 
 void parser::init()
 {
-	m_lexer.set_line(m_line);
+	m_lexer.set_text(m_text);
 
 	m_current_token = m_lexer.get_next_token();
 	m_next_token = m_lexer.get_next_token();
@@ -184,7 +184,10 @@ std::unique_ptr<expression> parser::parse_expression(Precedence precedence)
 
     auto left = prefix->second();
 
-    // 右侧运算符优先级更高时
+    // precedence 描述的是向右结合的能力。如果 precedence 是当前最高的，到目前所
+    // 收集到的 left_exp 就不会被传递给 infix_parse_func
+    // peek_precedence 描述的是向左结合的能力。这意味着 peek_precedence 越高
+    // 当前收集的 left_exp 越容易被 peek_token 收入囊中，即继续传递给 infix_parse_func
     while (m_next_token.type!= token::SEMICOLON && precedence < peek_precedence())
     {
         auto infix = _infix_parse_funcs.find(m_next_token.type);
@@ -204,7 +207,22 @@ std::unique_ptr<expression> parser::parse_expression(Precedence precedence)
 
 std::vector<std::shared_ptr<identifier>> parser::parse_function_parameters()
 {
-    return std::vector<std::shared_ptr<identifier>>();
+    std::vector<std::shared_ptr<identifier>> idents;
+    if (m_next_token.type == token::RPAREN)
+    {
+        next_token();
+        return idents;
+    }
+    next_token();
+    idents.emplace_back(new identifier(m_current_token, m_current_token.value));
+
+    while (m_next_token.type==token::COMMA)
+    {
+        next_token(); // comma
+        next_token(); // param
+        idents.emplace_back(new identifier(m_current_token, m_current_token.value));
+    }
+    return idents;
 }
 
 std::unique_ptr<block_statement> parser::parse_block_statement()
@@ -214,8 +232,20 @@ std::unique_ptr<block_statement> parser::parse_block_statement()
 
     while (m_current_token.type != token::RBRACE && m_current_token.type != token::END)
     {
-
+        auto stmt = parse_statement();
+        if (stmt)
+        {
+			block->append(stmt.release());
+		}
+		next_token();
     }
+
+    if (m_current_token.type == token::END)
+    {
+        return nullptr;
+    }
+
+    return block;
 }
 
 parser::Precedence parser::current_precedence() const
@@ -260,9 +290,10 @@ std::unique_ptr<expression> parser::parse_boolean_literal()
 
 std::unique_ptr<expression> parser::parse_function_literal()
 {
+    next_token();
     auto func = std::make_unique<function_literal>(m_current_token);
 
-    if (!m_next_token.type == token::LPAREN)
+    if (m_next_token.type != token::LPAREN)
     {
         return nullptr;
     }
@@ -271,7 +302,8 @@ std::unique_ptr<expression> parser::parse_function_literal()
     auto params = parse_function_parameters();
     func->set_parameters(params);
 
-    if (!m_next_token.type == token::LBRACE)
+    next_token();
+    if (m_next_token.type != token::LBRACE)
     {
         return nullptr;
     }

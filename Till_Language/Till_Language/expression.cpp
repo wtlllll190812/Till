@@ -33,7 +33,26 @@ const int integerLiteral::value() const
 
 std::string function_literal::to_string() const
 {
-    return std::string();
+    if (m_body == nullptr)
+    {
+        return std::string();
+    }
+
+    std::string ret(m_token.value);
+
+    ret.append(1, '(');
+    for (size_t i = 0; i < m_parameters.size(); ++i)
+    {
+        if (i != 0)
+        {
+            ret.append(", ");
+        }
+        ret.append(m_parameters[i]->to_string());
+    }
+    ret.append(") { ");
+    ret.append(m_body->to_string());
+    ret.append(" }");
+    return ret;
 }
 
 void function_literal::set_parameters(std::vector<std::shared_ptr<identifier>>& parameters)

@@ -68,6 +68,7 @@ private:
 class block_statement : public statement
 {
 public:
+	block_statement(token token) :statement(token) {};
 	std::string to_string() const override;
 	void append(statement* statment);
 

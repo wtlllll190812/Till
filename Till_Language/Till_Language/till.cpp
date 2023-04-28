@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<sstream>
 #include<string>
 #include "lexer.h"
 #include "parser.h"
@@ -53,7 +54,7 @@ void run_lex(ifstream& infile)
 
 	while (getline(infile, line))
 	{
-		m_lexer.set_line(line);
+		m_lexer.set_text(line);
 
 		// 处理每一行为token并显示
 		for (auto new_token = m_lexer.get_next_token();
@@ -72,12 +73,16 @@ void run_lex(ifstream& infile)
 
 void run_parser(ifstream& infile)
 {
-	string line;
+	string text;
 	parser m_parser;
+	ostringstream buf;
 
-	while (getline(infile, line))
-	{
-		auto program = m_parser.parse(line);
-		cout << program->to_string() << endl;
-	}
+	char ch;
+	while (buf && infile.get(ch))
+		buf.put(ch);
+
+	text= buf.str();
+
+	auto program = m_parser.parse(text);
+	cout << program->to_string() << endl;
 }

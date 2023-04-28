@@ -58,6 +58,7 @@ class block_statement;
 class function_literal : public expression
 {
 public:
+	function_literal(const token& token) : expression(token) {};
 	std::string to_string() const override;
 	void set_parameters(std::vector<std::shared_ptr<identifier>>& parameters);
 	void set_body(block_statement* body);

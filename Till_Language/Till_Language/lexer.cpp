@@ -125,9 +125,8 @@ token lexer::get_next_token()
 	return res;
 }
 
-void lexer::set_line(std::string& text)
+void lexer::set_text(std::string& text)
 {
-	m_line_number++;
 	m_text = text;
 	m_pos = 0;
 	m_next_pos = 0;
@@ -168,6 +167,10 @@ void lexer::skip_whitespace()
 		m_current_char == '\n' ||
 		m_current_char == '\r')
 	{
+		if (m_current_char == '\t')
+		{
+			m_line_number++;
+		}
 		read_char();
 	}
 }

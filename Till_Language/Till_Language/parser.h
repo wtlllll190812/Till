@@ -67,7 +67,7 @@ private:
     // 用于解析后缀操作符
     std::map<token::token_type, InfixParseFunc> _infix_parse_funcs;
 
-	std::string m_line;
+	std::string m_text;
 	token m_current_token;
 	token m_next_token;
 	lexer m_lexer;

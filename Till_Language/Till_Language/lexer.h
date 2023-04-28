@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// 设置当前行
 	/// </summary>
-	void set_line(std::string& text);
+	void set_text(std::string& text);
 
 private:
 	/// <summary>

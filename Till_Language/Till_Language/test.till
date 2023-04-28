@@ -2,14 +2,8 @@ let a=1;
 let b=2;
 func max(a,b)
 {
-	if(a>b)
-	{
-		return a;
-	}
-	else
-	{
-		return b;	
-	}
+	a=2;
+	b=3;
 }
 
 max(a,b);
