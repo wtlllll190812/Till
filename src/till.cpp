@@ -1,14 +1,14 @@
-#include<iostream>
-#include<fstream>
-#include<sstream>
-#include<string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "lexer.h"
 using namespace std;
 
-void read_file(string filepath, ifstream& infile);
-void run_lex(ifstream& infile);
+void read_file(string filepath, ifstream &infile);
+void run_lex(ifstream &infile);
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
@@ -28,23 +28,23 @@ int main(int argc, char* argv[])
 }
 
 /// <summary>
-/// 读取till文件
+/// ???till???
 /// </summary>
-/// <param name="filepath">文件路径</param>
-void read_file(string filepath, ifstream& infile)
+/// <param name="filepath">???·??</param>
+void read_file(string filepath, ifstream &infile)
 {
 	infile.open(filepath, ios::in);
 
 	if (!infile.is_open())
 	{
-		cout << "读取文件失败" << endl;
+		cout << "?????????" << endl;
 	}
 }
 
 /// <summary>
-/// 运行词法分析
+/// ???д??????
 /// </summary>
-void run_lex(ifstream& infile)
+void run_lex(ifstream &infile)
 {
 	string line;
 	lexer m_lexer;
@@ -53,10 +53,10 @@ void run_lex(ifstream& infile)
 	{
 		m_lexer.set_text(line);
 
-		// 处理每一行为token并显示
+		// ?????????token?????
 		for (auto new_token = m_lexer.get_next_token();
-			new_token.type != token::END;
-			new_token = m_lexer.get_next_token())
+			 new_token.type != token::END;
+			 new_token = m_lexer.get_next_token())
 		{
 			std::cout << new_token << std::endl;
 			if (new_token.type == token::ILLEGAL)

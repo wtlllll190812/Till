@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.shader": "shaderlab",
+        "iostream": "cpp",
+        "ostream": "cpp"
+    }
+}

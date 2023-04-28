@@ -1,5 +1,5 @@
 %{
-    #include "ast.h"
+    #include "ast.hpp"
     Block *program; /* the top level root node of our final AST */
 
     extern int yylex();
@@ -8,23 +8,23 @@
 
 /* Represents the many different ways we can access our data */
 %union {
-    Program*        program;
     Block*          block;
     Statement*      statement;
-    Expression*     expr;
+    Expression*     expression;
+    Identifier*     identifier;
     Object*         object;   
-     
-    std::string string;
+    std::string*    string;
+    int             token;
 }
 
 
-%token  IDENTIFIER INTEGER DOUBLE STRING                    //æ ‡è¯†ç¬¦å’Œå˜é‡
-%token  EQ NE LT LE GT GE                                   //æ¯”è¾ƒè¿ç®—ç¬¦
-%token  LPAREN RPAREN LBRACE RBRACE COMMA DOT SEMICOLON     //æ‹¬å·å’Œé€—å·
-%token  ADD SUB MUL DIV                                     //ç®—æœ¯è¿ç®—ç¬¦
-%token  ASSIGN                                              //èµ‹å€¼è¿ç®—ç¬¦
-%token  IF ELSE WHILE FOR                                   //æŽ§åˆ¶è¯­å¥
-%token  LET RETURN FUNC                                     //å…³é”®å­—
+%token  IDENTIFIER INTEGER DOUBLE STRING                    //±êÊ¶·ûºÍ±äÁ¿
+%token  EQ NE LT LE GT GE                                   //±È½ÏÔËËã·û
+%token  LPAREN RPAREN LBRACE RBRACE COMMA DOT SEMICOLON     //À¨ºÅºÍ¶ººÅ
+%token  ADD SUB MUL DIV                                     //ËãÊõÔËËã·û
+%token  ASSIGN                                              //¸³ÖµÔËËã·û
+%token  IF ELSE WHILE FOR                                   //¿ØÖÆÓï¾ä
+%token  LET RETURN FUNC                                     //¹Ø¼ü×Ö
 
 // %type  numeric expr
 // %type  func_decl_args
@@ -39,9 +39,10 @@
 %type <statement>       stmt
 %type <identifier>      IDENTIFIER
 %type <expression>      assign_expr if_expr while_expr expr term
-%type <object>          INTEGER DOUBLE STRING value
+%type <string>          INTEGER DOUBLE STRING 
+%type <object>          value
+%type <token>           EQ NE LT LE GT GE ADD SUB MUL DIV
 
-%type <string>          EQ NE LT LE GT GE ADD SUB MUL DIV
 
 %left ADD SUB 
 %left MUL DIV
@@ -53,38 +54,38 @@
 program:        block           { program=$1; }
                 ;
 
-block:          stmt            { $$=new Block();$$->append($1); }
-                | block stmt    { $1->append($2); }
+block:          stmt            { $$=new Block();$$->Append($1); }
+                | block stmt    { $1->Append($2); }
                 ;
 
-stmt:           assign_expr     { $$=new Statement($1); }
-                | if_expr       { $$=new Statement($1); }
-                | while_expr    { $$=new Statement($1); }
+stmt:           assign_expr     { $$=new Statement(*$1); }
+                | if_expr       { $$=new Statement(*$1); }
+                | while_expr    { $$=new Statement(*$1); }
                 ;
 
-assign_expr:    LET IDENTIFIER ASSIGN value SEMICOLON       { $$ = new AssignExpression($4); }
+assign_expr:    LET IDENTIFIER ASSIGN value SEMICOLON       { $$ = new AssignExpression(*$2, *$4); }
                 ;   
 
-if_expr:        IF LPAREN expr RPAREN block                 { $$ = new IfExpression($3, $5); }
-                | IF LPAREN expr RPAREN block ELSE block    %prec ELSE { $$ = new IfExpression($3, $5, $7); }
+if_expr:        IF LPAREN expr RPAREN block                 { $$ = new IfExpression(*$3, *$5); }
+                | IF LPAREN expr RPAREN block ELSE block    %prec ELSE { $$ = new IfExpression(*$3, *$5, *$7); }
                 ;
 
-while_expr:     WHILE LPAREN expr RPAREN block              { $$ = new WhileExpression($3, $5); }
+while_expr:     WHILE LPAREN expr RPAREN block              { $$ = new WhileExpression(*$3, *$5); }
                 ;
 
 expr            : term 
-                | expr ADD term   {$$=new BinaryExpression($1, $2, $3);}
-				| expr SUB term   {$$=new BinaryExpression($1, $2, $3);}
+                | expr ADD term   {$$=new BinaryExpression(*$1, $2, *$3);}
+				| expr SUB term   {$$=new BinaryExpression(*$1, $2, *$3);}
                 ;
 
-term            : value SEMICOLON               {$$=new ConstExpression($1);}
-				| term MUL value SEMICOLON 		{$$=new BinaryExpression($1, $2, $3);}
-				| term DIV value SEMICOLON		{$$=new BinaryExpression($1, $2, $3);}
+term            : value SEMICOLON               {$$=new ConstExpression(*$1);}
+				| term MUL value SEMICOLON 		{$$=new BinaryExpression(*$1, $2, *$3);}
+				| term DIV value SEMICOLON		{$$=new BinaryExpression(*$1, $2, *$3);}
 				;
 
-value:          INTEGER             {$$=new Object($1);}
-                | DOUBLE            {$$=new Object($1);}
-                | STRING            {$$=new Object($1);}
-                | IDENTIFIER        {$$=new Object($1);}
+value:          INTEGER             {$$=new Object(*$1);delete $1;}
+                | DOUBLE            {$$=new Object(*$1);delete $1;}
+                | STRING            {$$=new Object(*$1);delete $1;}
+                | IDENTIFIER        {$$=$1->get_value();}
                 ;
 %%
