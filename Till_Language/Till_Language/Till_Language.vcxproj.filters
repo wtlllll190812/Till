@@ -13,17 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\ast">
-      <UniqueIdentifier>{712a3752-9082-43ff-8069-8b4b45fd6b7a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\runtime">
       <UniqueIdentifier>{fb461608-9c30-4d27-93ff-0673f7ecd83a}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\runtime">
       <UniqueIdentifier>{0fca4a5f-edcd-4b08-b7b0-1da4e2fb1f7b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\ast">
-      <UniqueIdentifier>{b68048f2-c9a5-4435-a645-bdace59148be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,21 +30,6 @@
     <ClCompile Include="token.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="parser.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="statement.cpp">
-      <Filter>源文件\ast</Filter>
-    </ClCompile>
-    <ClCompile Include="program.cpp">
-      <Filter>源文件\ast</Filter>
-    </ClCompile>
-    <ClCompile Include="expression.cpp">
-      <Filter>源文件\ast</Filter>
-    </ClCompile>
-    <ClCompile Include="ast_node.h">
-      <Filter>头文件\ast</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexer.h">
@@ -58,18 +37,6 @@
     </ClInclude>
     <ClInclude Include="token.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="parser.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="expression.h">
-      <Filter>头文件\ast</Filter>
-    </ClInclude>
-    <ClInclude Include="statement.h">
-      <Filter>头文件\ast</Filter>
-    </ClInclude>
-    <ClInclude Include="program.h">
-      <Filter>头文件\ast</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

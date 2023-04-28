@@ -3,12 +3,10 @@
 #include<sstream>
 #include<string>
 #include "lexer.h"
-#include "parser.h"
 using namespace std;
 
 void read_file(string filepath, ifstream& infile);
 void run_lex(ifstream& infile);
-void run_parser(ifstream& infile);
 
 int main(int argc, char* argv[])
 {
@@ -23,8 +21,7 @@ int main(int argc, char* argv[])
 	ifstream infile;
 
 	read_file(filename, infile);
-	//run_lex(infile);
-	run_parser(infile);
+	run_lex(infile);
 
 	infile.close();
 	return 0;
@@ -69,20 +66,4 @@ void run_lex(ifstream& infile)
 			}
 		}
 	}
-}
-
-void run_parser(ifstream& infile)
-{
-	string text;
-	parser m_parser;
-	ostringstream buf;
-
-	char ch;
-	while (buf && infile.get(ch))
-		buf.put(ch);
-
-	text= buf.str();
-
-	auto program = m_parser.parse(text);
-	cout << program->to_string() << endl;
 }
