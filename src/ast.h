@@ -48,35 +48,21 @@ public:
     }
 };
 
-class Statement : public Node
-{
-private:
-    Expression *expr;
-
-public:
-    Statement(Expression *&expr) : expr(expr){};
-    ~Statement(){};
-    std::string toString()
-    {
-        return expr->toString();
-    }
-};
-
 class Block : public Node
 {
 public:
-    std::vector<Statement *> statements;
+    std::vector<Expression *> exprs;
     Block(){};
     ~Block(){};
-    void Append(Statement *state)
+    void Append(Expression *state)
     {
-        statements.push_back(state);
+        exprs.push_back(state);
     };
 
     std::string toString()
     {
         std::string str = "";
-        for (auto &state : statements)
+        for (auto &state : exprs)
         {
             str += state->toString();
             str += "\n";

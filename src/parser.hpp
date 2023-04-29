@@ -94,7 +94,6 @@ union YYSTYPE
 #line 12 "lang/till.y"
 
     Block*                      block;
-    Statement*                  statement;
     Expression*                 expression;
     Object*                     object;   
     std::string*                string;
@@ -103,7 +102,7 @@ union YYSTYPE
 
     int                         token;
 
-#line 107 "src/parser.hpp"
+#line 106 "src/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

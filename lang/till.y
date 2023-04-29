@@ -11,7 +11,6 @@
 /* Represents the many different ways we can access our data */
 %union {
     Block*                      block;
-    Statement*                  statement;
     Expression*                 expression;
     Object*                     object;   
     std::string*                string;
@@ -40,9 +39,8 @@
 
 
 %type <block>           block program
-%type <statement>       stmt
 %type <expression>      assign_expr declare_expr if_expr while_expr func_decl return_expr func_call
-%type <expression>      expr term factor
+%type <expression>      expr term factor stmt
 %type <object>          value
 %type <string_vector>   func_decl_args
 %type <expr_vector>     call_args
@@ -65,13 +63,13 @@ block:          stmt            { $$=new Block();$$->Append($1); }
                 ;
 
 //语句
-stmt:           declare_expr    { $$=new Statement($1); }
-                | if_expr       { $$=new Statement($1); }
-                | while_expr    { $$=new Statement($1); }
-                | assign_expr   { $$=new Statement($1); }
-                | func_decl     { $$=new Statement($1); }
-                | return_expr   { $$=new Statement($1); }
-                | func_call     { $$=new Statement($1); }
+stmt:           declare_expr    { $$=$1; }
+                | if_expr       { $$=$1; }
+                | while_expr    { $$=$1; }
+                | assign_expr   { $$=$1; }
+                | func_decl     { $$=$1; }
+                | return_expr   { $$=$1; }
+                | func_call     { $$=$1; }
                 ;
 //函数声明
 func_decl:      FUNC IDENTIFIER LPAREN func_decl_args RPAREN LBRACE block RBRACE { $$ = new FunctionExpression(*$2, *$4, *$7); }
