@@ -28,34 +28,52 @@ private:
 public:
     Expression(){};
     ~Expression(){};
+    virtual std::string toString()
+    {
+        return "Expression";
+    }
 };
-
 class Statement : public Node
 {
 private:
-    /* data */
+    Expression expr;
+
 public:
-    Statement(Expression &expr){};
+    Statement(Expression &expr) : expr(expr){};
     ~Statement(){};
+    std::string toString()
+    {
+        return expr.toString();
+    }
 };
 
 class Block : public Node
 {
-private:
-    std::vector<Statement *> statements;
-
 public:
+    std::vector<Statement *> statements;
     Block(){};
     ~Block(){};
-    void Append(Statement *state) { statements.push_back(state); };
+    void Append(Statement *state)
+    {
+        statements.push_back(state);
+    };
+
+    std::string toString()
+    {
+        std::string str = "";
+        for (auto &state : statements)
+        {
+            str += state->toString();
+            str += "\n";
+        }
+        return str;
+    };
 };
 
 class AssignExpression : public Expression
 {
-private:
 public:
-    AssignExpression(Identifier &ident, Expression &expression){};
-    AssignExpression(Identifier &ident, Object &obj){};
+    AssignExpression(Identifier &ident, int &op, Object &expr){};
     ~AssignExpression(){};
 };
 
@@ -94,6 +112,15 @@ private:
 public:
     CallExpression(){};
     ~CallExpression(){};
+};
+
+class DeclareExpression : public Expression
+{
+private:
+public:
+    DeclareExpression(Identifier &ident, Expression &expression){};
+    DeclareExpression(Identifier &ident, Object &obj){};
+    ~DeclareExpression(){};
 };
 
 class FunctionExpression : public Expression
