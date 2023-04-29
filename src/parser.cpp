@@ -69,7 +69,7 @@
 /* First part of user prologue.  */
 #line 1 "lang/till.y"
 
-    #include "ast.hpp"
+    #include "ast.h"
     #include <cstdio>
     #include <cstdlib>
     Block *program; /* the top level root node of our final AST */
@@ -521,10 +521,10 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    56,    56,    59,    60,    63,    64,    65,    66,    69,
-      72,    75,    76,    79,    82,    83,    84,    85,    88,    89,
-      90,    93,    94,    97,    98,    99,   100,   103,   104,   105,
-     106,   107,   108,   111
+       0,    53,    53,    56,    57,    60,    61,    62,    63,    66,
+      69,    72,    73,    76,    79,    80,    81,    82,    85,    86,
+      87,    90,    91,    94,    95,    96,    97,   100,   101,   102,
+     103,   104,   105,   108
 };
 #endif
 
@@ -568,7 +568,7 @@ static const yytype_int16 yytoknum[] =
 };
 #endif
 
-#define YYPACT_NINF (-46)
+#define YYPACT_NINF (-50)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -582,13 +582,13 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       5,   -19,     3,     9,     8,    44,     5,   -46,   -46,   -46,
-     -46,   -46,   -46,    61,    32,    32,   -15,   -46,   -46,   -46,
-     -46,   -46,   -46,    27,    32,    -8,    -4,    51,   -46,    33,
-      61,   -46,    35,    55,    32,    32,    32,    32,   -46,   -46,
-     -46,   -46,   -46,   -46,    32,    56,    53,   -46,     5,    -4,
-     -46,    -4,   -46,   -46,   -46,     5,   -46,    -2,    -1,    47,
-     -46,    59,     5,     4,   -46
+       5,   -15,    35,    37,     8,    18,     5,   -50,   -50,   -50,
+     -50,   -50,   -50,    32,    32,    32,    22,   -50,   -50,   -50,
+     -50,   -50,   -50,    32,    39,    21,    56,   -50,    -4,    33,
+      32,    41,   -50,    32,    32,    32,    32,   -50,   -50,   -50,
+     -50,   -50,   -50,    32,    57,    58,    50,   -50,    21,   -50,
+      21,   -50,   -50,   -50,     5,     5,   -50,    -2,    -1,    30,
+     -50,    59,     5,     4,   -50
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -598,25 +598,25 @@ static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     0,     0,     2,     3,     5,     8,
        6,     7,    33,     0,     0,     0,     0,     1,     4,    26,
-      23,    24,    25,     0,     0,     0,    14,    20,    22,     0,
-       0,    10,     0,     0,     0,     0,     0,     0,    27,    28,
-      29,    30,    31,    32,     0,     0,     0,    21,     0,    15,
-      20,    16,    18,    19,    17,     0,     9,     0,     0,    11,
+      23,    24,    25,     0,     0,    14,    20,    22,     0,     0,
+       0,     0,    10,     0,     0,     0,     0,    27,    28,    29,
+      30,    31,    32,     0,     0,     0,     0,    21,    15,    20,
+      16,    18,    19,    17,     0,     0,     9,     0,     0,    11,
       13,     0,     0,     0,    12
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -46,   -46,   -45,    -6,   -46,   -46,   -46,   -46,    24,    34,
-       6,    -9,   -46,   -46
+     -50,   -50,   -49,    -6,   -50,   -50,   -50,   -50,   -11,   -12,
+       6,   -50,   -50,   -50
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     5,     6,     7,     8,     9,    10,    11,    25,    26,
-      27,    28,    44,    13
+      -1,     5,     6,     7,     8,     9,    10,    11,    24,    25,
+      26,    27,    43,    13
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -624,26 +624,26 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      18,     1,     1,    57,    23,    12,    33,     1,     1,    30,
-      58,    16,    34,    35,    59,    60,    14,    63,    36,    37,
-      64,    46,    15,     2,     2,     3,     3,     4,     4,     2,
-       2,     3,     3,     4,     4,    19,    20,    21,    22,    29,
-      50,    50,    52,    53,    17,    24,    31,    45,    32,    47,
-      54,    18,    18,    34,    35,    34,    35,    18,    38,    39,
-      40,    41,    42,    43,    19,    20,    21,    22,    49,    51,
-      48,    55,    56,    61,    62
+      18,     1,     1,    28,    29,    57,    58,     1,     1,    12,
+      44,    16,    31,    63,    59,    60,    33,    34,    17,    46,
+      64,    48,    50,     2,     2,     3,     3,     4,     4,     2,
+       2,     3,     3,     4,     4,    19,    20,    21,    22,    49,
+      49,    51,    52,    35,    36,    23,    30,    45,    14,    53,
+      15,    18,    18,    33,    34,    47,    61,    18,    32,    33,
+      34,    33,    34,    37,    38,    39,    40,    41,    42,    56,
+      33,    34,    54,    55,    62
 };
 
 static const yytype_int8 yycheck[] =
 {
-       6,     3,     3,    48,    13,    24,    14,     3,     3,    24,
-      55,     3,    20,    21,    16,    16,    13,    62,    22,    23,
-      16,    30,    13,    25,    25,    27,    27,    29,    29,    25,
-      25,    27,    27,    29,    29,     3,     4,     5,     6,    15,
-      34,    35,    36,    37,     0,    13,    19,    14,    24,    14,
-      44,    57,    58,    20,    21,    20,    21,    63,     7,     8,
-       9,    10,    11,    12,     3,     4,     5,     6,    34,    35,
-      15,    15,    19,    26,    15
+       6,     3,     3,    14,    15,    54,    55,     3,     3,    24,
+      14,     3,    23,    62,    16,    16,    20,    21,     0,    30,
+      16,    33,    34,    25,    25,    27,    27,    29,    29,    25,
+      25,    27,    27,    29,    29,     3,     4,     5,     6,    33,
+      34,    35,    36,    22,    23,    13,    24,    14,    13,    43,
+      13,    57,    58,    20,    21,    14,    26,    63,    19,    20,
+      21,    20,    21,     7,     8,     9,    10,    11,    12,    19,
+      20,    21,    15,    15,    15
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -652,10 +652,10 @@ static const yytype_int8 yystos[] =
 {
        0,     3,    25,    27,    29,    33,    34,    35,    36,    37,
       38,    39,    24,    45,    13,    13,     3,     0,    35,     3,
-       4,     5,     6,    43,    13,    40,    41,    42,    43,    40,
-      24,    19,    40,    14,    20,    21,    22,    23,     7,     8,
-       9,    10,    11,    12,    44,    14,    43,    14,    15,    41,
-      42,    41,    42,    42,    42,    15,    19,    34,    34,    16,
+       4,     5,     6,    13,    40,    41,    42,    43,    40,    40,
+      24,    40,    19,    20,    21,    22,    23,     7,     8,     9,
+      10,    11,    12,    44,    14,    14,    40,    14,    41,    42,
+      41,    42,    42,    42,    15,    15,    19,    34,    34,    16,
       16,    26,    15,    34,    16
 };
 
@@ -1142,152 +1142,152 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: block  */
-#line 56 "lang/till.y"
+#line 53 "lang/till.y"
                                 { program=(yyvsp[0].block); }
 #line 1148 "src/parser.cpp"
     break;
 
   case 3: /* block: stmt  */
-#line 59 "lang/till.y"
+#line 56 "lang/till.y"
                                 { (yyval.block)=new Block();(yyval.block)->Append((yyvsp[0].statement)); }
 #line 1154 "src/parser.cpp"
     break;
 
   case 4: /* block: block stmt  */
-#line 60 "lang/till.y"
+#line 57 "lang/till.y"
                                 { (yyvsp[-1].block)->Append((yyvsp[0].statement)); }
 #line 1160 "src/parser.cpp"
     break;
 
   case 5: /* stmt: declare_expr  */
-#line 63 "lang/till.y"
+#line 60 "lang/till.y"
                                  { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
 #line 1166 "src/parser.cpp"
     break;
 
   case 6: /* stmt: if_expr  */
-#line 64 "lang/till.y"
+#line 61 "lang/till.y"
                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
 #line 1172 "src/parser.cpp"
     break;
 
   case 7: /* stmt: while_expr  */
-#line 65 "lang/till.y"
+#line 62 "lang/till.y"
                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
 #line 1178 "src/parser.cpp"
     break;
 
   case 8: /* stmt: assign_expr  */
-#line 66 "lang/till.y"
+#line 63 "lang/till.y"
                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
 #line 1184 "src/parser.cpp"
     break;
 
-  case 9: /* declare_expr: LET IDENTIFIER ASSIGN value SEMICOLON  */
-#line 69 "lang/till.y"
-                                                                                { (yyval.expression) = new DeclareExpression(*(yyvsp[-3].identifier), *(yyvsp[-1].object)); }
+  case 9: /* declare_expr: LET IDENTIFIER ASSIGN expr SEMICOLON  */
+#line 66 "lang/till.y"
+                                                                               { (yyval.expression) = new DeclareExpression(*(yyvsp[-3].string), *(yyvsp[-1].expression)); }
 #line 1190 "src/parser.cpp"
     break;
 
-  case 10: /* assign_expr: IDENTIFIER assign_operator value SEMICOLON  */
-#line 72 "lang/till.y"
-                                                                                { (yyval.expression) = new AssignExpression(*(yyvsp[-3].identifier),(yyvsp[-2].token), *(yyvsp[-1].object)); }
+  case 10: /* assign_expr: IDENTIFIER assign_operator expr SEMICOLON  */
+#line 69 "lang/till.y"
+                                                                               { (yyval.expression) = new AssignExpression(*(yyvsp[-3].string),(yyvsp[-2].token), *(yyvsp[-1].expression)); }
 #line 1196 "src/parser.cpp"
     break;
 
   case 11: /* if_expr: IF LPAREN expr RPAREN LBRACE block RBRACE  */
-#line 75 "lang/till.y"
+#line 72 "lang/till.y"
                                                                                                     { (yyval.expression) = new IfExpression(*(yyvsp[-4].expression), *(yyvsp[-1].block)); }
 #line 1202 "src/parser.cpp"
     break;
 
   case 12: /* if_expr: IF LPAREN expr RPAREN LBRACE block RBRACE ELSE LBRACE block RBRACE  */
-#line 76 "lang/till.y"
+#line 73 "lang/till.y"
                                                                                                     { (yyval.expression) = new IfExpression(*(yyvsp[-8].expression), *(yyvsp[-5].block), *(yyvsp[-1].block)); }
 #line 1208 "src/parser.cpp"
     break;
 
   case 13: /* while_expr: WHILE LPAREN expr RPAREN LBRACE block RBRACE  */
-#line 79 "lang/till.y"
+#line 76 "lang/till.y"
                                                                                                     { (yyval.expression) = new WhileExpression(*(yyvsp[-4].expression), *(yyvsp[-1].block)); }
 #line 1214 "src/parser.cpp"
     break;
 
   case 14: /* expr: term  */
-#line 82 "lang/till.y"
+#line 79 "lang/till.y"
                                                         {(yyval.expression)=(yyvsp[0].expression);}
 #line 1220 "src/parser.cpp"
     break;
 
   case 15: /* expr: expr ADD term  */
-#line 83 "lang/till.y"
+#line 80 "lang/till.y"
                                                         {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
 #line 1226 "src/parser.cpp"
     break;
 
   case 16: /* expr: expr SUB term  */
-#line 84 "lang/till.y"
+#line 81 "lang/till.y"
                                                                         {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
 #line 1232 "src/parser.cpp"
     break;
 
   case 17: /* expr: factor relational_operator factor  */
-#line 85 "lang/till.y"
+#line 82 "lang/till.y"
                                                         {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
 #line 1238 "src/parser.cpp"
     break;
 
   case 18: /* term: term MUL factor  */
-#line 88 "lang/till.y"
+#line 85 "lang/till.y"
                                                         {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
 #line 1244 "src/parser.cpp"
     break;
 
   case 19: /* term: term DIV factor  */
-#line 89 "lang/till.y"
+#line 86 "lang/till.y"
                                                                         {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
 #line 1250 "src/parser.cpp"
     break;
 
   case 20: /* term: factor  */
-#line 90 "lang/till.y"
+#line 87 "lang/till.y"
                                                 {(yyval.expression)=(yyvsp[0].expression);}
 #line 1256 "src/parser.cpp"
     break;
 
   case 21: /* factor: LPAREN expr RPAREN  */
-#line 93 "lang/till.y"
+#line 90 "lang/till.y"
                                                {(yyval.expression)=(yyvsp[-1].expression);}
 #line 1262 "src/parser.cpp"
     break;
 
   case 22: /* factor: value  */
-#line 94 "lang/till.y"
+#line 91 "lang/till.y"
                                                {(yyval.expression)=new ConstExpression(*(yyvsp[0].object));}
 #line 1268 "src/parser.cpp"
     break;
 
   case 23: /* value: INTEGER  */
-#line 97 "lang/till.y"
+#line 94 "lang/till.y"
                                     {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1274 "src/parser.cpp"
     break;
 
   case 24: /* value: DOUBLE  */
-#line 98 "lang/till.y"
+#line 95 "lang/till.y"
                                     {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1280 "src/parser.cpp"
     break;
 
   case 25: /* value: STRING  */
-#line 99 "lang/till.y"
+#line 96 "lang/till.y"
                                     {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1286 "src/parser.cpp"
     break;
 
   case 26: /* value: IDENTIFIER  */
-#line 100 "lang/till.y"
-                                    {(yyval.object)=(yyvsp[0].identifier)->get_value();}
+#line 97 "lang/till.y"
+                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1292 "src/parser.cpp"
     break;
 
@@ -1486,4 +1486,4 @@ yyreturn:
   return yyresult;
 }
 
-#line 113 "lang/till.y"
+#line 110 "lang/till.y"

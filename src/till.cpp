@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <stdio.h>
-#include "ast.hpp"
+#include "ast.h"
 #include "parser.hpp"
 using namespace std;
 

@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <vector>
-class Identifier;
 
 class Object
 {
@@ -73,7 +72,7 @@ public:
 class AssignExpression : public Expression
 {
 public:
-    AssignExpression(Identifier &ident, int &op, Object &expr){};
+    AssignExpression(std::string &ident, int &op, Expression &expr){};
     ~AssignExpression(){};
 };
 
@@ -117,9 +116,11 @@ public:
 class DeclareExpression : public Expression
 {
 private:
+    std::string ident;
+    Expression expression;
+
 public:
-    DeclareExpression(Identifier &ident, Expression &expression){};
-    DeclareExpression(Identifier &ident, Object &obj){};
+    DeclareExpression(std::string &ident, Expression &expression) : ident(ident), expression(expression){};
     ~DeclareExpression(){};
 };
 
@@ -130,16 +131,6 @@ private:
 public:
     FunctionExpression(){};
     ~FunctionExpression(){};
-};
-
-class Identifier : public Expression
-{
-private:
-    /* data */
-public:
-    Identifier(){};
-    ~Identifier(){};
-    Object *get_value() { return nullptr; };
 };
 
 class IfExpression : public Expression
