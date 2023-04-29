@@ -10,6 +10,22 @@ std::string Object::get_value()
     return m_value;
 }
 
+bool Object::get_bool()
+{
+    if (m_type == Null)
+    {
+        return false;
+    }
+    else if (m_type == Bool)
+    {
+        return m_value == "true";
+    }
+    else
+    {
+        return true;
+    }
+}
+
 Object Object::operator=(const Object &obj)
 {
     m_value = obj.m_value;

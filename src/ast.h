@@ -35,6 +35,7 @@ public:
     Object operator/(const Object &obj);
 
     std::string get_value();
+    bool get_bool();
 
 private:
     bool mis_match(const Object &obj);
@@ -285,6 +286,19 @@ public:
         ret += block2.toString();
         return ret;
     }
+    Object eval(Env &env) override
+    {
+        if (expr->eval(env).get_bool() == true)
+        {
+            block1.eval(env);
+        }
+        else
+        {
+            block2.eval(env);
+        }
+
+        return Object();
+    }
 };
 
 class ReturnExpression : public Expression
@@ -313,6 +327,10 @@ public:
     ValueExpression(Object &obj) : obj(obj){};
     ~ValueExpression(){};
     std::string toString() override;
+    Object eval(Env &env)
+    {
+        return obj;
+    }
 };
 
 class WhileExpression : public Expression
@@ -324,4 +342,12 @@ private:
 public:
     WhileExpression(Expression *&expr, Block &block) : expr(expr), block(block){};
     ~WhileExpression(){};
+    Object eval(Env &env) override
+    {
+        while (expr->eval(env).get_bool() == true)
+        {
+            block.eval(env);
+        }
+        return Object();
+    }
 };
