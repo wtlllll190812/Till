@@ -1,14 +1,15 @@
 include=C:\Windows\GnuWin32\FlexAndBison
+
 OBJS= 	lexer.o 	\
 		parser.o 	\
 		till.o 		\
 		ast.o 		\
 
 till.exe:${OBJS}
-	g++ ${CFLAG} -o $@ $^ -I $(include)
+	g++ ${CFLAG} -o $@ $^ -I $(include) 
 
 %.o: src/%.cpp
-	g++ ${CFLAG} -c -o $@ $< -I $(include)
+	g++ ${CFLAG} -c -o $@ $< -I $(include) 
 
 src/%.cpp:
 	parser

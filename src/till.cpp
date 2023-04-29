@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 #include <stdio.h>
+#include <vector>
+#include <map>
 #include "ast.h"
 #include "parser.hpp"
 using namespace std;
@@ -13,8 +15,6 @@ extern int yydebug;
 
 int main(int argc, char *argv[])
 {
-	// yydebug = 1;
-
 	if (argc < 2)
 	{
 		cout << "Usage: till <filename>" << endl;
@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
 	yyparse();
 	std::cout << program->toString() << std::endl;
 
+	auto env = vector<map<string, Object>>();
+	program->eval(env);
 	fclose(f);
 	return 0;
 }

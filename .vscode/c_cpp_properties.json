@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${default}",
-                "C:\\Windows\\GnuWin32\\FlexAndBison"
+                "C:\\Windows\\GnuWin32\\FlexAndBison",
+                "D:\\Program Files\\LLVM\\lib"
             ],
             "defines": [
                 "_DEBUG",

@@ -2,18 +2,21 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
 
 class Object
 {
 public:
     enum Type
     {
+        Error,
         Null,
         String,
         Int,
         Double,
         Bool,
         Identifier,
+        Function,
     };
 
 public:
@@ -21,10 +24,20 @@ public:
     Type m_type;
 
 public:
+    Object() : m_value(""), m_type(Null){};
     Object(std::string &value, Type type) : m_value(value), m_type(type){};
     Object(std::string &value) : m_value(value), m_type(Null){};
     ~Object(){};
+    Object operator=(const Object &obj);
+    Object operator+(const Object &obj);
+    Object operator-(const Object &obj);
+    Object operator*(const Object &obj);
+    Object operator/(const Object &obj);
+
     std::string get_value();
+
+private:
+    bool mis_match(const Object &obj);
 };
 
 class Node
@@ -34,6 +47,8 @@ public:
     Node(){};
     ~Node(){};
 };
+
+typedef std::vector<std::map<std::string, Object>> &Env;
 
 class Expression : public Node
 {
@@ -46,6 +61,10 @@ public:
     {
         return "Expression";
     }
+    virtual Object eval(Env env)
+    {
+        return Object();
+    }
 };
 
 class Block : public Node
@@ -54,21 +73,32 @@ public:
     std::vector<Expression *> exprs;
     Block(){};
     ~Block(){};
-    void Append(Expression *state)
+    void Append(Expression *expr)
     {
-        exprs.push_back(state);
+        exprs.push_back(expr);
     };
 
     std::string toString()
     {
         std::string str = "";
-        for (auto &state : exprs)
+        for (auto &expr : exprs)
         {
-            str += state->toString();
+            str += expr->toString();
             str += "\n";
         }
         return str;
     };
+
+    void eval(Env env)
+    {
+        env.push_back(std::map<std::string, Object>());
+        Object ret;
+        for (auto &expr : exprs)
+        {
+            ret = expr->eval(env);
+        }
+        env.pop_back();
+    }
 };
 
 class AssignExpression : public Expression
@@ -90,6 +120,14 @@ public:
         ret += std::to_string(op);
         ret += " ";
         ret += expr->toString();
+        return ret;
+    }
+
+    Object eval(Env env) override
+    {
+        Object ret;
+        ret.m_type = Object::Null;
+        ret.m_value = "";
         return ret;
     }
 };
