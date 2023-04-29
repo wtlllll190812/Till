@@ -63,27 +63,27 @@ stmt:           declare_expr     { $$=new Statement($1); }
                 | assign_expr   { $$=new Statement($1); }
                 ;
 
-declare_expr:    LET IDENTIFIER ASSIGN expr SEMICOLON                          { $$ = new DeclareExpression(*$2, *$4); }
+declare_expr:    LET IDENTIFIER ASSIGN expr SEMICOLON                          { $$ = new DeclareExpression(*$2, $4); }
                 ;   
 
-assign_expr:    IDENTIFIER assign_operator expr SEMICOLON                      { $$ = new AssignExpression(*$1,$2, *$3); }
+assign_expr:    IDENTIFIER assign_operator expr SEMICOLON                      { $$ = new AssignExpression(*$1,$2, $3); }
                 ;
 
-if_expr:        IF LPAREN expr RPAREN LBRACE block RBRACE                                           { $$ = new IfExpression(*$3, *$6); }
-                | IF LPAREN expr RPAREN LBRACE block RBRACE ELSE LBRACE block RBRACE                { $$ = new IfExpression(*$3, *$6, *$10); }
+if_expr:        IF LPAREN expr RPAREN LBRACE block RBRACE                                           { $$ = new IfExpression($3, *$6); }
+                | IF LPAREN expr RPAREN LBRACE block RBRACE ELSE LBRACE block RBRACE                { $$ = new IfExpression($3, *$6, *$10); }
                 ;
 
-while_expr:     WHILE LPAREN expr RPAREN LBRACE block RBRACE                                        { $$ = new WhileExpression(*$3, *$6); }
+while_expr:     WHILE LPAREN expr RPAREN LBRACE block RBRACE                                        { $$ = new WhileExpression($3, *$6); }
                 ;
 
 expr            : term                                  {$$=$1;}
-                | expr ADD term                         {$$=new BinaryExpression(*$1, $2, *$3);}
-				| expr SUB term                         {$$=new BinaryExpression(*$1, $2, *$3);}
-                | factor relational_operator factor     {$$=new BinaryExpression(*$1, $2, *$3);}
+                | expr ADD term                         {$$=new BinaryExpression($1, $2, $3);}
+				| expr SUB term                         {$$=new BinaryExpression($1, $2, $3);}
+                | factor relational_operator factor     {$$=new BinaryExpression($1, $2, $3);}
                 ;
 
-term            : term MUL factor  		        {$$=new BinaryExpression(*$1, $2, *$3);}
-				| term DIV factor 		        {$$=new BinaryExpression(*$1, $2, *$3);}
+term            : term MUL factor  		        {$$=new BinaryExpression($1, $2, $3);}
+				| term DIV factor 		        {$$=new BinaryExpression($1, $2, $3);}
                 | factor                        {$$=$1;}
 				;
 

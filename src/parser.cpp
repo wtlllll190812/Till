@@ -1185,31 +1185,31 @@ yyreduce:
 
   case 9: /* declare_expr: LET IDENTIFIER ASSIGN expr SEMICOLON  */
 #line 66 "lang/till.y"
-                                                                               { (yyval.expression) = new DeclareExpression(*(yyvsp[-3].string), *(yyvsp[-1].expression)); }
+                                                                               { (yyval.expression) = new DeclareExpression(*(yyvsp[-3].string), (yyvsp[-1].expression)); }
 #line 1190 "src/parser.cpp"
     break;
 
   case 10: /* assign_expr: IDENTIFIER assign_operator expr SEMICOLON  */
 #line 69 "lang/till.y"
-                                                                               { (yyval.expression) = new AssignExpression(*(yyvsp[-3].string),(yyvsp[-2].token), *(yyvsp[-1].expression)); }
+                                                                               { (yyval.expression) = new AssignExpression(*(yyvsp[-3].string),(yyvsp[-2].token), (yyvsp[-1].expression)); }
 #line 1196 "src/parser.cpp"
     break;
 
   case 11: /* if_expr: IF LPAREN expr RPAREN LBRACE block RBRACE  */
 #line 72 "lang/till.y"
-                                                                                                    { (yyval.expression) = new IfExpression(*(yyvsp[-4].expression), *(yyvsp[-1].block)); }
+                                                                                                    { (yyval.expression) = new IfExpression((yyvsp[-4].expression), *(yyvsp[-1].block)); }
 #line 1202 "src/parser.cpp"
     break;
 
   case 12: /* if_expr: IF LPAREN expr RPAREN LBRACE block RBRACE ELSE LBRACE block RBRACE  */
 #line 73 "lang/till.y"
-                                                                                                    { (yyval.expression) = new IfExpression(*(yyvsp[-8].expression), *(yyvsp[-5].block), *(yyvsp[-1].block)); }
+                                                                                                    { (yyval.expression) = new IfExpression((yyvsp[-8].expression), *(yyvsp[-5].block), *(yyvsp[-1].block)); }
 #line 1208 "src/parser.cpp"
     break;
 
   case 13: /* while_expr: WHILE LPAREN expr RPAREN LBRACE block RBRACE  */
 #line 76 "lang/till.y"
-                                                                                                    { (yyval.expression) = new WhileExpression(*(yyvsp[-4].expression), *(yyvsp[-1].block)); }
+                                                                                                    { (yyval.expression) = new WhileExpression((yyvsp[-4].expression), *(yyvsp[-1].block)); }
 #line 1214 "src/parser.cpp"
     break;
 
@@ -1221,31 +1221,31 @@ yyreduce:
 
   case 15: /* expr: expr ADD term  */
 #line 80 "lang/till.y"
-                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1226 "src/parser.cpp"
     break;
 
   case 16: /* expr: expr SUB term  */
 #line 81 "lang/till.y"
-                                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+                                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1232 "src/parser.cpp"
     break;
 
   case 17: /* expr: factor relational_operator factor  */
 #line 82 "lang/till.y"
-                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1238 "src/parser.cpp"
     break;
 
   case 18: /* term: term MUL factor  */
 #line 85 "lang/till.y"
-                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1244 "src/parser.cpp"
     break;
 
   case 19: /* term: term DIV factor  */
 #line 86 "lang/till.y"
-                                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+                                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1250 "src/parser.cpp"
     break;
 
