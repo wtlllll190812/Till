@@ -1161,25 +1161,25 @@ yyreduce:
 
   case 5: /* stmt: declare_expr  */
 #line 60 "lang/till.y"
-                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+                                 { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1166 "src/parser.cpp"
     break;
 
   case 6: /* stmt: if_expr  */
 #line 61 "lang/till.y"
-                                { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+                                { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1172 "src/parser.cpp"
     break;
 
   case 7: /* stmt: while_expr  */
 #line 62 "lang/till.y"
-                                { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+                                { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1178 "src/parser.cpp"
     break;
 
   case 8: /* stmt: assign_expr  */
 #line 63 "lang/till.y"
-                                { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+                                { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1184 "src/parser.cpp"
     break;
 

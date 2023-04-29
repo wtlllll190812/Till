@@ -32,17 +32,18 @@ public:
         return "Expression";
     }
 };
+
 class Statement : public Node
 {
 private:
-    Expression expr;
+    Expression *expr;
 
 public:
-    Statement(Expression &expr) : expr(expr){};
+    Statement(Expression *&expr) : expr(expr){};
     ~Statement(){};
     std::string toString()
     {
-        return expr.toString();
+        return expr->toString();
     }
 };
 
@@ -122,6 +123,16 @@ private:
 public:
     DeclareExpression(std::string &ident, Expression &expression) : ident(ident), expression(expression){};
     ~DeclareExpression(){};
+
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "DeclareExpression: ";
+        ret += ident;
+        ret += " = ";
+        ret += expression.toString();
+        return ret;
+    }
 };
 
 class FunctionExpression : public Expression

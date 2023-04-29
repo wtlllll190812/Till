@@ -57,10 +57,10 @@ block:          stmt            { $$=new Block();$$->Append($1); }
                 | block stmt    { $1->Append($2); }
                 ;
 
-stmt:           declare_expr     { $$=new Statement(*$1); }
-                | if_expr       { $$=new Statement(*$1); }
-                | while_expr    { $$=new Statement(*$1); }
-                | assign_expr   { $$=new Statement(*$1); }
+stmt:           declare_expr     { $$=new Statement($1); }
+                | if_expr       { $$=new Statement($1); }
+                | while_expr    { $$=new Statement($1); }
+                | assign_expr   { $$=new Statement($1); }
                 ;
 
 declare_expr:    LET IDENTIFIER ASSIGN expr SEMICOLON                          { $$ = new DeclareExpression(*$2, *$4); }
