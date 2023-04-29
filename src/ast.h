@@ -4,12 +4,11 @@
 
 class Object
 {
+private:
+    /* data */
 public:
-    std::string value;
-
-public:
-    Object() { value = "null"; };
-    Object(std::string value) : value(value){};
+    Object(){};
+    Object(std::string value){};
     ~Object(){};
 };
 
@@ -37,14 +36,14 @@ public:
 class Statement : public Node
 {
 private:
-    Expression expr;
+    Expression *expr;
 
 public:
-    Statement(Expression &expr) : expr(expr){};
+    Statement(Expression *&expr) : expr(expr){};
     ~Statement(){};
     std::string toString()
     {
-        return expr.toString();
+        return expr->toString();
     }
 };
 
@@ -74,24 +73,24 @@ public:
 class AssignExpression : public Expression
 {
 public:
-    AssignExpression(Object ident, int &op, Expression &expr){};
+    AssignExpression(std::string &ident, int &op, Expression *&expr){};
     ~AssignExpression(){};
 };
 
 class BinaryExpression : public Expression
 {
 private:
-    Expression expr1;
-    Expression expr2;
+    Expression *expr1;
+    Expression *expr2;
     Object obj;
     int op;
 
 public:
-    BinaryExpression(Expression &expr1, int &op, Expression &expr2)
+    BinaryExpression(Expression *&expr1, int &op, Expression *&expr2)
         : expr1(expr1), expr2(expr2), op(op){};
-    BinaryExpression(Object &obj, int &op, Expression &expr)
+    BinaryExpression(Object &obj, int &op, Expression *&expr)
         : expr1(expr), obj(obj), op(op){};
-    BinaryExpression(Expression &expr, int &op, Object &obj)
+    BinaryExpression(Expression *&expr, int &op, Object &obj)
         : expr1(expr), obj(obj), op(op){};
     ~BinaryExpression(){};
 };
@@ -118,13 +117,22 @@ public:
 class DeclareExpression : public Expression
 {
 private:
-    Object ident;
-    Expression expr;
+    std::string ident;
+    Expression *expr;
 
 public:
-    DeclareExpression(Object ident, Expression &expression);
+    DeclareExpression(std::string &ident, Expression *&expression) : ident(ident), expr(expression){};
     ~DeclareExpression(){};
-    std::string toString() override;
+
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "DeclareExpression: ";
+        ret += ident;
+        ret += " = ";
+        ret += expr->toString();
+        return ret;
+    }
 };
 
 class FunctionExpression : public Expression
@@ -139,24 +147,34 @@ public:
 class IfExpression : public Expression
 {
 private:
-    Expression expr;
+    Expression *expr;
     Block block1;
     Block block2;
 
 public:
-    IfExpression(Expression &expr, Block &block) : expr(expr), block1(block){};
-    IfExpression(Expression &expr, Block &block1, Block &block2) : expr(expr), block1(block1), block2(block2){};
+    IfExpression(Expression *expr, Block &block) : expr(expr), block1(block){};
+    IfExpression(Expression *expr, Block &block1, Block &block2) : expr(expr), block1(block1), block2(block2){};
     ~IfExpression(){};
-    std::string toString() override;
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "IfExpression: ";
+        ret += expr->toString();
+        ret += "\n";
+        ret += block1.toString();
+        ret += "\n";
+        ret += block2.toString();
+        return ret;
+    }
 };
 
 class WhileExpression : public Expression
 {
 private:
-    Expression expr;
+    Expression *expr;
     Block block;
 
 public:
-    WhileExpression(Expression &expr, Block &block) : expr(expr), block(block){};
+    WhileExpression(Expression *&expr, Block &block) : expr(expr), block(block){};
     ~WhileExpression(){};
 };

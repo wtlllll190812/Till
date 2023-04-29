@@ -11,8 +11,6 @@ extern Block *program;
 extern int yyrestart(FILE *f);
 extern int yydebug;
 
-void read_file(string filepath, ifstream &infile);
-
 int main(int argc, char *argv[])
 {
 	yydebug = 1;

@@ -521,10 +521,10 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    54,    54,    57,    58,    61,    62,    63,    64,    67,
-      70,    73,    74,    77,    80,    81,    82,    83,    86,    87,
-      88,    91,    92,    95,    96,    97,    98,   101,   102,   103,
-     104,   105,   106,   109
+       0,    53,    53,    56,    57,    60,    61,    62,    63,    66,
+      69,    72,    73,    76,    79,    80,    81,    82,    85,    86,
+      87,    90,    91,    94,    95,    96,    97,   100,   101,   102,
+     103,   104,   105,   108
 };
 #endif
 
@@ -1142,152 +1142,152 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: block  */
-#line 54 "lang/till.y"
+#line 53 "lang/till.y"
                                 { program=(yyvsp[0].block); }
 #line 1148 "src/parser.cpp"
     break;
 
   case 3: /* block: stmt  */
-#line 57 "lang/till.y"
+#line 56 "lang/till.y"
                                 { (yyval.block)=new Block();(yyval.block)->Append((yyvsp[0].statement)); }
 #line 1154 "src/parser.cpp"
     break;
 
   case 4: /* block: block stmt  */
-#line 58 "lang/till.y"
+#line 57 "lang/till.y"
                                 { (yyvsp[-1].block)->Append((yyvsp[0].statement)); }
 #line 1160 "src/parser.cpp"
     break;
 
   case 5: /* stmt: declare_expr  */
-#line 61 "lang/till.y"
-                                 { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+#line 60 "lang/till.y"
+                                 { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1166 "src/parser.cpp"
     break;
 
   case 6: /* stmt: if_expr  */
-#line 62 "lang/till.y"
-                                { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+#line 61 "lang/till.y"
+                                { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1172 "src/parser.cpp"
     break;
 
   case 7: /* stmt: while_expr  */
-#line 63 "lang/till.y"
-                                { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+#line 62 "lang/till.y"
+                                { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1178 "src/parser.cpp"
     break;
 
   case 8: /* stmt: assign_expr  */
-#line 64 "lang/till.y"
-                                { (yyval.statement)=new Statement(*(yyvsp[0].expression)); }
+#line 63 "lang/till.y"
+                                { (yyval.statement)=new Statement((yyvsp[0].expression)); }
 #line 1184 "src/parser.cpp"
     break;
 
   case 9: /* declare_expr: LET IDENTIFIER ASSIGN expr SEMICOLON  */
-#line 67 "lang/till.y"
-                                                                              { (yyval.expression) = new DeclareExpression(*(yyvsp[-3].string), *(yyvsp[-1].expression)); }
+#line 66 "lang/till.y"
+                                                                               { (yyval.expression) = new DeclareExpression(*(yyvsp[-3].string), (yyvsp[-1].expression)); }
 #line 1190 "src/parser.cpp"
     break;
 
   case 10: /* assign_expr: IDENTIFIER assign_operator expr SEMICOLON  */
-#line 70 "lang/till.y"
-                                                                               { (yyval.expression) = new AssignExpression(*(yyvsp[-3].string),(yyvsp[-2].token), *(yyvsp[-1].expression)); }
+#line 69 "lang/till.y"
+                                                                               { (yyval.expression) = new AssignExpression(*(yyvsp[-3].string),(yyvsp[-2].token), (yyvsp[-1].expression)); }
 #line 1196 "src/parser.cpp"
     break;
 
   case 11: /* if_expr: IF LPAREN expr RPAREN LBRACE block RBRACE  */
-#line 73 "lang/till.y"
-                                                                                                    { (yyval.expression) = new IfExpression(*(yyvsp[-4].expression), *(yyvsp[-1].block)); }
+#line 72 "lang/till.y"
+                                                                                                    { (yyval.expression) = new IfExpression((yyvsp[-4].expression), *(yyvsp[-1].block)); }
 #line 1202 "src/parser.cpp"
     break;
 
   case 12: /* if_expr: IF LPAREN expr RPAREN LBRACE block RBRACE ELSE LBRACE block RBRACE  */
-#line 74 "lang/till.y"
-                                                                                                    { (yyval.expression) = new IfExpression(*(yyvsp[-8].expression), *(yyvsp[-5].block), *(yyvsp[-1].block)); }
+#line 73 "lang/till.y"
+                                                                                                    { (yyval.expression) = new IfExpression((yyvsp[-8].expression), *(yyvsp[-5].block), *(yyvsp[-1].block)); }
 #line 1208 "src/parser.cpp"
     break;
 
   case 13: /* while_expr: WHILE LPAREN expr RPAREN LBRACE block RBRACE  */
-#line 77 "lang/till.y"
-                                                                                                    { (yyval.expression) = new WhileExpression(*(yyvsp[-4].expression), *(yyvsp[-1].block)); }
+#line 76 "lang/till.y"
+                                                                                                    { (yyval.expression) = new WhileExpression((yyvsp[-4].expression), *(yyvsp[-1].block)); }
 #line 1214 "src/parser.cpp"
     break;
 
   case 14: /* expr: term  */
-#line 80 "lang/till.y"
+#line 79 "lang/till.y"
                                                         {(yyval.expression)=(yyvsp[0].expression);}
 #line 1220 "src/parser.cpp"
     break;
 
   case 15: /* expr: expr ADD term  */
-#line 81 "lang/till.y"
-                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+#line 80 "lang/till.y"
+                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1226 "src/parser.cpp"
     break;
 
   case 16: /* expr: expr SUB term  */
-#line 82 "lang/till.y"
-                                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+#line 81 "lang/till.y"
+                                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1232 "src/parser.cpp"
     break;
 
   case 17: /* expr: factor relational_operator factor  */
-#line 83 "lang/till.y"
-                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+#line 82 "lang/till.y"
+                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1238 "src/parser.cpp"
     break;
 
   case 18: /* term: term MUL factor  */
-#line 86 "lang/till.y"
-                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+#line 85 "lang/till.y"
+                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1244 "src/parser.cpp"
     break;
 
   case 19: /* term: term DIV factor  */
-#line 87 "lang/till.y"
-                                                                        {(yyval.expression)=new BinaryExpression(*(yyvsp[-2].expression), (yyvsp[-1].token), *(yyvsp[0].expression));}
+#line 86 "lang/till.y"
+                                                                        {(yyval.expression)=new BinaryExpression((yyvsp[-2].expression), (yyvsp[-1].token), (yyvsp[0].expression));}
 #line 1250 "src/parser.cpp"
     break;
 
   case 20: /* term: factor  */
-#line 88 "lang/till.y"
+#line 87 "lang/till.y"
                                                 {(yyval.expression)=(yyvsp[0].expression);}
 #line 1256 "src/parser.cpp"
     break;
 
   case 21: /* factor: LPAREN expr RPAREN  */
-#line 91 "lang/till.y"
+#line 90 "lang/till.y"
                                                {(yyval.expression)=(yyvsp[-1].expression);}
 #line 1262 "src/parser.cpp"
     break;
 
   case 22: /* factor: value  */
-#line 92 "lang/till.y"
+#line 91 "lang/till.y"
                                                {(yyval.expression)=new ConstExpression(*(yyvsp[0].object));}
 #line 1268 "src/parser.cpp"
     break;
 
   case 23: /* value: INTEGER  */
-#line 95 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));}
+#line 94 "lang/till.y"
+                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1274 "src/parser.cpp"
     break;
 
   case 24: /* value: DOUBLE  */
-#line 96 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));}
+#line 95 "lang/till.y"
+                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1280 "src/parser.cpp"
     break;
 
   case 25: /* value: STRING  */
-#line 97 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));}
+#line 96 "lang/till.y"
+                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1286 "src/parser.cpp"
     break;
 
   case 26: /* value: IDENTIFIER  */
-#line 98 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));}
+#line 97 "lang/till.y"
+                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
 #line 1292 "src/parser.cpp"
     break;
 
@@ -1486,4 +1486,4 @@ yyreturn:
   return yyresult;
 }
 
-#line 111 "lang/till.y"
+#line 110 "lang/till.y"
