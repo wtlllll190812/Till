@@ -65,14 +65,14 @@ stmt:           assign_expr     { $$=new Statement(*$1); }
                 | while_expr    { $$=new Statement(*$1); }
                 ;
 
-assign_expr:    LET IDENTIFIER ASSIGN value SEMICOLON       { $$ = new AssignExpression(*$2, *$4); }
+assign_expr:    LET IDENTIFIER ASSIGN value SEMICOLON                   { $$ = new AssignExpression(*$2, *$4); }
                 ;   
 
-if_expr:        IF LPAREN expr RPAREN block                 { $$ = new IfExpression(*$3, *$5); }
-                | IF LPAREN expr RPAREN block ELSE block    %prec ELSE { $$ = new IfExpression(*$3, *$5, *$7); }
+if_expr:        IF LPAREN expr RPAREN LBRACE block RBRACE                                           { $$ = new IfExpression(*$3, *$6); }
+                | IF LPAREN expr RPAREN LBRACE block RBRACE ELSE LBRACE block RBRACE                %prec ELSE { $$ = new IfExpression(*$3, *$6, *$10); }
                 ;
 
-while_expr:     WHILE LPAREN expr RPAREN block              { $$ = new WhileExpression(*$3, *$5); }
+while_expr:     WHILE LPAREN expr RPAREN LBRACE block RBRACE                                        { $$ = new WhileExpression(*$3, *$6); }
                 ;
 
 expr            : term 

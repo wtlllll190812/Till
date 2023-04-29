@@ -5,19 +5,19 @@
 #include <stdio.h>
 #include "ast.hpp"
 #include "parser.hpp"
+using namespace std;
 
 extern Block *program;
 extern int yyrestart(FILE *f);
-
-using namespace std;
+extern int yydebug;
 
 void read_file(string filepath, ifstream &infile);
 
 int main(int argc, char *argv[])
 {
 	// yyparse();
-	// std::cout << program << std::endl;
 	// return 0;
+	yydebug = 1;
 
 	if (argc < 2)
 	{
@@ -28,8 +28,14 @@ int main(int argc, char *argv[])
 
 	FILE *f;
 	f = fopen(argv[1], "r");
+
+	// char buff[255];
+	// fgets(buff, 255, (FILE *)f);
+	// printf("%s", buff);
+
 	yyrestart(f);
 	yyparse();
+	std::cout << program << std::endl;
 
 	// ifstream infile;
 	// read_file(filename, infile);

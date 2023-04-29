@@ -15,7 +15,7 @@ src/%.cpp:
 
 parser:
 	echo "Generating parser..."
-	win_bison -d -o src/parser.cpp lang/till.y
+	win_bison -d -o src/parser.cpp lang/till.y -Wcounterexamples --debug
 
 lexer:
 	echo "Generating lexer..."

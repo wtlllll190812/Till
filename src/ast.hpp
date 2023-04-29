@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include <vector>
 class Identifier;
 
 class Object
@@ -8,6 +8,7 @@ class Object
 private:
     /* data */
 public:
+    Object(){};
     Object(std::string value){};
     ~Object(){};
 };
@@ -41,11 +42,12 @@ public:
 class Block : public Node
 {
 private:
-    /* data */
+    std::vector<Statement *> statements;
+
 public:
     Block(){};
     ~Block(){};
-    void Append(Statement *state){};
+    void Append(Statement *state) { statements.push_back(state); };
 };
 
 class AssignExpression : public Expression
@@ -60,20 +62,28 @@ public:
 class BinaryExpression : public Expression
 {
 private:
-    /* data */
+    Expression expr1;
+    Expression expr2;
+    Object obj;
+    int op;
+
 public:
-    BinaryExpression(Expression &expr1, int &op, Expression &expr2){};
-    BinaryExpression(Object &obj, int &op, Expression &expr){};
-    BinaryExpression(Expression &expr, int &op, Object &obj){};
+    BinaryExpression(Expression &expr1, int &op, Expression &expr2)
+        : expr1(expr1), expr2(expr2), op(op){};
+    BinaryExpression(Object &obj, int &op, Expression &expr)
+        : expr1(expr), obj(obj), op(op){};
+    BinaryExpression(Expression &expr, int &op, Object &obj)
+        : expr1(expr), obj(obj), op(op){};
     ~BinaryExpression(){};
 };
 
 class ConstExpression : public Expression
 {
 private:
-    /* data */
+    Object obj;
+
 public:
-    ConstExpression(Object &objct){};
+    ConstExpression(Object &objct) : obj(obj){};
     ~ConstExpression(){};
 };
 
@@ -108,27 +118,23 @@ public:
 class IfExpression : public Expression
 {
 private:
-    /* data */
-public:
-    IfExpression(Expression &expr, Block &block){};
-    IfExpression(Expression &expr, Block &block1, Block &block2){};
-    ~IfExpression(){};
-};
+    Expression expr;
+    Block block1;
+    Block block2;
 
-class ObjectExpression : public Expression
-{
-private:
-    /* data */
 public:
-    ObjectExpression(){};
-    ~ObjectExpression(){};
+    IfExpression(Expression &expr, Block &block) : expr(expr), block1(block){};
+    IfExpression(Expression &expr, Block &block1, Block &block2) : expr(expr), block1(block1), block2(block2){};
+    ~IfExpression(){};
 };
 
 class WhileExpression : public Expression
 {
 private:
-    /* data */
+    Expression expr;
+    Block block;
+
 public:
-    WhileExpression(Expression &expr, Block &block){};
+    WhileExpression(Expression &expr, Block &block) : expr(expr), block(block){};
     ~WhileExpression(){};
 };

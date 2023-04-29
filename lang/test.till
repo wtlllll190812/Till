@@ -1,1 +1,19 @@
 let a=1;
+let b=2;
+/*func max(a,b)
+{
+	if(a>b)
+	{
+		return a;
+	}
+	else
+	{
+		return b;
+	}
+}
+
+max(a,b);
+
+let c=2;
+let d=1;
+max(a,b);*/
