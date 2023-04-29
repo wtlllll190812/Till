@@ -93,14 +93,17 @@ union YYSTYPE
 {
 #line 12 "lang/till.y"
 
-    Block*          block;
-    Statement*      statement;
-    Expression*     expression;
-    Object*         object;   
-    std::string*    string;
-    int             token;
+    Block*                      block;
+    Statement*                  statement;
+    Expression*                 expression;
+    Object*                     object;   
+    std::string*                string;
+    std::vector<std::string>*   string_vector;
+    std::vector<Expression*>*   expr_vector;
 
-#line 104 "src/parser.hpp"
+    int                         token;
+
+#line 107 "src/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

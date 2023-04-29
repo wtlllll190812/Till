@@ -72,9 +72,25 @@ public:
 
 class AssignExpression : public Expression
 {
+private:
+    std::string ident;
+    Expression *expr;
+    int op;
+
 public:
-    AssignExpression(std::string &ident, int &op, Expression *&expr){};
+    AssignExpression(std::string &ident, int &op, Expression *&expr) : ident(ident), op(op), expr(expr){};
     ~AssignExpression(){};
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "Assign: ";
+        ret += ident;
+        ret += " ";
+        ret += std::to_string(op);
+        ret += " ";
+        ret += expr->toString();
+        return ret;
+    }
 };
 
 class BinaryExpression : public Expression
@@ -82,17 +98,23 @@ class BinaryExpression : public Expression
 private:
     Expression *expr1;
     Expression *expr2;
-    Object obj;
     int op;
 
 public:
     BinaryExpression(Expression *&expr1, int &op, Expression *&expr2)
         : expr1(expr1), expr2(expr2), op(op){};
-    BinaryExpression(Object &obj, int &op, Expression *&expr)
-        : expr1(expr), obj(obj), op(op){};
-    BinaryExpression(Expression *&expr, int &op, Object &obj)
-        : expr1(expr), obj(obj), op(op){};
     ~BinaryExpression(){};
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "BinaryExpr: ";
+        ret += expr1->toString();
+        ret += " ";
+        ret += std::to_string(op);
+        ret += " ";
+        ret += expr2->toString();
+        return ret;
+    }
 };
 
 class ConstExpression : public Expression
@@ -127,7 +149,7 @@ public:
     std::string toString() override
     {
         std::string ret;
-        ret += "DeclareExpression: ";
+        ret += "Let: ";
         ret += ident;
         ret += " = ";
         ret += expr->toString();
@@ -138,10 +160,53 @@ public:
 class FunctionExpression : public Expression
 {
 private:
-    /* data */
+    std::string ident;
+    std::vector<std::string> args;
+    Block block;
+
 public:
-    FunctionExpression(){};
+    FunctionExpression(std::string &ident, std::vector<std::string> &args, Block &block) : ident(ident), args(args), block(block){};
     ~FunctionExpression(){};
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "Function: ";
+        ret += ident;
+        ret += "(";
+        for (auto &arg : args)
+        {
+            ret += arg;
+            ret += ", ";
+        }
+        ret += ")\n";
+        ret += block.toString();
+        return ret;
+    }
+};
+
+class FunctionCallExpression : public Expression
+{
+private:
+    std::string ident;
+    std::vector<Expression *> args;
+
+public:
+    FunctionCallExpression(std::string &ident, std::vector<Expression *> &args) : ident(ident), args(args){};
+    ~FunctionCallExpression(){};
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "FunctionCall: ";
+        ret += ident;
+        ret += "(";
+        for (auto &arg : args)
+        {
+            ret += arg->toString();
+            ret += ", ";
+        }
+        ret += "\b)";
+        return ret;
+    }
 };
 
 class IfExpression : public Expression
@@ -158,12 +223,29 @@ public:
     std::string toString() override
     {
         std::string ret;
-        ret += "IfExpression: ";
+        ret += "If: ";
         ret += expr->toString();
-        ret += "\n";
+        ret += "\n\t";
         ret += block1.toString();
-        ret += "\n";
+        ret += "else\n\t";
         ret += block2.toString();
+        return ret;
+    }
+};
+
+class ReturnExpression : public Expression
+{
+private:
+    Expression *expr;
+
+public:
+    ReturnExpression(Expression *&expr) : expr(expr){};
+    ~ReturnExpression(){};
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "Return: ";
+        ret += expr->toString();
         return ret;
     }
 };

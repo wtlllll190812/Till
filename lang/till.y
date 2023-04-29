@@ -10,12 +10,15 @@
 
 /* Represents the many different ways we can access our data */
 %union {
-    Block*          block;
-    Statement*      statement;
-    Expression*     expression;
-    Object*         object;   
-    std::string*    string;
-    int             token;
+    Block*                      block;
+    Statement*                  statement;
+    Expression*                 expression;
+    Object*                     object;   
+    std::string*                string;
+    std::vector<std::string>*   string_vector;
+    std::vector<Expression*>*   expr_vector;
+
+    int                         token;
 }
 
 
@@ -38,9 +41,11 @@
 
 %type <block>           block program
 %type <statement>       stmt
-%type <expression>      assign_expr declare_expr if_expr while_expr 
+%type <expression>      assign_expr declare_expr if_expr while_expr func_decl return_expr func_call
 %type <expression>      expr term factor
 %type <object>          value
+%type <string_vector>   func_decl_args
+%type <expr_vector>     call_args
 %type <token>           ASSIGN EQ NE LT LE GT GE ADD SUB MUL DIV assign_operator relational_operator
 %type <string>          INTEGER DOUBLE STRING IDENTIFIER
 
@@ -50,25 +55,54 @@
 %start program
 
 %%
+//AST根
 program:        block           { program=$1; }
                 ;
 
+//代码块
 block:          stmt            { $$=new Block();$$->Append($1); }
                 | block stmt    { $1->Append($2); }
                 ;
 
-stmt:           declare_expr     { $$=new Statement($1); }
+//语句
+stmt:           declare_expr    { $$=new Statement($1); }
                 | if_expr       { $$=new Statement($1); }
                 | while_expr    { $$=new Statement($1); }
                 | assign_expr   { $$=new Statement($1); }
+                | func_decl     { $$=new Statement($1); }
+                | return_expr   { $$=new Statement($1); }
+                | func_call     { $$=new Statement($1); }
+                ;
+//函数声明
+func_decl:      FUNC IDENTIFIER LPAREN func_decl_args RPAREN LBRACE block RBRACE { $$ = new FunctionExpression(*$2, *$4, *$7); }
                 ;
 
+//函数参数
+func_decl_args: IDENTIFIER                                  { $$ = new std::vector<std::string>(); $$->push_back(*$1);}
+                | func_decl_args COMMA IDENTIFIER           { $1->push_back(*$3);}
+                ;
+
+return_expr:    RETURN expr SEMICOLON                       { $$ = new ReturnExpression($2); }
+                ;
+
+//函数调用
+func_call:      IDENTIFIER LPAREN call_args RPAREN SEMICOLON { $$ = new FunctionCallExpression(*$1, *$3); }
+                ;
+
+//函数调用参数
+call_args:      expr                                        { $$ = new std::vector<Expression*>(); $$->push_back($1); }
+                | call_args COMMA expr                      { $1->push_back($3); }
+                ;
+
+//声明语句
 declare_expr:    LET IDENTIFIER ASSIGN expr SEMICOLON                          { $$ = new DeclareExpression(*$2, $4); }
                 ;   
 
+//赋值语句
 assign_expr:    IDENTIFIER assign_operator expr SEMICOLON                      { $$ = new AssignExpression(*$1,$2, $3); }
                 ;
 
+//关键字
 if_expr:        IF LPAREN expr RPAREN LBRACE block RBRACE                                           { $$ = new IfExpression($3, *$6); }
                 | IF LPAREN expr RPAREN LBRACE block RBRACE ELSE LBRACE block RBRACE                { $$ = new IfExpression($3, *$6, *$10); }
                 ;
@@ -76,6 +110,9 @@ if_expr:        IF LPAREN expr RPAREN LBRACE block RBRACE                       
 while_expr:     WHILE LPAREN expr RPAREN LBRACE block RBRACE                                        { $$ = new WhileExpression($3, *$6); }
                 ;
 
+
+
+//表达式
 expr            : term                                  {$$=$1;}
                 | expr ADD term                         {$$=new BinaryExpression($1, $2, $3);}
 				| expr SUB term                         {$$=new BinaryExpression($1, $2, $3);}
@@ -97,6 +134,7 @@ value:          INTEGER             {$$=new Object(*$1);delete $1;}
                 | IDENTIFIER        {$$=new Object(*$1);delete $1;}
                 ;
 
+//运算符
 relational_operator:    EQ
                         | NE
                         | LT

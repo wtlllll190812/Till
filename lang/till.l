@@ -27,6 +27,7 @@
 "-"                     TOKEN(SUB); return SUB;
 "*"                     TOKEN(MUL); return MUL;
 "/"                     TOKEN(DIV); return DIV;
+"func"                  TOKEN(FUNC); return FUNC;
 "let"                   TOKEN(LET); return LET;
 "if"                    TOKEN(IF); return IF;
 "else"                  TOKEN(ELSE); return ELSE;
