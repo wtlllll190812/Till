@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	yyparse();
 	std::cout << program->toString() << std::endl;
 
-	auto env = vector<map<string, Object>>();
+	auto env = Env();
 	program->eval(env);
 	fclose(f);
 	return 0;

@@ -40,6 +40,42 @@ private:
     bool mis_match(const Object &obj);
 };
 
+class Env
+{
+private:
+    std::vector<std::map<std::string, Object>> env_var;
+
+public:
+    void push_back(std::map<std::string, Object> &env)
+    {
+        env_var.push_back(env);
+    }
+
+    void pop_back()
+    {
+        env_var.pop_back();
+    }
+
+    Object find_ident(std::string &var_name)
+    {
+        for (size_t i = env_var.size() - 1; i >= 0; i--)
+        {
+            auto &env = env_var[i];
+            if (env.find(var_name) != env.end())
+            {
+                return env[var_name];
+            }
+        }
+        return Object();
+    }
+
+    void append_ident(std::string &var_name, Object &object)
+    {
+        auto env = env_var.back();
+        env[var_name] = object;
+    }
+};
+
 class Node
 {
 private:
@@ -48,12 +84,8 @@ public:
     ~Node(){};
 };
 
-typedef std::vector<std::map<std::string, Object>> &Env;
-
 class Expression : public Node
 {
-private:
-    /* data */
 public:
     Expression(){};
     ~Expression(){};
@@ -61,7 +93,7 @@ public:
     {
         return "Expression";
     }
-    virtual Object eval(Env env)
+    virtual Object eval(Env &env)
     {
         return Object();
     }
@@ -69,6 +101,9 @@ public:
 
 class Block : public Node
 {
+private:
+    bool m_init = false;
+
 public:
     std::vector<Expression *> exprs;
     Block(){};
@@ -89,16 +124,8 @@ public:
         return str;
     };
 
-    void eval(Env env)
-    {
-        env.push_back(std::map<std::string, Object>());
-        Object ret;
-        for (auto &expr : exprs)
-        {
-            ret = expr->eval(env);
-        }
-        env.pop_back();
-    }
+    void eval(Env &env);
+    void env_init(Env &env, std::string &ident, Object &object);
 };
 
 class AssignExpression : public Expression
@@ -123,12 +150,11 @@ public:
         return ret;
     }
 
-    Object eval(Env env) override
+    Object eval(Env &env) override
     {
-        Object ret;
-        ret.m_type = Object::Null;
-        ret.m_value = "";
-        return ret;
+        auto obj = env.find_ident(ident);
+        obj = expr->eval(env);
+        return Object();
     }
 };
 
@@ -154,6 +180,7 @@ public:
         ret += expr2->toString();
         return ret;
     }
+    Object eval(Env &env) override;
 };
 
 class DeclareExpression : public Expression
@@ -174,6 +201,13 @@ public:
         ret += " = ";
         ret += expr->toString();
         return ret;
+    }
+
+    Object eval(Env &env) override
+    {
+        auto obj = expr->eval(env);
+        env.append_ident(ident, obj);
+        return Object();
     }
 };
 
