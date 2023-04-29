@@ -96,12 +96,11 @@ union YYSTYPE
     Block*          block;
     Statement*      statement;
     Expression*     expression;
-    Identifier*     identifier;
     Object*         object;   
     std::string*    string;
     int             token;
 
-#line 105 "src/parser.hpp"
+#line 104 "src/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

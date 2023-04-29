@@ -487,7 +487,7 @@ char *yytext;
 #line 1 "lang/till.l"
 #line 2 "lang/till.l"
 #include<string>
-#include "ast.hpp"
+#include "ast.h"
 #include "parser.hpp"
 #define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
 #define TOKEN(t) (yylval.token = t)

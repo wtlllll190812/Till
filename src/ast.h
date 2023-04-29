@@ -1,15 +1,15 @@
 #pragma once
 #include <iostream>
 #include <vector>
-class Identifier;
 
 class Object
 {
-private:
-    /* data */
 public:
-    Object(){};
-    Object(std::string value){};
+    std::string value;
+
+public:
+    Object() { value = "null"; };
+    Object(std::string value) : value(value){};
     ~Object(){};
 };
 
@@ -33,6 +33,7 @@ public:
         return "Expression";
     }
 };
+
 class Statement : public Node
 {
 private:
@@ -73,7 +74,7 @@ public:
 class AssignExpression : public Expression
 {
 public:
-    AssignExpression(Identifier &ident, int &op, Object &expr){};
+    AssignExpression(Object ident, int &op, Expression &expr){};
     ~AssignExpression(){};
 };
 
@@ -117,10 +118,13 @@ public:
 class DeclareExpression : public Expression
 {
 private:
+    Object ident;
+    Expression expr;
+
 public:
-    DeclareExpression(Identifier &ident, Expression &expression){};
-    DeclareExpression(Identifier &ident, Object &obj){};
+    DeclareExpression(Object ident, Expression &expression);
     ~DeclareExpression(){};
+    std::string toString() override;
 };
 
 class FunctionExpression : public Expression
@@ -130,16 +134,6 @@ private:
 public:
     FunctionExpression(){};
     ~FunctionExpression(){};
-};
-
-class Identifier : public Expression
-{
-private:
-    /* data */
-public:
-    Identifier(){};
-    ~Identifier(){};
-    Object *get_value() { return nullptr; };
 };
 
 class IfExpression : public Expression
@@ -153,6 +147,7 @@ public:
     IfExpression(Expression &expr, Block &block) : expr(expr), block1(block){};
     IfExpression(Expression &expr, Block &block1, Block &block2) : expr(expr), block1(block1), block2(block2){};
     ~IfExpression(){};
+    std::string toString() override;
 };
 
 class WhileExpression : public Expression

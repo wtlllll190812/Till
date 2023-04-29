@@ -1,5 +1,5 @@
 %{
-    #include "ast.hpp"
+    #include "ast.h"
     #include <cstdio>
     #include <cstdlib>
     Block *program; /* the top level root node of our final AST */
@@ -13,7 +13,6 @@
     Block*          block;
     Statement*      statement;
     Expression*     expression;
-    Identifier*     identifier;
     Object*         object;   
     std::string*    string;
     int             token;
@@ -39,12 +38,11 @@
 
 %type <block>           block program
 %type <statement>       stmt
-%type <identifier>      IDENTIFIER
 %type <expression>      assign_expr declare_expr if_expr while_expr 
 %type <expression>      expr term factor
-%type <string>          INTEGER DOUBLE STRING 
 %type <object>          value
 %type <token>           ASSIGN EQ NE LT LE GT GE ADD SUB MUL DIV assign_operator relational_operator
+%type <string>          INTEGER DOUBLE STRING IDENTIFIER
 
 
 %left ADD SUB 
@@ -66,10 +64,10 @@ stmt:           declare_expr     { $$=new Statement(*$1); }
                 | assign_expr   { $$=new Statement(*$1); }
                 ;
 
-declare_expr:    LET IDENTIFIER ASSIGN value SEMICOLON                          { $$ = new DeclareExpression(*$2, *$4); }
+declare_expr:   LET IDENTIFIER ASSIGN expr SEMICOLON                          { $$ = new DeclareExpression(*$2, *$4); }
                 ;   
 
-assign_expr:    IDENTIFIER assign_operator value SEMICOLON                      { $$ = new AssignExpression(*$1,$2, *$3); }
+assign_expr:    IDENTIFIER assign_operator expr SEMICOLON                      { $$ = new AssignExpression(*$1,$2, *$3); }
                 ;
 
 if_expr:        IF LPAREN expr RPAREN LBRACE block RBRACE                                           { $$ = new IfExpression(*$3, *$6); }
@@ -94,10 +92,10 @@ factor:         LPAREN expr RPAREN             {$$=$2;}
                 | value                        {$$=new ConstExpression(*$1);}
                 ;
 
-value:          INTEGER             {$$=new Object(*$1);delete $1;}
-                | DOUBLE            {$$=new Object(*$1);delete $1;}
-                | STRING            {$$=new Object(*$1);delete $1;}
-                | IDENTIFIER        {$$=$1->get_value();}
+value:          INTEGER             {$$=new Object(*$1);}
+                | DOUBLE            {$$=new Object(*$1);}
+                | STRING            {$$=new Object(*$1);}
+                | IDENTIFIER        {$$=new Object(*$1);}
                 ;
 
 relational_operator:    EQ

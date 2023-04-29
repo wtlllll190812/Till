@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <stdio.h>
-#include "ast.hpp"
+#include "ast.h"
 #include "parser.hpp"
 using namespace std;
 
@@ -33,19 +33,4 @@ int main(int argc, char *argv[])
 
 	fclose(f);
 	return 0;
-}
-
-/// <summary>
-/// 读取文件
-/// </summary>
-/// <param name="filepath">文件路径</param>
-void read_file(string filepath, ifstream &infile)
-{
-	infile.open(filepath, ios::in);
-
-	if (!infile.is_open())
-	{
-		cout << "文件打开失败" << endl;
-	}
-	cout << "打开文件" << endl;
 }
