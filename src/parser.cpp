@@ -1346,31 +1346,31 @@ yyreduce:
 
   case 32: /* factor: value  */
 #line 128 "lang/till.y"
-                                               {(yyval.expression)=new ConstExpression(*(yyvsp[0].object));}
+                                               {(yyval.expression)=new ValueExpression(*(yyvsp[0].object));}
 #line 1351 "src/parser.cpp"
     break;
 
   case 33: /* value: INTEGER  */
 #line 131 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
+                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::Identifier);}
 #line 1357 "src/parser.cpp"
     break;
 
   case 34: /* value: DOUBLE  */
 #line 132 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
+                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::Double);}
 #line 1363 "src/parser.cpp"
     break;
 
   case 35: /* value: STRING  */
 #line 133 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
+                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::String);}
 #line 1369 "src/parser.cpp"
     break;
 
   case 36: /* value: IDENTIFIER  */
 #line 134 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string));delete (yyvsp[0].string);}
+                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::Int);}
 #line 1375 "src/parser.cpp"
     break;
 

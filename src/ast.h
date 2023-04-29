@@ -1,15 +1,30 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <string>
 
 class Object
 {
-private:
-    /* data */
 public:
-    Object(){};
-    Object(std::string value){};
+    enum Type
+    {
+        Null,
+        String,
+        Int,
+        Double,
+        Bool,
+        Identifier,
+    };
+
+public:
+    std::string m_value;
+    Type m_type;
+
+public:
+    Object(std::string &value, Type type) : m_value(value), m_type(type){};
+    Object(std::string &value) : m_value(value), m_type(Null){};
     ~Object(){};
+    std::string get_value();
 };
 
 class Node
@@ -117,25 +132,6 @@ public:
     }
 };
 
-class ConstExpression : public Expression
-{
-private:
-    Object obj;
-
-public:
-    ConstExpression(Object &objct) : obj(obj){};
-    ~ConstExpression(){};
-};
-
-class CallExpression : public Expression
-{
-private:
-    /* data */
-public:
-    CallExpression(){};
-    ~CallExpression(){};
-};
-
 class DeclareExpression : public Expression
 {
 private:
@@ -204,7 +200,7 @@ public:
             ret += arg->toString();
             ret += ", ";
         }
-        ret += "\b)";
+        ret += ")";
         return ret;
     }
 };
@@ -248,6 +244,17 @@ public:
         ret += expr->toString();
         return ret;
     }
+};
+
+class ValueExpression : public Expression
+{
+private:
+    Object obj;
+
+public:
+    ValueExpression(Object &obj) : obj(obj){};
+    ~ValueExpression(){};
+    std::string toString() override;
 };
 
 class WhileExpression : public Expression

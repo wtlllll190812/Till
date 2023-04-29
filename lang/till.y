@@ -125,13 +125,13 @@ term            : term MUL factor  		        {$$=new BinaryExpression($1, $2, $3
 				;
 
 factor:         LPAREN expr RPAREN             {$$=$2;}
-                | value                        {$$=new ConstExpression(*$1);}
+                | value                        {$$=new ValueExpression(*$1);}
                 ;
 
-value:          INTEGER             {$$=new Object(*$1);delete $1;}
-                | DOUBLE            {$$=new Object(*$1);delete $1;}
-                | STRING            {$$=new Object(*$1);delete $1;}
-                | IDENTIFIER        {$$=new Object(*$1);delete $1;}
+value:          INTEGER             {$$=new Object(*$1,Object::Identifier);}
+                | DOUBLE            {$$=new Object(*$1,Object::Double);}
+                | STRING            {$$=new Object(*$1,Object::String);}
+                | IDENTIFIER        {$$=new Object(*$1,Object::Int);}
                 ;
 
 //运算符
