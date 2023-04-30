@@ -238,8 +238,7 @@ void Block::eval(Env &env)
 {
     if (!m_init)
     {
-        auto new_env = std::map<std::string, Object>();
-        env.push_val(new_env);
+        env.push_val(std::map<std::string, std::shared_ptr<Object>>());
         m_init = true;
     }
 
@@ -255,18 +254,20 @@ void Block::env_init(Env &env, std::string &ident, Object object)
 {
     if (!m_init)
     {
-        auto new_env = std::map<std::string, Object>();
-        env.push_val(new_env);
+        env.push_val(std::map<std::string, std::shared_ptr<Object>>());
         m_init = true;
     }
-    env.append_var(ident, object);
+    env.append_var(ident, shared_ptr<Object>(new Object(object)));
 }
 
 Object BinaryExpression::eval(Env &env)
-
 {
     auto obj1 = expr1->eval(env);
     auto obj2 = expr2->eval(env);
+    cout << obj1.get_value() << "___";
+    cout << obj1.get_type() << endl;
+    cout << obj2.get_value() << "___";
+    cout << obj2.get_type() << endl;
     switch (op)
     {
     case ADD:
@@ -309,12 +310,12 @@ Object FunctionCallExpression::eval(Env &env)
     }
     func->body.eval(env);
 
-    return env.get_return_val();
+    return *env.get_return_val();
 }
 
 Object ReturnExpression::eval(Env &env)
 {
-    env.set_return_val(expr->eval(env));
+    env.set_return_val(shared_ptr<Object>(new Object(expr->eval(env))));
     return Object::object_return;
 }
 

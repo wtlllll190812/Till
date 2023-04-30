@@ -79,13 +79,13 @@ public:
     };
 
 private:
-    std::vector<std::map<std::string, Object>> env_var;
+    std::vector<std::map<std::string, std::shared_ptr<Object>>> env_var;
     std::map<std::string, std::shared_ptr<Function>> env_func;
     std::stack<std::string> func_stack;
-    Object return_value;
+    std::shared_ptr<Object> return_value;
 
 public:
-    void push_val(std::map<std::string, Object> &env)
+    void push_val(std::map<std::string, std::shared_ptr<Object>> env)
     {
         env_var.push_back(env);
     }
@@ -95,13 +95,13 @@ public:
         env_var.pop_back();
     }
 
-    void append_var(std::string &var_name, Object &object)
+    void append_var(std::string &var_name, std::shared_ptr<Object> object)
     {
         auto env = env_var.back();
         env[var_name] = object;
     }
 
-    Object &find_var(std::string var_name)
+    std::shared_ptr<Object> find_var(std::string var_name)
     {
         for (size_t i = env_var.size() - 1; i >= 0; i--)
         {
@@ -124,12 +124,12 @@ public:
         return env_func[func_name];
     }
 
-    Object get_return_val()
+    std::shared_ptr<Object> get_return_val()
     {
         return return_value;
     }
 
-    void set_return_val(Object obj)
+    void set_return_val(std::shared_ptr<Object> obj)
     {
         func_stack.pop();
         return_value = obj;
@@ -153,10 +153,7 @@ public:
     {
         return "Expression";
     }
-    virtual Object eval(Env &env)
-    {
-        return Object::object_null;
-    }
+    virtual Object eval(Env &env) = 0;
 };
 
 class Block : public Node
@@ -213,7 +210,7 @@ public:
     Object eval(Env &env) override
     {
         auto obj = env.find_var(ident);
-        obj = expr->eval(env);
+        *obj = expr->eval(env);
         return Object::object_null;
     }
 };
@@ -365,7 +362,7 @@ public:
     {
         if (obj.get_type() == Object::Variable)
         {
-            return env.find_var(obj.get_value());
+            return *env.find_var(obj.get_value());
         }
         return obj;
     }
@@ -393,8 +390,7 @@ public:
 
     Object eval(Env &env) override
     {
-        auto obj = expr->eval(env);
-        env.append_var(ident, obj);
+        env.append_var(ident, std::shared_ptr<Object>(new Object(expr->eval(env))));
         return Object::object_null;
     }
 };
