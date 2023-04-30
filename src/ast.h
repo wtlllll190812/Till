@@ -56,6 +56,9 @@ public:
     std::string get_value();
     Type get_type();
     bool get_bool();
+    void set_value(std::string value);
+    void set_type(Object::Type type);
+
     static Object &error_object(const std::string errortext);
 
 private:
@@ -65,39 +68,50 @@ private:
 };
 
 class Block;
+struct Function
+{
+    Block &body;
+    std::vector<std::string> &args;
+    Function(std::vector<std::string> &args, Block &body)
+        : args(args), body(body){};
+    Function(Function &func) : args(func.args), body(func.body) {}
+    ~Function(){};
+};
+
+typedef std::vector<std::map<std::string, std::shared_ptr<Object>>> EnvScope;
+typedef std::map<std::string, std::shared_ptr<Function>> FuncMap;
 class Env
 {
 public:
-    struct Function
-    {
-        Block &body;
-        std::vector<std::string> &args;
-        Function(std::vector<std::string> &args, Block &body)
-            : args(args), body(body){};
-        Function(Function &func) : args(func.args), body(func.body) {}
-        ~Function(){};
-    };
-
 private:
-    std::vector<std::map<std::string, std::shared_ptr<Object>>> env_var;
-    std::map<std::string, std::shared_ptr<Function>> env_func;
+    EnvScope env_var;
+    FuncMap env_func;
     std::stack<std::string> func_stack;
     std::shared_ptr<Object> return_value;
 
 public:
-    void push_val(std::map<std::string, std::shared_ptr<Object>> env)
+    Env()
     {
+        env_var = EnvScope();
+        env_func = FuncMap();
+        func_stack = std::stack<std::string>();
+        return_value = std::shared_ptr<Object>(new Object());
+    }
+    void push_scope(std::map<std::string, std::shared_ptr<Object>> env)
+    {
+        // std::cout << "push_scope" << std::endl;
         env_var.push_back(env);
     }
 
-    void pop_val()
+    void pop_scope()
     {
+        // std::cout << "pop_scope" << std::endl;
         env_var.pop_back();
     }
 
     void append_var(std::string &var_name, std::shared_ptr<Object> object)
     {
-        auto env = env_var.back();
+        auto &env = env_var.back();
         env[var_name] = object;
     }
 
@@ -207,12 +221,7 @@ public:
         return ret;
     }
 
-    Object eval(Env &env) override
-    {
-        auto obj = env.find_var(ident);
-        *obj = expr->eval(env);
-        return Object::object_null;
-    }
+    Object eval(Env &env) override;
 };
 
 class BinaryExpression : public Expression

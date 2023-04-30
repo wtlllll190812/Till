@@ -20,6 +20,16 @@ Object::Type Object::get_type()
     return m_type;
 }
 
+void Object::set_value(std::string value)
+{
+    m_value = value;
+}
+
+void Object::set_type(Object::Type type)
+{
+    m_type = type;
+}
+
 bool Object::get_bool()
 {
     if (m_type == Null || m_type == Error)
@@ -67,7 +77,7 @@ Object Object::operator+(const Object &obj)
     }
 
     ret.m_type = Double;
-    ret.m_value = value1 + value2;
+    ret.m_value = to_string(value1 + value2);
     return ret;
 }
 
@@ -82,7 +92,7 @@ Object Object::operator-(const Object &obj)
 
     Object ret;
     ret.m_type = Double;
-    ret.m_value = value1 - value2;
+    ret.m_value = to_string(value1 - value2);
     return ret;
 }
 
@@ -97,7 +107,7 @@ Object Object::operator*(const Object &obj)
 
     Object ret;
     ret.m_type = Double;
-    ret.m_value = value1 * value2;
+    ret.m_value = to_string(value1 * value2);
     return ret;
 }
 
@@ -112,7 +122,7 @@ Object Object::operator/(const Object &obj)
 
     Object ret;
     ret.m_type = Double;
-    ret.m_value = value1 / value2;
+    ret.m_value = to_string(value1 / value2);
     return ret;
 }
 
@@ -204,6 +214,11 @@ Object Object::operator!=(Object &obj)
 
 bool Object::operable(const Object &obj)
 {
+    if ((m_type == Int && obj.m_type == Double) || (obj.m_type == Int && m_type == Double))
+    {
+        return true;
+    }
+
     bool res = false;
     res |= m_type != obj.m_type;
     res |= m_type == Object::Null;
@@ -238,7 +253,7 @@ void Block::eval(Env &env)
 {
     if (!m_init)
     {
-        env.push_val(std::map<std::string, std::shared_ptr<Object>>());
+        env.push_scope(std::map<std::string, std::shared_ptr<Object>>());
         m_init = true;
     }
 
@@ -247,17 +262,27 @@ void Block::eval(Env &env)
         if ((expr->eval(env) == Object::object_return).get_bool())
             break;
     }
-    env.pop_val();
+    env.pop_scope();
+    m_init = false;
 }
 
 void Block::env_init(Env &env, std::string &ident, Object object)
 {
     if (!m_init)
     {
-        env.push_val(std::map<std::string, std::shared_ptr<Object>>());
+        env.push_scope(std::map<std::string, std::shared_ptr<Object>>());
         m_init = true;
     }
     env.append_var(ident, shared_ptr<Object>(new Object(object)));
+}
+
+Object AssignExpression::eval(Env &env)
+{
+    auto var = env.find_var(ident);
+    auto obj = expr->eval(env);
+    var->set_type(obj.get_type());
+    var->set_value(obj.get_value());
+    return Object::object_null;
 }
 
 Object BinaryExpression::eval(Env &env)
@@ -268,6 +293,8 @@ Object BinaryExpression::eval(Env &env)
     cout << obj1.get_type() << endl;
     cout << obj2.get_value() << "___";
     cout << obj2.get_type() << endl;
+    cout << obj1.get_value() << " " << op << " " << obj2.get_value() << endl;
+
     switch (op)
     {
     case ADD:
