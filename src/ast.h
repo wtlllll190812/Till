@@ -11,10 +11,12 @@ public:
     {
         Error,
         Null,
+
         String,
         Int,
         Double,
         Bool,
+
         Identifier,
         Function,
     };
@@ -26,19 +28,29 @@ public:
 public:
     Object() : m_value(""), m_type(Null){};
     Object(std::string &value, Type type) : m_value(value), m_type(type){};
-    Object(std::string &value) : m_value(value), m_type(Null){};
     ~Object(){};
     Object operator=(const Object &obj);
     Object operator+(const Object &obj);
     Object operator-(const Object &obj);
     Object operator*(const Object &obj);
     Object operator/(const Object &obj);
+    Object operator||(Object &obj);
+    Object operator&&(Object &obj);
+    Object operator!();
+    Object operator==(Object &obj);
+    Object operator>(Object &obj);
+    Object operator<(Object &obj);
+    Object operator>=(Object &obj);
+    Object operator<=(Object &obj);
+    Object operator!=(Object &obj);
 
     std::string get_value();
     bool get_bool();
 
 private:
-    bool mis_match(const Object &obj);
+    bool operable(const Object &obj);
+    bool str2double(const std::string &str, double &value);
+    Object error_object(const std::string errortext);
 };
 
 class Env

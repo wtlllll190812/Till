@@ -12,7 +12,7 @@ std::string Object::get_value()
 
 bool Object::get_bool()
 {
-    if (m_type == Null)
+    if (m_type == Null || m_type == Error)
     {
         return false;
     }
@@ -35,65 +35,190 @@ Object Object::operator=(const Object &obj)
 
 Object Object::operator+(const Object &obj)
 {
-    if (mis_match(obj))
+    Object ret;
+    double value1;
+    double value2;
+    if (!operable(obj))
     {
-        Object ret;
-        ret.m_type = Object::Error;
-        ret.m_value = "Type mismatch";
-        return ret;
+        error_object("Type mismatch");
     }
 
-    Object ret;
-    ret.m_type = m_type;
-    ret.m_value = stod(m_value) + stod(obj.m_value);
+    if (!str2double(m_value, value1) || !str2double(obj.m_value, value2))
+    {
+        if (m_type == String)
+        {
+            ret.m_type = String;
+            ret.m_value = m_value + obj.m_value;
+            return ret;
+        }
+        else
+        {
+            error_object("Type mismatch");
+        }
+    }
+
+    ret.m_type = Double;
+    ret.m_value = value1 + value2;
     return ret;
 }
 
 Object Object::operator-(const Object &obj)
 {
-    if (mis_match(obj))
+    double value1;
+    double value2;
+    if (!operable(obj) || !str2double(m_value, value1) || !str2double(obj.m_value, value2))
     {
-        Object ret;
-        ret.m_type = Object::Error;
-        ret.m_value = "Type mismatch";
-        return ret;
+        error_object("Type mismatch");
     }
 
     Object ret;
-    ret.m_type = m_type;
-    ret.m_value = stod(m_value) - stod(obj.m_value);
+    ret.m_type = Double;
+    ret.m_value = value1 - value2;
     return ret;
 }
 
 Object Object::operator*(const Object &obj)
 {
-    if (mis_match(obj))
+    double value1;
+    double value2;
+    if (!operable(obj) || !str2double(m_value, value1) || !str2double(obj.m_value, value2))
     {
-        Object ret;
-        ret.m_type = Object::Error;
-        ret.m_value = "Type mismatch";
-        return ret;
+        error_object("Type mismatch");
     }
 
     Object ret;
-    ret.m_type = m_type;
-    ret.m_value = stod(m_value) * stod(obj.m_value);
+    ret.m_type = Double;
+    ret.m_value = value1 * value2;
     return ret;
 }
 
 Object Object::operator/(const Object &obj)
 {
-    if (mis_match(obj))
+    double value1;
+    double value2;
+    if (!operable(obj) || !str2double(m_value, value1) || !str2double(obj.m_value, value2))
     {
-        Object ret;
-        ret.m_type = Object::Error;
-        ret.m_value = "Type mismatch";
-        return ret;
+        error_object("Type mismatch");
     }
 
     Object ret;
-    ret.m_type = m_type;
-    ret.m_value = stod(m_value) / stod(obj.m_value);
+    ret.m_type = Double;
+    ret.m_value = value1 / value2;
+    return ret;
+}
+
+Object Object::operator||(Object &obj)
+{
+    auto res = get_bool() || obj.get_bool();
+    Object ret;
+    ret.m_type = Object::Bool;
+    ret.m_value = res ? "true" : "false";
+    return ret;
+}
+
+Object Object::operator&&(Object &obj)
+{
+    auto res = get_bool() && obj.get_bool();
+    Object ret;
+    ret.m_type = Object::Bool;
+    ret.m_value = res ? "true" : "false";
+    return ret;
+}
+
+Object Object::operator!()
+{
+    auto res = !get_bool();
+    Object ret;
+    ret.m_type = Object::Bool;
+    ret.m_value = res ? "true" : "false";
+    return ret;
+}
+
+Object Object::operator==(Object &obj)
+{
+    auto res = obj.m_value == m_value && obj.m_type == m_type;
+    Object ret;
+    ret.m_type = Object::Bool;
+    ret.m_value = res ? "true" : "false";
+    return ret;
+}
+
+Object Object::operator>(Object &obj)
+{
+    if (!operable(obj))
+    {
+        error_object("Type mismatch");
+    }
+
+    auto res = stod(m_value) > stod(obj.m_value);
+    Object ret;
+    ret.m_type = Object::Bool;
+    ret.m_value = res ? "true" : "false";
+    return ret;
+}
+
+Object Object::operator<(Object &obj)
+{
+    if (!operable(obj))
+    {
+        error_object("Type mismatch");
+    }
+
+    auto res = stod(m_value) < stod(obj.m_value);
+    Object ret;
+    ret.m_type = Object::Bool;
+    ret.m_value = res ? "true" : "false";
+    return ret;
+}
+
+Object Object::operator>=(Object &obj)
+{
+    Object ret1 = operator>(obj);
+    Object ret2 = operator==(obj);
+    return ret1 || ret2;
+}
+
+Object Object::operator<=(Object &obj)
+{
+    Object ret1 = operator<(obj);
+    Object ret2 = operator==(obj);
+    return ret1 || ret2;
+}
+
+Object Object::operator!=(Object &obj)
+{
+    Object ret1 = operator==(obj);
+    return !ret1;
+}
+
+bool Object::operable(const Object &obj)
+{
+    bool res = false;
+    res |= m_type != obj.m_type;
+    res |= m_type == Object::Null || obj.m_type == Object::Null;
+    res |= m_type == Object::Error || obj.m_type == Object::Error;
+    return !res;
+}
+
+bool Object::str2double(const std::string &str, double &value)
+{
+    try
+    {
+        value = std::stod(str);
+    }
+    catch (std::invalid_argument &e)
+    {
+        return false;
+    }
+    return true;
+}
+
+Object Object::error_object(const std::string errortext)
+{
+    Object ret;
+    ret.m_type = Object::Error;
+    ret.m_value = errortext;
+    cout << errortext << endl;
     return ret;
 }
 
@@ -124,11 +249,6 @@ void Block::env_init(Env &env, std::string &ident, Object &object)
     env.append_ident(ident, object);
 }
 
-bool Object::mis_match(const Object &obj)
-{
-    return m_type != obj.m_type || m_type == Object::Null || obj.m_type == Object::Null || m_type == Object::Error || obj.m_type == Object::Error;
-}
-
 std::string ValueExpression::toString()
 {
     std::string ret;
@@ -150,6 +270,18 @@ Object BinaryExpression::eval(Env &env)
         return obj1 * obj2;
     case DIV:
         return obj1 / obj2;
+    case EQ:
+        return obj1 == obj2;
+    case NE:
+        return obj1 != obj2;
+    case GT:
+        return obj1 > obj2;
+    case LT:
+        return obj1 < obj2;
+    case GE:
+        return obj1 >= obj2;
+    case LE:
+        return obj1 <= obj2;
     default:
         return Object();
     }

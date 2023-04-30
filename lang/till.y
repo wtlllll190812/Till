@@ -126,10 +126,10 @@ factor:         LPAREN expr RPAREN             {$$=$2;}
                 | value                        {$$=new ValueExpression(*$1);}
                 ;
 
-value:          INTEGER             {$$=new Object(*$1,Object::Identifier);}
+value:          INTEGER             {$$=new Object(*$1,Object::Int);}
                 | DOUBLE            {$$=new Object(*$1,Object::Double);}
                 | STRING            {$$=new Object(*$1,Object::String);}
-                | IDENTIFIER        {$$=new Object(*$1,Object::Int);}
+                | IDENTIFIER        {$$=new Object(*$1,Object::Identifier);}
                 ;
 
 //运算符

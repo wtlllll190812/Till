@@ -1352,7 +1352,7 @@ yyreduce:
 
   case 33: /* value: INTEGER  */
 #line 129 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::Identifier);}
+                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::Int);}
 #line 1357 "src/parser.cpp"
     break;
 
@@ -1370,7 +1370,7 @@ yyreduce:
 
   case 36: /* value: IDENTIFIER  */
 #line 132 "lang/till.y"
-                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::Int);}
+                                    {(yyval.object)=new Object(*(yyvsp[0].string),Object::Identifier);}
 #line 1375 "src/parser.cpp"
     break;
 
