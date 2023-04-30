@@ -2,16 +2,18 @@ let a=(1*5)*(1+4);
 let b=2;
 let c=a/b;
 
-if(a<=b)
+func max(a,b)
 {
-	c=a-b;
-}
-else
-{
-	c=a+b;
+	if(a>=b)
+	{
+		return a;
+	}
+	else
+	{
+		return b;
+	}
 }
 
-while(a>b)
-{
-	a=a-1;
-}
+c=max(b,a);
+
+b=a+c;

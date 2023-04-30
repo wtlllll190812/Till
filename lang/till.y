@@ -98,6 +98,7 @@ declare_expr:    LET IDENTIFIER ASSIGN expr SEMICOLON                          {
 
 //赋值语句
 assign_expr:    IDENTIFIER assign_operator expr SEMICOLON                      { $$ = new AssignExpression(*$1,$2, $3); }
+                |IDENTIFIER assign_operator func_call                          { $$ = new AssignExpression(*$1,$2, $3); }
                 ;
 
 //关键字

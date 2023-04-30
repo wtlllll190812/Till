@@ -266,14 +266,17 @@ void Block::eval(Env &env)
     m_init = false;
 }
 
-void Block::env_init(Env &env, std::string &ident, Object object)
+void Block::env_init(Env &env, args_vec &args)
 {
     if (!m_init)
     {
-        env.push_scope(std::map<std::string, std::shared_ptr<Object>>());
+        env.push_scope(Scope());
         m_init = true;
     }
-    env.append_var(ident, shared_ptr<Object>(new Object(object)));
+    for (auto &arg : args)
+    {
+        env.declare_var(arg.first, arg.second);
+    }
 }
 
 Object AssignExpression::eval(Env &env)
@@ -282,6 +285,7 @@ Object AssignExpression::eval(Env &env)
     auto obj = expr->eval(env);
     var->set_type(obj.get_type());
     var->set_value(obj.get_value());
+    cout << "AssignExpression " << var->get_value() << endl;
     return Object::object_null;
 }
 
@@ -289,11 +293,7 @@ Object BinaryExpression::eval(Env &env)
 {
     auto obj1 = expr1->eval(env);
     auto obj2 = expr2->eval(env);
-    cout << obj1.get_value() << "___";
-    cout << obj1.get_type() << endl;
-    cout << obj2.get_value() << "___";
-    cout << obj2.get_type() << endl;
-    cout << obj1.get_value() << " " << op << " " << obj2.get_value() << endl;
+    cout << "BinaryExpression " << obj1.get_value() << " " << op << " " << obj2.get_value() << endl;
 
     switch (op)
     {
@@ -324,19 +324,21 @@ Object BinaryExpression::eval(Env &env)
 
 Object FunctionDeclareExpression::eval(Env &env)
 {
-    env.append_func(ident, args, block);
+    env.declare_func(ident, args, block);
     return Object::object_null;
 }
 
 Object FunctionCallExpression::eval(Env &env)
 {
     auto func = env.find_func(ident);
+    auto args_decl = args_vec();
     for (int i = 0; i < args.size(); i++)
     {
-        func->body.env_init(env, func->args[i], args[i]->eval(env));
+        cout << func->args[i] << "  " << args[i]->eval(env).get_value() << endl;
+        args_decl.push_back({func->args[i], shared_ptr<Object>(new Object(args[i]->eval(env)))});
     }
+    func->body.env_init(env, args_decl);
     func->body.eval(env);
-
     return *env.get_return_val();
 }
 
