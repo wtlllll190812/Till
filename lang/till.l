@@ -4,12 +4,23 @@
 #include "parser.hpp"
 #define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
 #define TOKEN(t) (yylval.token = t)
+#define OPERA(op) (yylval.token = op)
 %}
 %option noyywrap
 
 %%
 [ \t\n]                 ;/* ignore whitespace */
 "/*"([^*]|\*[^/])*"*/"  ;/* ignore comments */
+"=="                    TOKEN((int)Opera::EQ); return EQ;
+"!="                    TOKEN((int)Opera::NE); return NE;
+"<"                     TOKEN((int)Opera::LT); return LT;
+">"                     TOKEN((int)Opera::GT); return GT;
+"<="                    TOKEN((int)Opera::LE); return LE;
+">="                    TOKEN((int)Opera::GE); return GE;
+"+"                     TOKEN((int)Opera::ADD); return ADD;
+"-"                     TOKEN((int)Opera::SUB); return SUB;
+"*"                     TOKEN((int)Opera::MUL); return MUL;
+"/"                     TOKEN((int)Opera::DIV); return DIV;
 "("                     TOKEN(LPAREN); return LPAREN;
 ")"                     TOKEN(RPAREN); return RPAREN;
 "{"                     TOKEN(LBRACE); return LBRACE;
@@ -17,16 +28,6 @@
 ";"                     TOKEN(SEMICOLON); return SEMICOLON;
 ","                     TOKEN(COMMA); return COMMA;
 "="                     TOKEN(ASSIGN); return ASSIGN;
-"=="                    TOKEN(EQ); return EQ;
-"!="                    TOKEN(NE); return NE;
-"<"                     TOKEN(LT); return LT;
-">"                     TOKEN(GT); return GT;
-"<="                    TOKEN(LE); return LE;
-">="                    TOKEN(GE); return GE;
-"+"                     TOKEN(ADD); return ADD;
-"-"                     TOKEN(SUB); return SUB;
-"*"                     TOKEN(MUL); return MUL;
-"/"                     TOKEN(DIV); return DIV;
 "func"                  TOKEN(FUNC); return FUNC;
 "let"                   TOKEN(LET); return LET;
 "if"                    TOKEN(IF); return IF;
