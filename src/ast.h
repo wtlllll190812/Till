@@ -2,7 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <memory>
 #include <map>
+#include <stack>
 
 class Object
 {
@@ -11,6 +13,8 @@ public:
     {
         Error,
         Null,
+        Return,
+        Break,
 
         String,
         Int,
@@ -23,6 +27,9 @@ public:
 
 public:
     static Object object_null;
+    static Object object_return;
+    static Object object_break;
+
     std::string m_value;
     Type m_type;
 
@@ -55,6 +62,7 @@ private:
     static std::vector<Object> error_objects;
 };
 
+class Block;
 class Env
 {
 public:
@@ -62,30 +70,25 @@ public:
     {
         Block &body;
         std::vector<std::string> &args;
-        Object return_value;
         Function(std::vector<std::string> &args, Block &body)
-            : args(args), body(body), return_value(Object::object_null){};
-        Function &operator=(const Function &func)
-        {
-            args = func.args;
-            body = func.body;
-            return *this;
-        }
+            : args(args), body(body){};
+        Function(Function &func) : args(func.args), body(func.body) {}
         ~Function(){};
     };
 
 private:
     std::vector<std::map<std::string, Object>> env_var;
-    std::map<std::string, Function> env_func;
-    Function &current_func;
+    std::map<std::string, std::shared_ptr<Function>> env_func;
+    std::stack<std::string> func_stack;
+    Object return_value;
 
 public:
-    void push_stack(std::map<std::string, Object> &env)
+    void push_val(std::map<std::string, Object> &env)
     {
         env_var.push_back(env);
     }
 
-    void pop_stack()
+    void pop_val()
     {
         env_var.pop_back();
     }
@@ -108,14 +111,26 @@ public:
         }
     }
 
-    void append_func(std::string &func_name, Function func)
+    void append_func(std::string &func_name, std::vector<std::string> &args, Block &body)
     {
-        env_func[func_name] = func;
+        env_func[func_name] = std::shared_ptr<Function>(new Function(args, body));
     }
 
-    Function &find_func(std::string &func_name)
+    std::shared_ptr<Function> &find_func(std::string &func_name)
     {
+        func_stack.push(func_name);
         return env_func[func_name];
+    }
+
+    Object get_return_val()
+    {
+        return return_value;
+    }
+
+    void set_return_val(Object obj)
+    {
+        func_stack.pop();
+        return_value = obj;
     }
 };
 
@@ -168,7 +183,7 @@ public:
     };
 
     void eval(Env &env);
-    void env_init(Env &env, std::string &ident, Object &object);
+    void env_init(Env &env, std::string &ident, Object object);
 };
 
 class AssignExpression : public Expression

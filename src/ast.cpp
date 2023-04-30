@@ -6,6 +6,9 @@ using namespace std;
 typedef std::map<std::string, Object> Env_table;
 
 Object Object::object_null = Object("", Object::Null);
+Object Object::object_return = Object("", Object::Return);
+Object Object::object_break = Object("", Object::Break);
+std::vector<Object> Object::error_objects = vector<Object>();
 
 std::string Object::get_value()
 {
@@ -146,29 +149,31 @@ Object Object::operator==(Object &obj)
 
 Object Object::operator>(Object &obj)
 {
-    if (!operable(obj))
+    double value1;
+    double value2;
+    if (!operable(obj) || !str2double(m_value, value1) || !str2double(obj.m_value, value2))
     {
         error_object("Type mismatch");
     }
 
-    auto res = stod(m_value) > stod(obj.m_value);
     Object ret;
     ret.m_type = Object::Bool;
-    ret.m_value = res ? "true" : "false";
+    ret.m_value = value1 - value2 > 0 ? "true" : "false";
     return ret;
 }
 
 Object Object::operator<(Object &obj)
 {
-    if (!operable(obj))
+    double value1;
+    double value2;
+    if (!operable(obj) || !str2double(m_value, value1) || !str2double(obj.m_value, value2))
     {
         error_object("Type mismatch");
     }
 
-    auto res = stod(m_value) < stod(obj.m_value);
     Object ret;
     ret.m_type = Object::Bool;
-    ret.m_value = res ? "true" : "false";
+    ret.m_value = value1 - value2 < 0 ? "true" : "false";
     return ret;
 }
 
@@ -196,8 +201,11 @@ bool Object::operable(const Object &obj)
 {
     bool res = false;
     res |= m_type != obj.m_type;
-    res |= m_type == Object::Null || obj.m_type == Object::Null;
-    res |= m_type == Object::Error || obj.m_type == Object::Error;
+    res |= m_type == Object::Null;
+    res |= m_type == Object::Error;
+    res |= m_type == Object::Break;
+    res |= m_type == Object::Return;
+
     return !res;
 }
 
@@ -226,23 +234,24 @@ void Block::eval(Env &env)
     if (!m_init)
     {
         auto new_env = std::map<std::string, Object>();
-        env.push_stack(new_env);
+        env.push_val(new_env);
         m_init = true;
     }
 
     for (auto &expr : exprs)
     {
-        expr->eval(env);
+        if ((expr->eval(env) == Object::object_return).get_bool())
+            break;
     }
-    env.pop_stack();
+    env.pop_val();
 }
 
-void Block::env_init(Env &env, std::string &ident, Object &object)
+void Block::env_init(Env &env, std::string &ident, Object object)
 {
     if (!m_init)
     {
         auto new_env = std::map<std::string, Object>();
-        env.push_stack(new_env);
+        env.push_val(new_env);
         m_init = true;
     }
     env.append_var(ident, object);
@@ -250,14 +259,20 @@ void Block::env_init(Env &env, std::string &ident, Object &object)
 
 Object FunctionDeclareExpression::eval(Env &env)
 {
-    env.append_func(ident, Env::Function(args, block));
+    env.append_func(ident, args, block);
+    return Object::object_null;
 }
 
 Object FunctionCallExpression::eval(Env &env)
 {
     auto func = env.find_func(ident);
-    func.body.eval(env);
-    return func.return_value;
+    for (int i = 0; i < args.size(); i++)
+    {
+        func->body.env_init(env, func->args[i], args[i]->eval(env));
+    }
+    func->body.eval(env);
+
+    return env.get_return_val();
 }
 
 std::string ValueExpression::toString()
@@ -294,6 +309,6 @@ Object BinaryExpression::eval(Env &env)
     case LE:
         return obj1 <= obj2;
     default:
-        return Object();
+        return Object::object_null;
     }
 }

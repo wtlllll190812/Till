@@ -14,7 +14,4 @@ func max(a,b)
 }
 
 max(a,b);
-
-let c=2;
-let d=1;
 max(a,b);
