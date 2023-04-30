@@ -4,6 +4,8 @@ OBJS= 	lexer.o 	\
 		parser.o 	\
 		till.o 		\
 		ast.o 		\
+		env.o 		\
+		object.o 	\
 
 till.exe:${OBJS}
 	g++ ${CFLAG} -o $@ $^ -I $(include) 
