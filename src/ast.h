@@ -30,6 +30,7 @@ public:
     static Object object_return;
     static Object object_break;
 
+private:
     std::string m_value;
     Type m_type;
 
@@ -53,6 +54,7 @@ public:
     Object operator!=(Object &obj);
 
     std::string get_value();
+    Type get_type();
     bool get_bool();
     static Object &error_object(const std::string errortext);
 
@@ -99,7 +101,7 @@ public:
         env[var_name] = object;
     }
 
-    Object &find_var(std::string &var_name)
+    Object &find_var(std::string var_name)
     {
         for (size_t i = env_var.size() - 1; i >= 0; i--)
         {
@@ -347,6 +349,7 @@ public:
         ret += expr->toString();
         return ret;
     }
+    Object eval(Env &env) override;
 };
 
 class ValueExpression : public Expression
@@ -360,6 +363,10 @@ public:
     std::string toString() override;
     Object eval(Env &env)
     {
+        if (obj.get_type() == Object::Variable)
+        {
+            return env.find_var(obj.get_value());
+        }
         return obj;
     }
 };

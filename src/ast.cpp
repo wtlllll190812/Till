@@ -15,6 +15,11 @@ std::string Object::get_value()
     return m_value;
 }
 
+Object::Type Object::get_type()
+{
+    return m_type;
+}
+
 bool Object::get_bool()
 {
     if (m_type == Null || m_type == Error)
@@ -257,32 +262,8 @@ void Block::env_init(Env &env, std::string &ident, Object object)
     env.append_var(ident, object);
 }
 
-Object FunctionDeclareExpression::eval(Env &env)
-{
-    env.append_func(ident, args, block);
-    return Object::object_null;
-}
-
-Object FunctionCallExpression::eval(Env &env)
-{
-    auto func = env.find_func(ident);
-    for (int i = 0; i < args.size(); i++)
-    {
-        func->body.env_init(env, func->args[i], args[i]->eval(env));
-    }
-    func->body.eval(env);
-
-    return env.get_return_val();
-}
-
-std::string ValueExpression::toString()
-{
-    std::string ret;
-    ret += obj.get_value();
-    return ret;
-}
-
 Object BinaryExpression::eval(Env &env)
+
 {
     auto obj1 = expr1->eval(env);
     auto obj2 = expr2->eval(env);
@@ -311,4 +292,35 @@ Object BinaryExpression::eval(Env &env)
     default:
         return Object::object_null;
     }
+}
+
+Object FunctionDeclareExpression::eval(Env &env)
+{
+    env.append_func(ident, args, block);
+    return Object::object_null;
+}
+
+Object FunctionCallExpression::eval(Env &env)
+{
+    auto func = env.find_func(ident);
+    for (int i = 0; i < args.size(); i++)
+    {
+        func->body.env_init(env, func->args[i], args[i]->eval(env));
+    }
+    func->body.eval(env);
+
+    return env.get_return_val();
+}
+
+Object ReturnExpression::eval(Env &env)
+{
+    env.set_return_val(expr->eval(env));
+    return Object::object_return;
+}
+
+std::string ValueExpression::toString()
+{
+    std::string ret;
+    ret += obj.get_value();
+    return ret;
 }
