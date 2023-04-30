@@ -5,6 +5,8 @@ using namespace std;
 
 typedef std::map<std::string, Object> Env_table;
 
+Object Object::object_null = Object("", Object::Null);
+
 std::string Object::get_value()
 {
     return m_value;
@@ -26,11 +28,10 @@ bool Object::get_bool()
     }
 }
 
-Object Object::operator=(const Object &obj)
+void Object::operator=(const Object &obj)
 {
     m_value = obj.m_value;
     m_type = obj.m_type;
-    return *this;
 }
 
 Object Object::operator+(const Object &obj)
@@ -213,13 +214,11 @@ bool Object::str2double(const std::string &str, double &value)
     return true;
 }
 
-Object Object::error_object(const std::string errortext)
+Object &Object::error_object(const std::string errortext)
 {
-    Object ret;
-    ret.m_type = Object::Error;
-    ret.m_value = errortext;
     cout << errortext << endl;
-    return ret;
+    error_objects.push_back(Object(errortext, Object::Error));
+    return error_objects.back();
 }
 
 void Block::eval(Env &env)
@@ -227,7 +226,7 @@ void Block::eval(Env &env)
     if (!m_init)
     {
         auto new_env = std::map<std::string, Object>();
-        env.push_back(new_env);
+        env.push_stack(new_env);
         m_init = true;
     }
 
@@ -235,7 +234,7 @@ void Block::eval(Env &env)
     {
         expr->eval(env);
     }
-    env.pop_back();
+    env.pop_stack();
 }
 
 void Block::env_init(Env &env, std::string &ident, Object &object)
@@ -243,10 +242,22 @@ void Block::env_init(Env &env, std::string &ident, Object &object)
     if (!m_init)
     {
         auto new_env = std::map<std::string, Object>();
-        env.push_back(new_env);
+        env.push_stack(new_env);
         m_init = true;
     }
-    env.append_ident(ident, object);
+    env.append_var(ident, object);
+}
+
+Object FunctionDeclareExpression::eval(Env &env)
+{
+    env.append_func(ident, Env::Function(args, block));
+}
+
+Object FunctionCallExpression::eval(Env &env)
+{
+    auto func = env.find_func(ident);
+    func.body.eval(env);
+    return func.return_value;
 }
 
 std::string ValueExpression::toString()

@@ -72,7 +72,7 @@ stmt:           declare_expr    { $$=$1; }
                 | func_call     { $$=$1; }
                 ;
 //函数声明
-func_decl:      FUNC IDENTIFIER LPAREN func_decl_args RPAREN LBRACE block RBRACE { $$ = new FunctionExpression(*$2, *$4, *$7); }
+func_decl:      FUNC IDENTIFIER LPAREN func_decl_args RPAREN LBRACE block RBRACE { $$ = new FunctionDeclareExpression(*$2, *$4, *$7); }
                 ;
 
 //函数参数
@@ -93,7 +93,7 @@ call_args:      expr                                        { $$ = new std::vect
                 ;
 
 //声明语句
-declare_expr:    LET IDENTIFIER ASSIGN expr SEMICOLON                          { $$ = new DeclareExpression(*$2, $4); }
+declare_expr:    LET IDENTIFIER ASSIGN expr SEMICOLON                          { $$ = new VarDeclareExpression(*$2, $4); }
                 ;   
 
 //赋值语句
@@ -129,7 +129,7 @@ factor:         LPAREN expr RPAREN             {$$=$2;}
 value:          INTEGER             {$$=new Object(*$1,Object::Int);}
                 | DOUBLE            {$$=new Object(*$1,Object::Double);}
                 | STRING            {$$=new Object(*$1,Object::String);}
-                | IDENTIFIER        {$$=new Object(*$1,Object::Identifier);}
+                | IDENTIFIER        {$$=new Object(*$1,Object::Variable);}
                 ;
 
 //运算符

@@ -17,19 +17,20 @@ public:
         Double,
         Bool,
 
-        Identifier,
+        Variable,
         Function,
     };
 
 public:
+    static Object object_null;
     std::string m_value;
     Type m_type;
 
 public:
     Object() : m_value(""), m_type(Null){};
-    Object(std::string &value, Type type) : m_value(value), m_type(type){};
+    Object(std::string value, Type type) : m_value(value), m_type(type){};
     ~Object(){};
-    Object operator=(const Object &obj);
+    void operator=(const Object &obj);
     Object operator+(const Object &obj);
     Object operator-(const Object &obj);
     Object operator*(const Object &obj);
@@ -46,30 +47,56 @@ public:
 
     std::string get_value();
     bool get_bool();
+    static Object &error_object(const std::string errortext);
 
 private:
     bool operable(const Object &obj);
     bool str2double(const std::string &str, double &value);
-    Object error_object(const std::string errortext);
+    static std::vector<Object> error_objects;
 };
 
 class Env
 {
+public:
+    struct Function
+    {
+        Block &body;
+        std::vector<std::string> &args;
+        Object return_value;
+        Function(std::vector<std::string> &args, Block &body)
+            : args(args), body(body), return_value(Object::object_null){};
+        Function &operator=(const Function &func)
+        {
+            args = func.args;
+            body = func.body;
+            return *this;
+        }
+        ~Function(){};
+    };
+
 private:
     std::vector<std::map<std::string, Object>> env_var;
+    std::map<std::string, Function> env_func;
+    Function &current_func;
 
 public:
-    void push_back(std::map<std::string, Object> &env)
+    void push_stack(std::map<std::string, Object> &env)
     {
         env_var.push_back(env);
     }
 
-    void pop_back()
+    void pop_stack()
     {
         env_var.pop_back();
     }
 
-    Object find_ident(std::string &var_name)
+    void append_var(std::string &var_name, Object &object)
+    {
+        auto env = env_var.back();
+        env[var_name] = object;
+    }
+
+    Object &find_var(std::string &var_name)
     {
         for (size_t i = env_var.size() - 1; i >= 0; i--)
         {
@@ -79,13 +106,16 @@ public:
                 return env[var_name];
             }
         }
-        return Object();
     }
 
-    void append_ident(std::string &var_name, Object &object)
+    void append_func(std::string &func_name, Function func)
     {
-        auto env = env_var.back();
-        env[var_name] = object;
+        env_func[func_name] = func;
+    }
+
+    Function &find_func(std::string &func_name)
+    {
+        return env_func[func_name];
     }
 };
 
@@ -108,7 +138,7 @@ public:
     }
     virtual Object eval(Env &env)
     {
-        return Object();
+        return Object::object_null;
     }
 };
 
@@ -165,9 +195,9 @@ public:
 
     Object eval(Env &env) override
     {
-        auto obj = env.find_ident(ident);
+        auto obj = env.find_var(ident);
         obj = expr->eval(env);
-        return Object();
+        return Object::object_null;
     }
 };
 
@@ -196,35 +226,7 @@ public:
     Object eval(Env &env) override;
 };
 
-class DeclareExpression : public Expression
-{
-private:
-    std::string ident;
-    Expression *expr;
-
-public:
-    DeclareExpression(std::string &ident, Expression *&expression) : ident(ident), expr(expression){};
-    ~DeclareExpression(){};
-
-    std::string toString() override
-    {
-        std::string ret;
-        ret += "Let: ";
-        ret += ident;
-        ret += " = ";
-        ret += expr->toString();
-        return ret;
-    }
-
-    Object eval(Env &env) override
-    {
-        auto obj = expr->eval(env);
-        env.append_ident(ident, obj);
-        return Object();
-    }
-};
-
-class FunctionExpression : public Expression
+class FunctionDeclareExpression : public Expression
 {
 private:
     std::string ident;
@@ -232,8 +234,8 @@ private:
     Block block;
 
 public:
-    FunctionExpression(std::string &ident, std::vector<std::string> &args, Block &block) : ident(ident), args(args), block(block){};
-    ~FunctionExpression(){};
+    FunctionDeclareExpression(std::string &ident, std::vector<std::string> &args, Block &block) : ident(ident), args(args), block(block){};
+    ~FunctionDeclareExpression(){};
     std::string toString() override
     {
         std::string ret;
@@ -249,6 +251,7 @@ public:
         ret += block.toString();
         return ret;
     }
+    Object eval(Env &env) override;
 };
 
 class FunctionCallExpression : public Expression
@@ -274,6 +277,7 @@ public:
         ret += ")";
         return ret;
     }
+    Object eval(Env &env) override;
 };
 
 class IfExpression : public Expression
@@ -309,7 +313,7 @@ public:
             block2.eval(env);
         }
 
-        return Object();
+        return Object::object_null;
     }
 };
 
@@ -345,6 +349,34 @@ public:
     }
 };
 
+class VarDeclareExpression : public Expression
+{
+private:
+    std::string ident;
+    Expression *expr;
+
+public:
+    VarDeclareExpression(std::string &ident, Expression *&expression) : ident(ident), expr(expression){};
+    ~VarDeclareExpression(){};
+
+    std::string toString() override
+    {
+        std::string ret;
+        ret += "Let: ";
+        ret += ident;
+        ret += " = ";
+        ret += expr->toString();
+        return ret;
+    }
+
+    Object eval(Env &env) override
+    {
+        auto obj = expr->eval(env);
+        env.append_var(ident, obj);
+        return Object::object_null;
+    }
+};
+
 class WhileExpression : public Expression
 {
 private:
@@ -360,6 +392,6 @@ public:
         {
             block.eval(env);
         }
-        return Object();
+        return Object::object_null;
     }
 };
