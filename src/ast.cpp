@@ -1,9 +1,22 @@
 #include "ast.h"
-#include "parser.hpp"
 #include <stdlib.h>
 using namespace std;
 
-typedef std::map<std::string, Object> Env_table;
+void Block::add_expr(Expression *expr)
+{
+    exprs.push_back(expr);
+};
+
+std::string Block::toString()
+{
+    std::string str = "";
+    for (auto &expr : exprs)
+    {
+        str += expr->toString();
+        str += "\n";
+    }
+    return str;
+};
 
 void Block::eval(Env &env)
 {
@@ -35,6 +48,18 @@ void Block::env_init(Env &env, args_vec &args)
     }
 }
 
+std::string AssignExpression::toString()
+{
+    std::string ret;
+    ret += "Assign: ";
+    ret += ident;
+    ret += " ";
+    ret += std::to_string(op);
+    ret += " ";
+    ret += expr->toString();
+    return ret;
+}
+
 Object AssignExpression::eval(Env &env)
 {
     auto var = env.find_var(ident);
@@ -45,6 +70,18 @@ Object AssignExpression::eval(Env &env)
     return Object::object_null;
 }
 
+std::string BinaryExpression::toString()
+{
+    std::string ret;
+    ret += "BinaryExpr: ";
+    ret += expr1->toString();
+    ret += " ";
+    ret += std::to_string(op);
+    ret += " ";
+    ret += expr2->toString();
+    return ret;
+}
+
 Object BinaryExpression::eval(Env &env)
 {
     auto obj1 = expr1->eval(env);
@@ -53,35 +90,66 @@ Object BinaryExpression::eval(Env &env)
 
     switch (op)
     {
-    case ADD:
+    case (int)Opera::ADD:
         return obj1 + obj2;
-    case SUB:
+    case (int)Opera::SUB:
         return obj1 - obj2;
-    case MUL:
+    case (int)Opera::MUL:
         return obj1 * obj2;
-    case DIV:
+    case (int)Opera::DIV:
         return obj1 / obj2;
-    case EQ:
+    case (int)Opera::EQ:
         return obj1 == obj2;
-    case NE:
+    case (int)Opera::NE:
         return obj1 != obj2;
-    case GT:
+    case (int)Opera::GT:
         return obj1 > obj2;
-    case LT:
+    case (int)Opera::LT:
         return obj1 < obj2;
-    case GE:
+    case (int)Opera::GE:
         return obj1 >= obj2;
-    case LE:
+    case (int)Opera::LE:
         return obj1 <= obj2;
     default:
         return Object::object_null;
     }
 }
 
+std::string FunctionDeclareExpression::toString()
+{
+    std::string ret;
+    ret += "Function: ";
+    ret += ident;
+    ret += "(";
+    for (auto &arg : args)
+    {
+        ret += arg;
+        ret += ", ";
+    }
+    ret += ")\n";
+    ret += block.toString();
+    return ret;
+}
+
 Object FunctionDeclareExpression::eval(Env &env)
 {
     env.declare_func(ident, args, block);
     return Object::object_null;
+}
+
+std::string FunctionCallExpression::toString()
+{
+    std::string ret;
+    ret += "FunctionCall: ";
+    ret += ident;
+    ret += "(";
+    for (auto &arg : args)
+    {
+        ret += arg->toString();
+        ret += ", ";
+    }
+    ret += ")";
+    return ret;
 }
 
 Object FunctionCallExpression::eval(Env &env)
@@ -98,6 +166,40 @@ Object FunctionCallExpression::eval(Env &env)
     return *env.get_return_val();
 }
 
+std::string IfExpression::toString()
+{
+    std::string ret;
+    ret += "If: ";
+    ret += expr->toString();
+    ret += "\n\t";
+    ret += block1.toString();
+    ret += "else\n\t";
+    ret += block2.toString();
+    return ret;
+}
+
+Object IfExpression::eval(Env &env)
+{
+    if (expr->eval(env).get_bool() == true)
+    {
+        block1.eval(env);
+    }
+    else
+    {
+        block2.eval(env);
+    }
+
+    return Object::object_null;
+}
+
+std::string ReturnExpression::toString()
+{
+    std::string ret;
+    ret += "Return: ";
+    ret += expr->toString();
+    return ret;
+}
+
 Object ReturnExpression::eval(Env &env)
 {
     env.set_return_val(shared_ptr<Object>(new Object(expr->eval(env))));
@@ -109,4 +211,48 @@ std::string ValueExpression::toString()
     std::string ret;
     ret += obj.get_value();
     return ret;
+}
+
+Object ValueExpression::eval(Env &env)
+{
+    if (obj.get_type() == Object::Variable)
+    {
+        return *env.find_var(obj.get_value());
+    }
+    return obj;
+}
+
+std::string VarDeclareExpression::toString()
+{
+    std::string ret;
+    ret += "Let: ";
+    ret += ident;
+    ret += " = ";
+    ret += expr->toString();
+    return ret;
+}
+
+Object VarDeclareExpression::eval(Env &env)
+{
+    env.declare_var(ident, std::shared_ptr<Object>(new Object(expr->eval(env))));
+    return Object::object_null;
+}
+
+std::string WhileExpression::toString()
+{
+    std::string ret;
+    ret += "While: ";
+    ret += expr->toString();
+    ret += "\n\t";
+    ret += block.toString();
+    return ret;
+}
+
+Object WhileExpression::eval(Env &env)
+{
+    while (expr->eval(env).get_bool() == true)
+    {
+        block.eval(env);
+    }
+    return Object::object_null;
 }

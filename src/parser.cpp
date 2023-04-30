@@ -1175,13 +1175,13 @@ yyreduce:
 
   case 3: /* block: stmt  */
 #line 61 "lang/till.y"
-                                { (yyval.block)=new Block();(yyval.block)->Append((yyvsp[0].expression)); }
+                                { (yyval.block)=new Block();(yyval.block)->add_expr((yyvsp[0].expression)); }
 #line 1180 "src/parser.cpp"
     break;
 
   case 4: /* block: block stmt  */
 #line 62 "lang/till.y"
-                                { (yyvsp[-1].block)->Append((yyvsp[0].expression)); }
+                                { (yyvsp[-1].block)->add_expr((yyvsp[0].expression)); }
 #line 1186 "src/parser.cpp"
     break;
 

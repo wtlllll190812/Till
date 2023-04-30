@@ -58,8 +58,8 @@ program:        block           { program=$1; }
                 ;
 
 //代码块
-block:          stmt            { $$=new Block();$$->Append($1); }
-                | block stmt    { $1->Append($2); }
+block:          stmt            { $$=new Block();$$->add_expr($1); }
+                | block stmt    { $1->add_expr($2); }
                 ;
 
 //语句
