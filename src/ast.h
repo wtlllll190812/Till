@@ -3,6 +3,9 @@
 #include "env.h"
 #include "object.h"
 
+/// <summary>
+/// operator
+/// </summary>
 enum class Opera
 {
     ADD = 1,
@@ -17,23 +20,31 @@ enum class Opera
     LE = 25,
 };
 
+/// <summary>
+/// ast node
+/// </summary>
 class Node
 {
-private:
 public:
     Node(){};
     ~Node(){};
+    virtual std::string toString() = 0;
 };
 
+/// <summary>
+/// ast expression
+/// </summary>
 class Expression : public Node
 {
 public:
     Expression(){};
     ~Expression(){};
-    virtual std::string toString() = 0;
-    virtual Object eval(Env &env) = 0;
+    virtual Object execute(Env &env) = 0;
 };
 
+/// <summary>
+/// Block,contain some expressions
+/// </summary>
 class Block : public Node
 {
 private:
@@ -44,8 +55,13 @@ public:
     Block(){};
     ~Block(){};
     void add_expr(Expression *expr);
-    std::string toString();
-    void eval(Env &env);
+
+    std::string toString() override;
+    void execute(Env &env);
+
+    /// <summary>
+    /// Init scope for block
+    /// </summary>
     void env_init(Env &env, args_vec &args);
 };
 
@@ -59,8 +75,9 @@ private:
 public:
     AssignExpression(std::string &ident, int &op, Expression *&expr) : ident(ident), op(op), expr(expr){};
     ~AssignExpression(){};
+
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class BinaryExpression : public Expression
@@ -74,8 +91,9 @@ public:
     BinaryExpression(Expression *&expr1, int &op, Expression *&expr2)
         : expr1(expr1), expr2(expr2), op(op){};
     ~BinaryExpression(){};
+
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class FunctionDeclareExpression : public Expression
@@ -88,8 +106,9 @@ private:
 public:
     FunctionDeclareExpression(std::string &ident, std::vector<std::string> &args, Block &block) : ident(ident), args(args), block(block){};
     ~FunctionDeclareExpression(){};
+
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class FunctionCallExpression : public Expression
@@ -101,8 +120,9 @@ private:
 public:
     FunctionCallExpression(std::string &ident, std::vector<Expression *> &args) : ident(ident), args(args){};
     ~FunctionCallExpression(){};
+
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class IfExpression : public Expression
@@ -116,8 +136,9 @@ public:
     IfExpression(Expression *expr, Block &block) : expr(expr), block1(block){};
     IfExpression(Expression *expr, Block &block1, Block &block2) : expr(expr), block1(block1), block2(block2){};
     ~IfExpression(){};
+
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class ReturnExpression : public Expression
@@ -128,8 +149,9 @@ private:
 public:
     ReturnExpression(Expression *&expr) : expr(expr){};
     ~ReturnExpression(){};
+
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class ValueExpression : public Expression
@@ -142,7 +164,7 @@ public:
     ~ValueExpression(){};
 
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class VarDeclareExpression : public Expression
@@ -156,7 +178,7 @@ public:
     ~VarDeclareExpression(){};
 
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };
 
 class WhileExpression : public Expression
@@ -170,5 +192,5 @@ public:
     ~WhileExpression(){};
 
     std::string toString() override;
-    Object eval(Env &env) override;
+    Object execute(Env &env) override;
 };

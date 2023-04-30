@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	std::cout << program->toString() << std::endl;
 
 	auto env = Env();
-	program->eval(env);
+	program->execute(env);
 	fclose(f);
 	return 0;
 }

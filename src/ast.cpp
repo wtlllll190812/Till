@@ -18,7 +18,7 @@ std::string Block::toString()
     return str;
 };
 
-void Block::eval(Env &env)
+void Block::execute(Env &env)
 {
     if (!m_init)
     {
@@ -28,7 +28,7 @@ void Block::eval(Env &env)
 
     for (auto &expr : exprs)
     {
-        if ((expr->eval(env) == Object::object_return).get_bool())
+        if ((expr->execute(env) == Object::object_return).get_bool())
             break;
     }
     env.pop_scope();
@@ -60,10 +60,10 @@ std::string AssignExpression::toString()
     return ret;
 }
 
-Object AssignExpression::eval(Env &env)
+Object AssignExpression::execute(Env &env)
 {
     auto var = env.find_var(ident);
-    auto obj = expr->eval(env);
+    auto obj = expr->execute(env);
     var->set_type(obj.get_type());
     var->set_value(obj.get_value());
     cout << "AssignExpression " << var->get_value() << endl;
@@ -82,10 +82,10 @@ std::string BinaryExpression::toString()
     return ret;
 }
 
-Object BinaryExpression::eval(Env &env)
+Object BinaryExpression::execute(Env &env)
 {
-    auto obj1 = expr1->eval(env);
-    auto obj2 = expr2->eval(env);
+    auto obj1 = expr1->execute(env);
+    auto obj2 = expr2->execute(env);
     cout << "BinaryExpression " << obj1.get_value() << " " << op << " " << obj2.get_value() << endl;
 
     switch (op)
@@ -131,7 +131,7 @@ std::string FunctionDeclareExpression::toString()
     return ret;
 }
 
-Object FunctionDeclareExpression::eval(Env &env)
+Object FunctionDeclareExpression::execute(Env &env)
 {
     env.declare_func(ident, args, block);
     return Object::object_null;
@@ -152,17 +152,17 @@ std::string FunctionCallExpression::toString()
     return ret;
 }
 
-Object FunctionCallExpression::eval(Env &env)
+Object FunctionCallExpression::execute(Env &env)
 {
     auto func = env.find_func(ident);
     auto args_decl = args_vec();
     for (int i = 0; i < args.size(); i++)
     {
-        cout << func->args[i] << "  " << args[i]->eval(env).get_value() << endl;
-        args_decl.push_back({func->args[i], shared_ptr<Object>(new Object(args[i]->eval(env)))});
+        cout << func->args[i] << "  " << args[i]->execute(env).get_value() << endl;
+        args_decl.push_back({func->args[i], shared_ptr<Object>(new Object(args[i]->execute(env)))});
     }
     func->body.env_init(env, args_decl);
-    func->body.eval(env);
+    func->body.execute(env);
     return *env.get_return_val();
 }
 
@@ -178,15 +178,15 @@ std::string IfExpression::toString()
     return ret;
 }
 
-Object IfExpression::eval(Env &env)
+Object IfExpression::execute(Env &env)
 {
-    if (expr->eval(env).get_bool() == true)
+    if (expr->execute(env).get_bool() == true)
     {
-        block1.eval(env);
+        block1.execute(env);
     }
     else
     {
-        block2.eval(env);
+        block2.execute(env);
     }
 
     return Object::object_null;
@@ -200,9 +200,9 @@ std::string ReturnExpression::toString()
     return ret;
 }
 
-Object ReturnExpression::eval(Env &env)
+Object ReturnExpression::execute(Env &env)
 {
-    env.set_return_val(shared_ptr<Object>(new Object(expr->eval(env))));
+    env.set_return_val(shared_ptr<Object>(new Object(expr->execute(env))));
     return Object::object_return;
 }
 
@@ -213,7 +213,7 @@ std::string ValueExpression::toString()
     return ret;
 }
 
-Object ValueExpression::eval(Env &env)
+Object ValueExpression::execute(Env &env)
 {
     if (obj.get_type() == Object::Variable)
     {
@@ -232,9 +232,9 @@ std::string VarDeclareExpression::toString()
     return ret;
 }
 
-Object VarDeclareExpression::eval(Env &env)
+Object VarDeclareExpression::execute(Env &env)
 {
-    env.declare_var(ident, std::shared_ptr<Object>(new Object(expr->eval(env))));
+    env.declare_var(ident, std::shared_ptr<Object>(new Object(expr->execute(env))));
     return Object::object_null;
 }
 
@@ -248,11 +248,11 @@ std::string WhileExpression::toString()
     return ret;
 }
 
-Object WhileExpression::eval(Env &env)
+Object WhileExpression::execute(Env &env)
 {
-    while (expr->eval(env).get_bool() == true)
+    while (expr->execute(env).get_bool() == true)
     {
-        block.eval(env);
+        block.execute(env);
     }
     return Object::object_null;
 }
