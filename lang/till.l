@@ -28,6 +28,7 @@
 ";"                     TOKEN(SEMICOLON); return SEMICOLON;
 ","                     TOKEN(COMMA); return COMMA;
 "="                     TOKEN(ASSIGN); return ASSIGN;
+"scall"                 TOKEN(SCALL); return SCALL;
 "func"                  TOKEN(FUNC); return FUNC;
 "let"                   TOKEN(LET); return LET;
 "if"                    TOKEN(IF); return IF;

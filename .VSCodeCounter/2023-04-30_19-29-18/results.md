@@ -1,23 +1,21 @@
 # Summary
 
-Date : 2023-04-27 23:05:35
+Date : 2023-04-30 19:29:18
 
-Directory d:\\TLProject\\Vscode\\VsCode_C\\Till_Language\\Till_Language\\Till_Language
+Directory d:\\TLProject\\Vscode\\VsCode_C\\Till_Language\\src
 
-Total : 16 files,  878 codes, 63 comments, 113 blanks, all 1054 lines
+Total : 10 files,  3162 codes, 678 comments, 706 blanks, all 4546 lines
 
 Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| C++ | 14 | 707 | 63 | 113 | 883 |
-| XML | 1 | 166 | 0 | 0 | 166 |
-| Markdown | 1 | 5 | 0 | 0 | 5 |
+| C++ | 10 | 3,162 | 678 | 706 | 4,546 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 16 | 878 | 63 | 113 | 1,054 |
+| . | 10 | 3,162 | 678 | 706 | 4,546 |
 
 Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

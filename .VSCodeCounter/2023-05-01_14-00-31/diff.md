@@ -1,22 +1,26 @@
 # Diff Summary
 
-Date : 2023-04-27 23:05:35
+Date : 2023-05-01 14:00:31
 
-Directory d:\\TLProject\\Vscode\\VsCode_C\\Till_Language\\Till_Language\\Till_Language
+Directory d:\\TLProject\\Vscode\\VsCode_C\\Till_Language\\src
 
-Total : 11 files,  249 codes, 22 comments, 52 blanks, all 323 lines
+Total : 5 files,  -104 codes, -19 comments, -26 blanks, all -149 lines
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| C++ | 10 | 243 | 22 | 52 | 317 |
-| XML | 1 | 6 | 0 | 0 | 6 |
+| C++ | 2 | 37 | 0 | 7 | 44 |
+| Markdown | 1 | -3 | 0 | -2 | -5 |
+| Lex/Flex | 1 | -40 | 0 | -1 | -41 |
+| Bison | 1 | -98 | -19 | -30 | -147 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 11 | 249 | 22 | 52 | 323 |
+| . | 5 | -104 | -19 | -26 | -149 |
+| . (Files) | 2 | 37 | 0 | 7 | 44 |
+| lang | 3 | -141 | -19 | -33 | -193 |
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)

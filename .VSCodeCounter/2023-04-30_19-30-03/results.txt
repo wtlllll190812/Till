@@ -1,0 +1,42 @@
+Date : 2023-04-30 19:30:03
+Directory : d:\TLProject\Vscode\VsCode_C\Till_Language\src
+Total : 13 files,  3303 codes, 697 comments, 739 blanks, all 4739 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         10 |      3,162 |        678 |        706 |      4,546 |
+| Bison    |          1 |         98 |         19 |         30 |        147 |
+| Lex/Flex |          1 |         40 |          0 |          1 |         41 |
+| Markdown |          1 |          3 |          0 |          2 |          5 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                       | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                          |         13 |      3,303 |        697 |        739 |      4,739 |
+| . (Files)                                                  |         10 |      3,162 |        678 |        706 |      4,546 |
+| lang                                                       |          3 |        141 |         19 |         33 |        193 |
++------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                   | language | code       | comment    | blank      | total      |
++------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\ast.cpp     | C++      |        233 |          0 |         25 |        258 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\ast.h       | C++      |        147 |         15 |         34 |        196 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\env.cpp     | C++      |         50 |          2 |          9 |         61 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\env.h       | C++      |         38 |          0 |          5 |         43 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\lang\till.l | Lex/Flex |         40 |          0 |          1 |         41 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\lang\till.y | Bison    |         98 |         19 |         30 |        147 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\lang\语法.md  | Markdown |          3 |          0 |          2 |          5 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\lexer.cpp   | C++      |      1,251 |        362 |        324 |      1,937 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\object.cpp  | C++      |        215 |          0 |         32 |        247 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\object.h    | C++      |         56 |          0 |         11 |         67 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\parser.cpp  | C++      |      1,073 |        263 |        246 |      1,582 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\parser.hpp  | C++      |         68 |         36 |         15 |        119 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\till.cpp    | C++      |         31 |          0 |          5 |         36 |
+| Total                                                      |          |      3,303 |        697 |        739 |      4,739 |
++------------------------------------------------------------+----------+------------+------------+------------+------------+

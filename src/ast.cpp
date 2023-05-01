@@ -206,6 +206,33 @@ Object ReturnExpression::execute(Env &env)
     return Object::object_return;
 }
 
+std::string SystemCallExpression::toString()
+{
+    std::string ret;
+    ret += "SystemCall: ";
+    ret += ident;
+    ret += "(";
+    for (auto &arg : args)
+    {
+        ret += arg->toString();
+        ret += ", ";
+    }
+    ret += ")";
+    return ret;
+}
+
+Object SystemCallExpression::execute(Env &env)
+{
+    auto func = syscalls[ident];
+    auto args_Object = vector<Object>();
+    for (auto &arg : args)
+    {
+        args_Object.push_back(arg->execute(env));
+    }
+
+    return func(args_Object);
+}
+
 std::string ValueExpression::toString()
 {
     std::string ret;

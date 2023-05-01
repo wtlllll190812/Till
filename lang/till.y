@@ -27,7 +27,7 @@
 %token  ADD SUB MUL DIV                                     //算术运算符
 %token  ASSIGN                                              //赋值运算符
 %token  IF ELSE WHILE FOR                                   //控制语句
-%token  LET RETURN FUNC                                     //关键字
+%token  LET RETURN FUNC SCALL                               //关键字
 
 // %type  numeric expr
 // %type  func_decl_args
@@ -39,7 +39,7 @@
 
 
 %type <block>           block program
-%type <expression>      assign_expr declare_expr if_expr while_expr func_decl return_expr func_call
+%type <expression>      assign_expr declare_expr if_expr while_expr func_decl return_expr func_call system_call
 %type <expression>      expr term factor stmt
 %type <object>          value
 %type <string_vector>   func_decl_args
@@ -70,7 +70,9 @@ stmt:           declare_expr    { $$=$1; }
                 | func_decl     { $$=$1; }
                 | return_expr   { $$=$1; }
                 | func_call     { $$=$1; }
+                | system_call   { $$=$1; }
                 ;
+
 //函数声明
 func_decl:      FUNC IDENTIFIER LPAREN func_decl_args RPAREN LBRACE block RBRACE { $$ = new FunctionDeclareExpression(*$2, *$4, *$7); }
                 ;
@@ -87,6 +89,8 @@ return_expr:    RETURN expr SEMICOLON                       { $$ = new ReturnExp
 func_call:      IDENTIFIER LPAREN call_args RPAREN SEMICOLON { $$ = new FunctionCallExpression(*$1, *$3); }
                 ;
 
+system_call:    SCALL IDENTIFIER LPAREN call_args RPAREN SEMICOLON     { $$ = new SystemCallExpression(*$2,*$4); }
+                ;
 //函数调用参数
 call_args:      expr                                        { $$ = new std::vector<Expression*>(); $$->push_back($1); }
                 | call_args COMMA expr                      { $1->push_back($3); }

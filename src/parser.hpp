@@ -82,7 +82,8 @@ extern int yydebug;
     FOR = 283,                     /* FOR  */
     LET = 284,                     /* LET  */
     RETURN = 285,                  /* RETURN  */
-    FUNC = 286                     /* FUNC  */
+    FUNC = 286,                    /* FUNC  */
+    SCALL = 287                    /* SCALL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -102,7 +103,7 @@ union YYSTYPE
 
     int                         token;
 
-#line 106 "src/parser.hpp"
+#line 107 "src/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

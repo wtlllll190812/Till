@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <functional>
 #include "env.h"
 #include "object.h"
 
@@ -149,6 +150,23 @@ private:
 public:
     ReturnExpression(Expression *&expr) : expr(expr){};
     ~ReturnExpression(){};
+
+    std::string toString() override;
+    Object execute(Env &env) override;
+};
+
+typedef std::map<std::string, std::function<Object(std::vector<Object>)>> SystemCallMap;
+
+class SystemCallExpression : public Expression
+{
+private:
+    std::string ident;
+    std::vector<Expression *> args;
+    static SystemCallMap syscalls;
+
+public:
+    SystemCallExpression(std::string &ident, std::vector<Expression *> &args) : ident(ident), args(args){};
+    ~SystemCallExpression(){};
 
     std::string toString() override;
     Object execute(Env &env) override;

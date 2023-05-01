@@ -1,0 +1,34 @@
+Date : 2023-05-01 14:00:31
+Directory : d:\TLProject\Vscode\VsCode_C\Till_Language\src
+Total : 10 files,  3199 codes, 678 comments, 713 blanks, all 4590 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         10 |      3,199 |        678 |        713 |      4,590 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                         |         10 |      3,199 |        678 |        713 |      4,590 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                  | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\ast.cpp    | C++      |        257 |          0 |         29 |        286 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\ast.h      | C++      |        160 |         15 |         37 |        212 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\env.cpp    | C++      |         50 |          2 |          9 |         61 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\env.h      | C++      |         38 |          0 |          5 |         43 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\lexer.cpp  | C++      |      1,251 |        362 |        324 |      1,937 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\object.cpp | C++      |        215 |          0 |         32 |        247 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\object.h   | C++      |         56 |          0 |         11 |         67 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\parser.cpp | C++      |      1,073 |        263 |        246 |      1,582 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\parser.hpp | C++      |         68 |         36 |         15 |        119 |
+| d:\TLProject\Vscode\VsCode_C\Till_Language\src\till.cpp   | C++      |         31 |          0 |          5 |         36 |
+| Total                                                     |          |      3,199 |        678 |        713 |      4,590 |
++-----------------------------------------------------------+----------+------------+------------+------------+------------+

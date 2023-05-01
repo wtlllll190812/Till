@@ -44,7 +44,9 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "stdio.h": "c",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp"
     },
     "makefile.launchConfigurations": [
         {
